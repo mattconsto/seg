@@ -1,17 +1,12 @@
+package dashboard.model;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.sql.*;
 
-public class CSVReader {
-	public static void main(String[] args) {
-		CSVReader db = new CSVReader();
-		db.readCsvs("data");
-	}
-
-	public void readCsvs(String folder) {
+public class DatabaseImporter {
+	public void readCSVs(String folder) {
 		try {
-			Class.forName("org.sqlite.JDBC");
-			Connection conn = DriverManager.getConnection("jdbc:sqlite:auction.db");
+			Connection conn = DatabaseConnection.getConnection();
 			System.out.println("Opened database successfully");
 			readImpressions(folder + "\\impression_log.csv", conn);
 			readClicks(folder + "\\click_log.csv", conn);
