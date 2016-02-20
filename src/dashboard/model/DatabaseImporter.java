@@ -8,9 +8,9 @@ public class DatabaseImporter {
 		try {
 			Connection conn = DatabaseConnection.getConnection();
 			System.out.println("Opened database successfully");
-			readImpressions(folder + "\\impression_log.csv", conn);
-			readClicks(folder + "\\click_log.csv", conn);
-			readServer(folder + "\\server_log.csv", conn);
+			readImpressions(folder + "/impression_log.csv", conn);
+			readClicks(folder + "/click_log.csv", conn);
+			readServer(folder + "/server_log.csv", conn);
 			conn.close();
 		} catch (Exception e) {
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
