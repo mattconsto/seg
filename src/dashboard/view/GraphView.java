@@ -1,5 +1,6 @@
 package dashboard.view;
 
+import dashboard.controller.BounceGraphConstructor;
 import dashboard.controller.ClicksGraphConstructor;
 import dashboard.controller.ConversionGraphConstructor;
 import dashboard.controller.ImpressionsGraphConstructor;
@@ -32,13 +33,13 @@ public class GraphView extends Application{
 		final CategoryAxis xAxis = new CategoryAxis();
 		final NumberAxis yAxis = new NumberAxis();
 		xAxis.setLabel("Date");
-		yAxis.setLabel("Impressions");
+		yAxis.setLabel("Bounces");
 		final LineChart<String,Number> lineChart = new LineChart<String,Number>(xAxis, yAxis);
 		lineChart.setCreateSymbols(false);
 		lineChart.setLegendVisible(false);
 		root.add(lineChart, 0, 0, 1, 1);
 		
-		lineChart.getData().add(new ConversionGraphConstructor().fetchGraph());
+		lineChart.getData().add(new BounceGraphConstructor().fetchGraph());
 		
 		Scene scene = new Scene(root, 800, 600);
 		arg0.setScene(scene);
