@@ -2,6 +2,7 @@ package dashboard.view;
 
 import dashboard.controller.ClicksGraphConstructor;
 import dashboard.controller.ImpressionsGraphConstructor;
+import dashboard.controller.UniqueImpressionsGraphConstructor;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -36,7 +37,7 @@ public class GraphView extends Application{
 		lineChart.setLegendVisible(false);
 		root.add(lineChart, 0, 0, 1, 1);
 		
-		lineChart.getData().add(new ClicksGraphConstructor().fetchGraph());
+		lineChart.getData().add(new UniqueImpressionsGraphConstructor().fetchGraph());
 		
 		Scene scene = new Scene(root, 800, 600);
 		arg0.setScene(scene);
