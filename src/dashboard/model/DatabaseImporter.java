@@ -1,10 +1,36 @@
 package dashboard.model;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.sql.*;
+import javafx.scene.control.Alert;
 
 public class DatabaseImporter {
-	public void readCSVs(String folder) {
+	private boolean verifyFile(String file)
+        {
+            File f1 = new File(file);
+            if(!f1.exists() || f1.isDirectory()) {
+                         
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText(null);
+                alert.setContentText(file + " does not exist");
+                alert.showAndWait();
+                return false;
+            }
+            return true;
+
+        }
+        public boolean checkFilesExist(String folder)
+        {
+            return !(!verifyFile(folder + "\\impression_log.csv") ||
+                    !verifyFile(folder + "\\click_log.csv") ||
+                    !verifyFile(folder + "\\server_log.csv"));
+                        
+        }
+         
+      
+        public boolean readCSVs(String folder) {
 		try {
 			Connection conn = DatabaseConnection.getConnection();
 			System.out.println("Opened database successfully");
@@ -12,10 +38,12 @@ public class DatabaseImporter {
 			readClicks(folder + "/click_log.csv", conn);
 			readServer(folder + "/server_log.csv", conn);
 			conn.close();
+                        return true;
 		} catch (Exception e) {
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 			System.exit(0);
 		}
+                return false;
 	}
 
 	public void readImpressions(String fname, Connection conn) {
