@@ -49,27 +49,26 @@
           <Menu mnemonicParsing="false" text="File">
             <items>
               <MenuItem fx:id="importCampaign" mnemonicParsing="false" onAction="#importCampaignAction" text="Import Campaign" />
-                  <MenuItem fx:id="openCampaign" mnemonicParsing="false" onAction="#openCampaignAction" text="Open Campaign" />
-                  <MenuItem fx:id="importCampaign1" mnemonicParsing="false" onAction="#importCampaignAction" text="Import Campaign" />
-                  <MenuItem fx:id="close" mnemonicParsing="false" onAction="#closeAction" text="Close" />
+              <MenuItem fx:id="openCampaign" mnemonicParsing="false" onAction="#openCampaignAction" text="Open Campaign" />
+              <MenuItem fx:id="close" mnemonicParsing="false" onAction="#closeAction" text="Close" />
             </items>
           </Menu>
             <Menu mnemonicParsing="false" text="View" />
             <Menu fx:id="prefMenu" mnemonicParsing="false" onAction="#prefOnAction" text="Preferences">
                <items>
-                  <RadioMenuItem fx:id="pref1" mnemonicParsing="false" onAction="#preferenceAction4" text="Impressions">
+                  <RadioMenuItem fx:id="pref1" mnemonicParsing="false" onAction="#preference_impressions" text="Impressions">
                      <toggleGroup>
                         <ToggleGroup fx:id="viewGroup" />
                      </toggleGroup>
                   </RadioMenuItem>
-                  <RadioMenuItem fx:id="pref2" mnemonicParsing="false" onAction="#preferenceAction2" text="Clicks" toggleGroup="$viewGroup" />
-                  <RadioMenuItem fx:id="pref3" mnemonicParsing="false" onAction="#preferenceAction3" text="Unique Impressions">
+                  <RadioMenuItem fx:id="pref2" mnemonicParsing="false" onAction="#preference_clicks" text="Clicks" toggleGroup="$viewGroup" />
+                  <RadioMenuItem fx:id="pref3" mnemonicParsing="false" onAction="#preference_impressions_unique" text="Unique Impressions">
                      <toggleGroup>
                         <ToggleGroup fx:id="viewGroup1" />
                      </toggleGroup>
                   </RadioMenuItem>
-                  <RadioMenuItem fx:id="pref4" mnemonicParsing="false" onAction="#preferenceAction4" text="Unique Clicks" toggleGroup="$viewGroup" />
-                  <RadioMenuItem fx:id="pref5" mnemonicParsing="false" onAction="#preferenceAction5" text="Conversions" toggleGroup="$viewGroup" />
+                  <RadioMenuItem fx:id="pref4" mnemonicParsing="false" onAction="#preference_clicks_unique" text="Unique Clicks" toggleGroup="$viewGroup" />
+                  <RadioMenuItem fx:id="pref5" mnemonicParsing="false" onAction="#preference_conversions" text="Conversions" toggleGroup="$viewGroup" />
                </items>
             </Menu>
         </menus>
