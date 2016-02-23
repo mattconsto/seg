@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.chart.*?>
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+
+<AnchorPane id="AnchorPane" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="909.0" prefWidth="1278.0" styleClass="background" stylesheets="@AuctionTool.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dashboard.controller.AuctionController">
+  <children>
+      <MenuBar fx:id="menu" prefHeight="25.0" prefWidth="1278.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
+            <items>
+              <MenuItem fx:id="importCampaign" mnemonicParsing="false" onAction="#importCampaignAction" text="Import Campaign" />
+                  <MenuItem fx:id="openCampaign" mnemonicParsing="false" onAction="#openCampaignAction" text="Open Campaign" />
+                  <MenuItem fx:id="close" mnemonicParsing="false" onAction="#closeAction" text="Close" />
+            </items>
+          </Menu>
+            <Menu mnemonicParsing="false" text="View" />
+            <Menu fx:id="prefMenu" mnemonicParsing="false" onAction="#prefOnAction" text="Preferences">
+               <items>
+                  <RadioMenuItem fx:id="pref1" mnemonicParsing="false" onAction="#preferenceAction4" text="Impressions">
+                     <toggleGroup>
+                        <ToggleGroup fx:id="viewGroup" />
+                     </toggleGroup>
+                  </RadioMenuItem>
+                  <RadioMenuItem fx:id="pref2" mnemonicParsing="false" onAction="#preferenceAction2" text="Clicks" toggleGroup="$viewGroup" />
+                  <RadioMenuItem fx:id="pref3" mnemonicParsing="false" onAction="#preferenceAction3" text="Unique Impressions" toggleGroup="$viewGroup" />
+                  <RadioMenuItem fx:id="pref4" mnemonicParsing="false" onAction="#preferenceAction4" text="Unique Clicks" toggleGroup="$viewGroup" />
+                  <RadioMenuItem fx:id="pref5" mnemonicParsing="false" onAction="#preferenceAction5" text="Conversions" toggleGroup="$viewGroup" />
+               </items>
+            </Menu>
+        </menus>
+      </MenuBar>
+    <AnchorPane id="anchorPane2" prefHeight="886.0" prefWidth="1278.0" styleClass="top-segment" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="24.0">
+      <children>
+            <SplitPane dividerPositions="0.17124901806755696" layoutX="2.5" layoutY="5.5" prefHeight="879.0" prefWidth="1278.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+              <items>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                     <children>
+                        <ComboBox fx:id="filterGender" layoutX="10.0" layoutY="33.0" prefHeight="25.0" prefWidth="195.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+                        <Label layoutX="14.0" layoutY="14.0" text="Gender" AnchorPane.leftAnchor="10.0" />
+                        <ComboBox fx:id="filterAge" layoutX="10.0" layoutY="96.0" prefHeight="25.0" prefWidth="195.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+                        <Label layoutX="10.0" layoutY="71.0" prefHeight="25.0" prefWidth="25.0" text="Age" AnchorPane.leftAnchor="10.0" />
+                        <ComboBox fx:id="filterIncome" layoutX="14.0" layoutY="160.0" prefWidth="150.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+                        <Label layoutX="10.0" layoutY="141.0" text="Income" AnchorPane.leftAnchor="10.0" />
+                        <ComboBox fx:id="filterContext" layoutX="10.0" layoutY="222.0" prefWidth="150.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+                        <Label layoutX="10.0" layoutY="203.0" text="Context" AnchorPane.leftAnchor="10.0" />
+                        <ComboBox fx:id="filterMetrics" layoutX="10.0" layoutY="282.0" prefWidth="150.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+                        <Label layoutX="9.0" layoutY="258.0" prefHeight="25.0" prefWidth="88.0" text="Graph Metrics" AnchorPane.leftAnchor="10.0" />
+                        <Button fx:id="generateGraph" layoutX="10.0" layoutY="474.0" mnemonicParsing="false" onAction="#generateData" prefHeight="52.0" prefWidth="196.0" text="Generate" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+                        <Label layoutX="11.0" layoutY="327.0" prefHeight="17.0" prefWidth="87.0" text="Date from:" AnchorPane.leftAnchor="10.0" />
+                        <Label layoutX="10.0" layoutY="389.0" prefHeight="17.0" prefWidth="43.0" text="Date to:" AnchorPane.leftAnchor="10.0" />
+                        <DatePicker fx:id="filterDateFrom" layoutX="10.0" layoutY="409.0" prefHeight="31.0" prefWidth="94.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+                        <DatePicker fx:id="filterDateTo" layoutX="10.0" layoutY="346.0" prefHeight="31.0" prefWidth="91.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+                     </children>
+                  </AnchorPane>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="782.0" prefWidth="891.0">
+                     <children>
+                        <SplitPane dividerPositions="0.2580952380952381" prefHeight="880.0" prefWidth="1052.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                          <items>
+                            <AnchorPane maxWidth="400.0" minHeight="0.0" minWidth="0.0" prefHeight="881.0" prefWidth="289.0">
+                                 <children>
+                                    <TableView layoutX="45.0" layoutY="27.0" maxWidth="400.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                      <columns>
+                                        <TableColumn maxWidth="250.0" minWidth="-1.0" prefWidth="65.0" text="Metric" />
+                                        <TableColumn maxWidth="241.0" minWidth="-1.0" prefWidth="203.0" text="Result" />
+                                      </columns>
+                                       <columnResizePolicy>
+                                          <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                       </columnResizePolicy>
+                                    </TableView>
+                                 </children>
+                              </AnchorPane>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                                 <children>
+                                    <LineChart fx:id="lineChart" layoutX="7.0" layoutY="8.0" prefHeight="870.0" prefWidth="607.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                      <xAxis>
+                                        <CategoryAxis side="BOTTOM" />
+                                      </xAxis>
+                                      <yAxis>
+                                        <NumberAxis side="LEFT" />
+                                      </yAxis>
+                                    </LineChart>
+                                 </children>
+                              </AnchorPane>
+                          </items>
+                        </SplitPane>
+                     </children>
+                  </AnchorPane>
+              </items>
+            </SplitPane>
+      </children>
+    </AnchorPane>
+  </children>
+</AnchorPane>
