@@ -130,9 +130,7 @@ public class AuctionController extends AnchorPane {
 						alert.setHeaderText(null);
 						alert.setContentText("The files were imported successfully");
 						alert.showAndWait();
-
 					}
-
 				}
 			}
 		}

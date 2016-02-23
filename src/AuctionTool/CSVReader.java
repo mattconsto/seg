@@ -4,16 +4,16 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.sql.*;
+
+import dashboard.model.DatabaseConnection;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 
 public class CSVReader {
 	public CSVReader() {}
 
-	private boolean verifyFile(String file) {
-		File f1 = new File(file);
-		if (!f1.exists() || f1.isDirectory()) {
-
+	private boolean verifyFile(File file) {
+		if (!file.exists() || file.isDirectory()) {
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setTitle("Error");
 			alert.setHeaderText(null);
@@ -22,33 +22,28 @@ public class CSVReader {
 			return false;
 		}
 		return true;
-
 	}
 
 	public boolean checkFilesExist(String folder) {
-		return !(!verifyFile(folder + "\\impression_log.csv") || !verifyFile(folder + "\\click_log.csv")
-				|| !verifyFile(folder + "\\server_log.csv"));
-
+		return verifyFile(new File(folder + "\\impression_log.csv"))
+			&& verifyFile(new File(folder + "\\click_log.csv"))
+			&& verifyFile(new File(folder + "\\server_log.csv"));
 	}
 
 	public boolean readCsvs(String folder, String name) {
 		try {
-			Class.forName("org.sqlite.JDBC");
-			try (Connection conn = DriverManager.getConnection("jdbc:sqlite:" + name + ".db")) {
-				System.out.println("Opened database successfully");
-				readImpressions(folder + "\\impression_log.csv", conn);
-				readClicks(folder + "\\click_log.csv", conn);
-				readServer(folder + "\\server_log.csv", conn);
-			}
-		} catch (ClassNotFoundException | SQLException e) {
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-			System.exit(0);
+			Connection conn = DatabaseConnection.getConnection();
+			System.out.println("Opened database successfully");
+			readImpressions(new File(folder + "\\impression_log.csv"), conn);
+			readClicks(new File(folder + "\\click_log.csv"), conn);
+			readServer(new File(folder + "\\server_log.csv"), conn);
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 		return true;
 	}
 
-	public void readImpressions(String fname, Connection conn) {
-
+	public void readImpressions(File fname, Connection conn) {
 		try {
 			Statement stmt = conn.createStatement();
 			stmt.executeUpdate("drop table if exists IMPRESSIONS;");
@@ -59,19 +54,19 @@ public class CSVReader {
 			// strings
 
 			String sql = "CREATE TABLE IMPRESSIONS " + "(DATE      TEXT NOT NULL," + " ID        INTEGER   NOT NULL,"
-					+ " GENDER    INTEGER NOT NULL," + // store this as integer
-														// as it will be faster
-														// to filter
-					" AGE       INTEGER NOT NULL," + // store 0 - <25, 1 =
-														// 25-34, 2 = 35-44, 3 =
-														// 45-54, 4=>54
-					" INCOME    INTEGER NOT NULL," + // 0 = Low, 1 = Medium, 2 =
-														// High
-					" CONTEXT   INTEGER NOT NULL," + // store as 0 = News
-														// 1=,Shopping,2=Social
-														// Media, 3 =Blog, 4 =
-														// Hobbies, 5 = Travel
-					" COST      REAL NOT NULL) ";
+				+ " GENDER    INTEGER NOT NULL," + // store this as integer
+													// as it will be faster
+													// to filter
+				" AGE       INTEGER NOT NULL," + // store 0 - <25, 1 =
+													// 25-34, 2 = 35-44, 3 =
+													// 45-54, 4=>54
+				" INCOME    INTEGER NOT NULL," + // 0 = Low, 1 = Medium, 2 =
+													// High
+				" CONTEXT   INTEGER NOT NULL," + // store as 0 = News
+													// 1=,Shopping,2=Social
+													// Media, 3 =Blog, 4 =
+													// Hobbies, 5 = Travel
+				" COST      REAL NOT NULL) ";
 
 			stmt.executeUpdate(sql);
 			stmt.close();
@@ -90,55 +85,32 @@ public class CSVReader {
 
 				prep.setString(1, values[0]);
 				prep.setLong(2, Long.parseLong(values[1]));
-				if (values[2].toUpperCase().equals("FEMALE"))
-					prep.setBoolean(3, false);
-				else
-					prep.setBoolean(3, true);
+				prep.setBoolean(3, values[2].toUpperCase().equals("FEMALE"));
 
 				// Age group of user: <25, 25-­‐34, 35-­‐44 , 45-­‐ 54, >54
 				// (store as 0 - 4)
 				switch (values[3]) {
-				case "<25":
-					prep.setInt(4, 0);
-					break;
-				case "25-34":
-					prep.setInt(4, 1);
-					break;
-				case "35-44":
-					prep.setInt(4, 2);
-					break;
-				case "45-54":
-					prep.setInt(4, 3);
-					break;
-				default: // ">54":
-					prep.setInt(4, 4);
-					break;
+					case "<25":   prep.setInt(4, 0); break;
+					case "25-34": prep.setInt(4, 1); break;
+					case "35-44": prep.setInt(4, 2); break;
+					case "45-54": prep.setInt(4, 3); break;
+					default:      prep.setInt(4, 4); break;
 				}
+				
 				if (values[4].toUpperCase().equals("LOW"))
 					prep.setInt(5, 0);
 				else if (values[4].toUpperCase().equals("HIGH"))
 					prep.setInt(5, 2);
 				else
 					prep.setInt(5, 1);
+				
 				switch (values[5].toUpperCase()) {
-				case "NEWS":
-					prep.setInt(6, 0);
-					break;
-				case "SHOPPING":
-					prep.setInt(6, 1);
-					break;
-				case "SOCIAL MEDIA":
-					prep.setInt(6, 2);
-					break;
-				case "BLOG":
-					prep.setInt(6, 3);
-					break;
-				case "HOBBIES":
-					prep.setInt(6, 4);
-					break;
-				default: // case "TRAVEL":
-					prep.setInt(6, 5);
-					break;
+					case "NEWS":         prep.setInt(6, 0); break;
+					case "SHOPPING":     prep.setInt(6, 1); break;
+					case "SOCIAL MEDIA": prep.setInt(6, 2); break;
+					case "BLOG":         prep.setInt(6, 3); break;
+					case "HOBBIES":      prep.setInt(6, 4); break;
+					default:             prep.setInt(6, 5); break;
 				}
 
 				prep.setDouble(7, Double.parseDouble(values[6]));
@@ -148,7 +120,6 @@ public class CSVReader {
 				// 500,000 seems to be ok, the lower the number the longer it
 				// takes
 				if (i++ == 500000) {
-					// commit data to database
 					prep.executeBatch();
 					i = 0;
 					System.out.println("IMPRESSION record " + j++);
@@ -156,9 +127,7 @@ public class CSVReader {
 
 			}
 			br.close();
-			if (i > 0) {
-				prep.executeBatch();
-			}
+			if (i > 0) prep.executeBatch();
 			conn.setAutoCommit(true);
 			// create index after inserting as it's quicker
 			// may want to add index to Date field too
@@ -167,17 +136,14 @@ public class CSVReader {
 			stmt = conn.createStatement();
 			stmt.executeUpdate("CREATE INDEX IMRESSION_ID ON IMPRESSIONS(ID)");
 			stmt.close();
-
 		} catch (Exception e) {
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-			System.exit(0);
+			e.printStackTrace();
 		}
 
 		System.out.println("IMPRESSION Table created successfully");
 	}
 
-	public void readClicks(String fname, Connection conn) {
-
+	public void readClicks(File fname, Connection conn) {
 		try {
 			Statement stmt = conn.createStatement();
 			stmt.executeUpdate("drop table if exists CLICKS;");
@@ -192,11 +158,11 @@ public class CSVReader {
 			BufferedReader br = new BufferedReader(new FileReader(fname));
 			conn.setAutoCommit(false);
 			String line = br.readLine();
-			long i = 0;
-			long j = 0; // commit count
+			long i = 0, j = 0; // commit count
 
 			while ((line = br.readLine()) != null) {
 				String[] values = line.split(",");
+				
 				prep.setString(1, values[0]);
 				prep.setLong(2, Long.parseLong(values[1]));
 				prep.setDouble(3, Double.parseDouble(values[2]));
@@ -206,27 +172,21 @@ public class CSVReader {
 				// 500,000 seems to be ok, the lower the number the longer it
 				// takes
 				if (i++ == 500000) {
-					// commit data to database
 					prep.executeBatch();
 					i = 0;
 					System.out.println("Clicks record " + j++);
 				}
 			}
 			br.close();
-			if (i > 0) {
-				prep.executeBatch();
-			}
-
+			if (i > 0) prep.executeBatch();
 		} catch (Exception e) {
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-			System.exit(0);
+			e.printStackTrace();
 		}
 
 		System.out.println("CLICK Table created successfully");
 	}
 
-	public void readServer(String fname, Connection conn) {
-
+	public void readServer(File fname, Connection conn) {
 		try {
 			Statement stmt = conn.createStatement();
 			stmt.executeUpdate("drop table if exists SERVER;");
@@ -241,39 +201,33 @@ public class CSVReader {
 			BufferedReader br = new BufferedReader(new FileReader(fname));
 
 			String line = br.readLine();
-			long i = 0;
-			long j = 0; // commit count
+			long i = 0, j = 0; // commit count
+			
 			while ((line = br.readLine()) != null) {
-				String[] values = line.split(","); // your seperator
+				String[] values = line.split(",");
+				
 				prep.setString(1, values[0]);
 				prep.setLong(2, Long.parseLong(values[1]));
 				prep.setString(3, values[2]);
 				prep.setInt(4, Integer.parseInt(values[3]));
-				if (values[4].equals("Yes"))
-					prep.setInt(5, 1);
-				else
-					prep.setInt(5, 0);
-
+				prep.setInt(5, 1);
+				prep.setBoolean(5, values[4].equals("Yes"));
 				prep.addBatch();
 				// need to commit data after 500000 as it will run out of memory
 				// if too many records
 				// 500,000 seems to be ok, the lower the number the longer it
 				// takes
 				if (i++ == 500000) {
-					// commit data to database
 					prep.executeBatch();
 					i = 0;
 					System.out.println("Server record " + j++);
 				}
 			}
 			br.close();
-			if (i > 0) {
-				prep.executeBatch();
-			}
+			if (i > 0) prep.executeBatch();
 			conn.setAutoCommit(true);
 		} catch (Exception e) {
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-			System.exit(0);
+			e.printStackTrace();
 		}
 
 		System.out.println("Server Table created successfully");

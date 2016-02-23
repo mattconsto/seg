@@ -1,6 +1,5 @@
 package AuctionTool;
 
-import java.io.InputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Application;
@@ -35,7 +34,7 @@ public class Main extends Application {
 
 	private void gotoAuctionTool() {
 		try {
-			AuctionController auctionTool = (AuctionController) replaceSceneContent("AuctionTool.fxml");
+			AuctionController auctionTool = (AuctionController) replaceSceneContent("/fxml/AuctionTool.fxml");
 			auctionTool.setApp(this);
 			auctionTool.initialize();
 		} catch (Exception ex) {
@@ -45,40 +44,24 @@ public class Main extends Application {
 
 	public Stage getStage() {
 		return stage;
-
 	}
 
 	private Node replaceSceneContent(String fxml) throws Exception {
 		FXMLLoader loader = new FXMLLoader();
-		InputStream in = Main.class.getResourceAsStream(fxml);
 		loader.setBuilderFactory(new JavaFXBuilderFactory());
 		loader.setLocation(Main.class.getResource(fxml));
-		AnchorPane page;
-		try {
-			page = (AnchorPane) loader.load(in);
-		} finally {
-			in.close();
-		}
+		AnchorPane page = (AnchorPane) loader.load(Main.class.getResourceAsStream(fxml));
 
 		// Store the stage width and height in case the user has resized the
 		// window
 		double stageWidth = stage.getWidth();
-		if (!Double.isNaN(stageWidth)) {
-			stageWidth -= (stage.getWidth() - stage.getScene().getWidth());
-		}
-
+		if (!Double.isNaN(stageWidth))  stageWidth -= (stage.getWidth() - stage.getScene().getWidth());
 		double stageHeight = stage.getHeight();
-		if (!Double.isNaN(stageHeight)) {
-			stageHeight -= (stage.getHeight() - stage.getScene().getHeight());
-		}
+		if (!Double.isNaN(stageHeight)) stageHeight -= (stage.getHeight() - stage.getScene().getHeight());
 
 		Scene scene = new Scene(page);
-		if (!Double.isNaN(stageWidth)) {
-			page.setPrefWidth(stageWidth);
-		}
-		if (!Double.isNaN(stageHeight)) {
-			page.setPrefHeight(stageHeight);
-		}
+		if (!Double.isNaN(stageWidth))  page.setPrefWidth(stageWidth);
+		if (!Double.isNaN(stageHeight)) page.setPrefHeight(stageHeight);
 
 		stage.setScene(scene);
 		stage.sizeToScene();
