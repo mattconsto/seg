@@ -30,7 +30,7 @@ public class Main extends Application {
 			for (int size : new int[] {512, 256, 128, 64, 48, 32, 16})
 				stage.getIcons().add(
 					new Image(getClass().getResourceAsStream(
-						String.format("/icons/icon%d.png", size))));
+						String.format("/icon%d.png", size))));
 			
 			// Get the window display scaling, so we can set the correct res.
 			double deviceScaling = Toolkit.getDefaultToolkit()
@@ -55,7 +55,7 @@ public class Main extends Application {
 
 	private void gotoAuctionTool() {
 		try {
-			AuctionController auctionTool = (AuctionController) replaceSceneContent("/fxml/AuctionTool.fxml");
+			AuctionController auctionTool = (AuctionController) replaceSceneContent("/AuctionTool.fxml");
 			auctionTool.setApp(this);
 			auctionTool.initialize();
 		} catch (Exception ex) {
