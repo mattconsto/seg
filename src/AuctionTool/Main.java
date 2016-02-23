@@ -1,12 +1,18 @@
 package AuctionTool;
 
+import java.awt.GraphicsEnvironment;
+import java.awt.Rectangle;
+import java.awt.Toolkit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import dashboard.Preferences;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.JavaFXBuilderFactory;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
@@ -15,16 +21,31 @@ import javafx.stage.Stage;
  */
 public class Main extends Application {
 	private Stage stage;
-	private final double MINIMUM_WINDOW_WIDTH = 390.0;
-	private final double MINIMUM_WINDOW_HEIGHT = 500.0;
 
 	@Override
 	public void start(Stage primaryStage) {
 		try {
 			stage = primaryStage;
-			stage.setMinWidth(MINIMUM_WINDOW_WIDTH);
-			stage.setMinHeight(MINIMUM_WINDOW_HEIGHT);
-			stage.setTitle("Auction Tool");
+			stage.setTitle(Preferences.productName);
+			for (int size : new int[] {512, 256, 128, 64, 48, 32, 16})
+				stage.getIcons().add(
+					new Image(getClass().getResourceAsStream(
+						String.format("/icons/icon%d.png", size))));
+			
+			// Get the window display scaling, so we can set the correct res.
+			double deviceScaling = Toolkit.getDefaultToolkit()
+									.getScreenResolution() / 96.0;
+			
+			Rectangle bounds = GraphicsEnvironment
+								.getLocalGraphicsEnvironment()
+								.getMaximumWindowBounds();
+
+			stage.setMinWidth(Preferences.minimumWidth / deviceScaling);
+			stage.setMinHeight(Preferences.minimumHeight / deviceScaling);
+			stage.setWidth(Preferences.windowScaling * bounds.getWidth() / deviceScaling);
+			stage.setHeight(Preferences.windowScaling * bounds.getHeight() / deviceScaling);
+			stage.centerOnScreen();
+			
 			gotoAuctionTool();
 			primaryStage.show();
 		} catch (Exception ex) {
@@ -51,20 +72,7 @@ public class Main extends Application {
 		loader.setBuilderFactory(new JavaFXBuilderFactory());
 		loader.setLocation(Main.class.getResource(fxml));
 		AnchorPane page = (AnchorPane) loader.load(Main.class.getResourceAsStream(fxml));
-
-		// Store the stage width and height in case the user has resized the
-		// window
-		double stageWidth = stage.getWidth();
-		if (!Double.isNaN(stageWidth))  stageWidth -= (stage.getWidth() - stage.getScene().getWidth());
-		double stageHeight = stage.getHeight();
-		if (!Double.isNaN(stageHeight)) stageHeight -= (stage.getHeight() - stage.getScene().getHeight());
-
-		Scene scene = new Scene(page);
-		if (!Double.isNaN(stageWidth))  page.setPrefWidth(stageWidth);
-		if (!Double.isNaN(stageHeight)) page.setPrefHeight(stageHeight);
-
-		stage.setScene(scene);
-		stage.sizeToScene();
+		stage.setScene(new Scene(page));
 		return (Node) loader.getController();
 	}
 }
