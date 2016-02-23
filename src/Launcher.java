@@ -1,10 +1,14 @@
-import dashboard.view.MainUI;
+import AuctionTool.Main;
+import javafx.application.Application;
 
 /**
- * Launcher
+ * Launch the MainUI
  */
 public class Launcher {
 	public static void main(String args[]) {
-		new MainUI();
+		Application.launch(Main.class, (String[]) null);
+		
+		// GraphView.launch(args);
+		// new DatabaseImporter().readCSVs("data");
 	}
 }

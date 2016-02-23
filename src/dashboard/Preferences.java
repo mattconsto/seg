@@ -1,8 +1,7 @@
 package dashboard;
 
 /**
- * 
- * @author Matthew Consterdine
+ * Stores a list of Application Preferences
  */
 public class Preferences {
 	/**

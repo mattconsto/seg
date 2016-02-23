@@ -8,22 +8,21 @@ import java.sql.Statement;
 import javafx.scene.chart.XYChart;
 import javafx.scene.chart.XYChart.Series;
 
-public class ClicksGraphConstructor extends GraphConstructor
-{
-
+public class ClicksGraphConstructor extends GraphConstructor {
 	@Override
 	protected Series<String, Number> generateSpecificGraph(Connection conn) throws SQLException {
 		Statement selectStatement = conn.createStatement();
-		ResultSet selectResults = selectStatement.executeQuery("SELECT SUBSTR(DATE, 0, 11) AS DATE,COUNT(*) AS Frequency FROM CLICKS GROUP BY SUBSTR(DATE, 0, 11);");
-		
+		ResultSet selectResults = selectStatement.executeQuery(
+				"SELECT SUBSTR(DATE, 0, 11) AS DATE,COUNT(*) AS Frequency FROM CLICKS GROUP BY SUBSTR(DATE, 0, 11);");
+
 		XYChart.Series<String, Number> series = new XYChart.Series<String, Number>();
 		series.setName("Clicks by date");
-		
-		while(selectResults.next()){
+
+		while (selectResults.next()) {
 			series.getData().add(new XYChart.Data<String, Number>(selectResults.getString(1), selectResults.getInt(2)));
 			System.out.println(selectResults.getString(1));
 		}
-		
+
 		selectResults.close();
 		selectStatement.close();
 		return series;

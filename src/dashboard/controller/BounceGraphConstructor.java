@@ -9,7 +9,6 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.chart.XYChart.Series;
 
 public class BounceGraphConstructor extends GraphConstructor{
-
 	@Override
 	protected Series<String, Number> generateSpecificGraph(Connection conn) throws SQLException {
 		Statement selectStatement = conn.createStatement();
@@ -27,5 +26,4 @@ public class BounceGraphConstructor extends GraphConstructor{
 		selectStatement.close();
 		return series;
 	}
-
 }

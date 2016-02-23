@@ -32,173 +32,142 @@
 package AuctionTool;
 
 import java.io.File;
-import java.net.URL;
-import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.RadioMenuItem;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleButton;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
+
 import org.controlsfx.control.CheckComboBox;
 
 /**
  * Login Controller.
  */
 public class AuctionController extends AnchorPane {
+	private Main application;
+	@FXML
+	private MenuBar menu;
+	@FXML
+	private MenuItem importCampaign;
+	@FXML
+	private MenuItem openCampaign;
+	@FXML
+	private MenuItem close;
+	@FXML
+	private ToggleGroup viewGroup;
+	@FXML
+	private ToggleGroup viewGroup1;
+	@FXML
+	private MenuItem importCampaign1;
+	@FXML
+	private Menu prefMenu;
+	@FXML
+	private RadioMenuItem pref1;
+	@FXML
+	private RadioMenuItem pref2;
+	@FXML
+	private RadioMenuItem pref3;
+	@FXML
+	private RadioMenuItem pref4;
+	@FXML
+	private RadioMenuItem pref5;
+	@FXML
+	private CheckComboBox<String> filterGender;
+	@FXML
+	private CheckComboBox<String> filterAge;
+	@FXML
+	private CheckComboBox<String> filterIncome;
+	@FXML
+	private CheckComboBox<String> filterContext;
+	@FXML
+	private CheckComboBox<String> filterMetrics;
+	@FXML
+	private DatePicker filterDateFrom;
+	@FXML
+	private DatePicker filterDateTo;
+	@FXML
+	private Button generateGraph;
+	@FXML
+	private LineChart<?, ?> graphDisplay;
 
-    TextField userId;
-    PasswordField password;
-    Button login;
-    Label errorMessage;
+	public void setApp(Main application) {
+		this.application = application;
+	}
 
-    private Main application;
-    @FXML
-    private MenuBar menu;
-    @FXML
-    private MenuItem importCampaign;
-    @FXML
-    private MenuItem openCampaign;
-    @FXML
-    private MenuItem close;
-    @FXML
-    private ToggleGroup viewGroup;
-    @FXML
-    private ToggleGroup viewGroup1;
-    @FXML
-    private MenuItem importCampaign1;
-    @FXML
-    private Menu prefMenu;
-    @FXML
-    private RadioMenuItem pref1;
-    @FXML
-    private RadioMenuItem pref2;
-    @FXML
-    private RadioMenuItem pref3;
-    @FXML
-    private RadioMenuItem pref4;
-    @FXML
-    private RadioMenuItem pref5;
-    @FXML
-    private org.controlsfx.control.CheckComboBox<String> filterGender;
-    @FXML
-    private org.controlsfx.control.CheckComboBox<String> filterAge;
-    @FXML
-    private org.controlsfx.control.CheckComboBox<String> filterIncome;
-    @FXML
-    private org.controlsfx.control.CheckComboBox<String> filterContext;
-    @FXML
-    private org.controlsfx.control.CheckComboBox<String> filterMetrics;
-    @FXML
-    private DatePicker filterDateFrom;
-    @FXML
-    private DatePicker filterDateTo;
-    @FXML
-    private Button generateGraph;
-    @FXML
-    private LineChart<?, ?> graphDisplay;
-    
-    
-    public void setApp(Main application){
-        this.application = application;
-    }
-    
-    void initialize() {
-        filterGender.getItems().addAll("Female","Male");
-        filterAge.getItems().addAll("Less than 25","25 to 34","35 to 44","45 to 54","Greater than 55");
-        filterIncome.getItems().addAll("Low","Medium","High");
-        filterContext.getItems().addAll("News","Shopping","Social Media","Blog","Hobbies","Travel");
-        filterMetrics.getItems().addAll("Hours","Days","Weeks","Months");
-    }
+	void initialize() {
+		filterGender.getItems().addAll("Female", "Male");
+		filterAge.getItems().addAll("Less than 25", "25 to 34", "35 to 44", "45 to 54", "Greater than 55");
+		filterIncome.getItems().addAll("Low", "Medium", "High");
+		filterContext.getItems().addAll("News", "Shopping", "Social Media", "Blog", "Hobbies", "Travel");
+		filterMetrics.getItems().addAll("Hours", "Days", "Weeks", "Months");
+	}
 
-    @FXML
-    private void importCampaignAction(ActionEvent event) {
-        DirectoryChooser dirChooser = new DirectoryChooser();
-        dirChooser.setTitle("Select folder to import campaign");
-        
-        String userDirectoryString = System.getProperty("user.home");
-        File userDirectory = new File(userDirectoryString);
-        if(!userDirectory.canRead()) {
-            userDirectory = new File("c:/");
-        }
-        dirChooser.setInitialDirectory(userDirectory);
+	@FXML
+	private void importCampaignAction(ActionEvent event) {
+		DirectoryChooser dirChooser = new DirectoryChooser();
+		dirChooser.setTitle("Select folder to import campaign");
 
-        File f = dirChooser.showDialog(application.getStage());
-        if (f != null)
-        {
-            CSVReader importCsv = new CSVReader();
-            if (importCsv.checkFilesExist(f.getAbsolutePath())) {
-                 FileChooser fChooser = new FileChooser();
-                 fChooser.setTitle("jk");
-                 File s = fChooser.showSaveDialog(application.getStage());
-                 if (s != null)
-                 {
-                     if (importCsv.readCsvs(f.getAbsolutePath(), s.getAbsolutePath()))
-                     {
-                            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                            alert.setTitle("Campaign imported successfully");
-                            alert.setHeaderText(null);
-                            alert.setContentText("The files were imported successfully");
-                            alert.showAndWait();
-                            
-                     }
-                     
-                 }
-            }
-        }
-    }
+		String userDirectoryString = System.getProperty("user.home");
+		File userDirectory = new File(userDirectoryString);
+		if (!userDirectory.canRead()) {
+			userDirectory = new File("c:/");
+		}
+		dirChooser.setInitialDirectory(userDirectory);
 
-    @FXML
-    private void openCampaignAction(ActionEvent event) {
-    }
+		File f = dirChooser.showDialog(application.getStage());
+		if (f != null) {
+			CSVReader importCsv = new CSVReader();
+			if (importCsv.checkFilesExist(f.getAbsolutePath())) {
+				FileChooser fChooser = new FileChooser();
+				fChooser.setTitle("jk");
+				File s = fChooser.showSaveDialog(application.getStage());
+				if (s != null) {
+					if (importCsv.readCsvs(f.getAbsolutePath(), s.getAbsolutePath())) {
+						Alert alert = new Alert(Alert.AlertType.INFORMATION);
+						alert.setTitle("Campaign imported successfully");
+						alert.setHeaderText(null);
+						alert.setContentText("The files were imported successfully");
+						alert.showAndWait();
 
-    @FXML
-    private void closeAction(ActionEvent event) {
-    }
+					}
 
+				}
+			}
+		}
+	}
+
+	@FXML
+	private void preferenceAction4(ActionEvent event) {
+		MenuItem mItem = (MenuItem) event.getSource();
+		String side = mItem.getText();
+		if ("left".equalsIgnoreCase(side)) {
+			System.out.println("left");
+		} else if ("right".equalsIgnoreCase(side)) {
+			System.out.println("right");
+		} else if ("top".equalsIgnoreCase(side)) {
+			System.out.println("top");
+		} else if ("bottom".equalsIgnoreCase(side)) {
+			System.out.println("bottom");
+		}
+	}
+	
     @FXML
-    private void preferenceAction2(ActionEvent event) {
-    }
+    private void openCampaignAction(ActionEvent event) {}
 
     @FXML
-    private void preferenceAction3(ActionEvent event) {
-    }
+    private void closeAction(ActionEvent event) {}
 
     @FXML
-    private void preferenceAction4(ActionEvent event) {
-        MenuItem mItem = (MenuItem) event.getSource();
-                String side = mItem.getText();
-                if ("left".equalsIgnoreCase(side)) {
-                    System.out.println("left");
-                } else if ("right".equalsIgnoreCase(side)) {
-                    System.out.println("right");
-                } else if ("top".equalsIgnoreCase(side)) {
-                    System.out.println("top");
-                } else if ("bottom".equalsIgnoreCase(side)) {
-                    System.out.println("bottom");
-                }
-    }
+    private void preferenceAction2(ActionEvent event) {}
 
     @FXML
-    private void preferenceAction5(ActionEvent event) {
-    }
+    private void preferenceAction3(ActionEvent event) {}
+	
+    @FXML
+    private void preferenceAction5(ActionEvent event) {}
 
     @FXML
-    private void prefOnAction(ActionEvent event) {
-    }
-    
+    private void prefOnAction(ActionEvent event) {}
 }

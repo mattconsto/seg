@@ -8,24 +8,23 @@ import java.sql.Statement;
 import javafx.scene.chart.XYChart;
 import javafx.scene.chart.XYChart.Series;
 
-public class ConversionGraphConstructor extends GraphConstructor{
-
+public class ConversionGraphConstructor extends GraphConstructor {
 	@Override
 	protected Series<String, Number> generateSpecificGraph(Connection conn) throws SQLException {
 		Statement selectStatement = conn.createStatement();
-		ResultSet selectResults = selectStatement.executeQuery("SELECT SUBSTR(ENTRYDATE, 0, 11) AS ENTRYDATE,COUNT(*) AS Frequency FROM SERVER WHERE CONVERSION = 1 GROUP BY SUBSTR(ENTRYDATE, 0, 11);");
-		
+		ResultSet selectResults = selectStatement.executeQuery(
+				"SELECT SUBSTR(ENTRYDATE, 0, 11) AS ENTRYDATE,COUNT(*) AS Frequency FROM SERVER WHERE CONVERSION = 1 GROUP BY SUBSTR(ENTRYDATE, 0, 11);");
+
 		XYChart.Series<String, Number> series = new XYChart.Series<String, Number>();
 		series.setName("Conversions by date");
-		
-		while(selectResults.next()){
+
+		while (selectResults.next()) {
 			series.getData().add(new XYChart.Data<String, Number>(selectResults.getString(1), selectResults.getInt(2)));
 			System.out.println(selectResults.getString(1));
 		}
-		
+
 		selectResults.close();
 		selectStatement.close();
 		return series;
 	}
-
 }

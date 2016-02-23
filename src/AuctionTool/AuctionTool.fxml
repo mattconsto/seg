@@ -135,7 +135,4 @@
       </children>
     </AnchorPane>
   </children>
-  <stylesheets>
-    <URL value="@../login/Login.css" />
-  </stylesheets>
 </AnchorPane>
