@@ -155,7 +155,9 @@ public class AuctionController extends AnchorPane {
     private void openCampaignAction(ActionEvent event) {}
 
     @FXML
-    private void closeAction(ActionEvent event) {}
+    private void closeAction(ActionEvent event) {
+    	System.exit(0);
+    }
 
     @FXML
     private void preferenceAction2(ActionEvent event) {}

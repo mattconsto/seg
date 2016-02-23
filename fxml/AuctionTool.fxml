@@ -49,9 +49,8 @@
           <Menu mnemonicParsing="false" text="File">
             <items>
               <MenuItem fx:id="importCampaign" mnemonicParsing="false" onAction="#importCampaignAction" text="Import Campaign" />
-                  <MenuItem fx:id="openCampaign" mnemonicParsing="false" onAction="#openCampaignAction" text="Open Campaign" />
-                  <MenuItem fx:id="importCampaign1" mnemonicParsing="false" onAction="#importCampaignAction" text="Import Campaign" />
-                  <MenuItem fx:id="close" mnemonicParsing="false" onAction="#closeAction" text="Close" />
+              <MenuItem fx:id="openCampaign" mnemonicParsing="false" onAction="#openCampaignAction" text="Open Campaign" />
+              <MenuItem fx:id="close" mnemonicParsing="false" onAction="#closeAction" text="Close" />
             </items>
           </Menu>
             <Menu mnemonicParsing="false" text="View" />
