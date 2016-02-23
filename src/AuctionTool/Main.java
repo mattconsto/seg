@@ -59,7 +59,7 @@ public class Main extends Application {
 			auctionTool.setApp(this);
 			auctionTool.initialize();
 		} catch (Exception ex) {
-			Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+			ex.printStackTrace();
 		}
 	}
 

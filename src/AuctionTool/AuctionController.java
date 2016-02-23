@@ -32,6 +32,8 @@
 package AuctionTool;
 
 import java.io.File;
+import java.sql.SQLException;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
@@ -41,6 +43,14 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 
 import org.controlsfx.control.CheckComboBox;
+
+import dashboard.Preferences;
+import dashboard.controller.BounceGraphConstructor;
+import dashboard.controller.ClicksGraphConstructor;
+import dashboard.controller.ConversionGraphConstructor;
+import dashboard.controller.ImpressionsGraphConstructor;
+import dashboard.controller.UniqueClicksGraphConstructor;
+import dashboard.controller.UniqueImpressionsGraphConstructor;
 
 /**
  * Login Controller.
@@ -90,18 +100,26 @@ public class AuctionController extends AnchorPane {
 	@FXML
 	private Button generateGraph;
 	@FXML
-	private LineChart<?, ?> graphDisplay;
+	private LineChart<String, Number> graphDisplay;
 
 	public void setApp(Main application) {
 		this.application = application;
 	}
 
+	@SuppressWarnings("unchecked")
 	void initialize() {
 		filterGender.getItems().addAll("Female", "Male");
 		filterAge.getItems().addAll("Less than 25", "25 to 34", "35 to 44", "45 to 54", "Greater than 55");
 		filterIncome.getItems().addAll("Low", "Medium", "High");
 		filterContext.getItems().addAll("News", "Shopping", "Social Media", "Blog", "Hobbies", "Travel");
 		filterMetrics.getItems().addAll("Hours", "Days", "Weeks", "Months");
+		
+		try {
+			application.getStage().setTitle(Preferences.productName + " - Impressions");
+			graphDisplay.getData().addAll(new BounceGraphConstructor().fetchGraph());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@FXML
@@ -135,21 +153,6 @@ public class AuctionController extends AnchorPane {
 			}
 		}
 	}
-
-	@FXML
-	private void preferenceAction4(ActionEvent event) {
-		MenuItem mItem = (MenuItem) event.getSource();
-		String side = mItem.getText();
-		if ("left".equalsIgnoreCase(side)) {
-			System.out.println("left");
-		} else if ("right".equalsIgnoreCase(side)) {
-			System.out.println("right");
-		} else if ("top".equalsIgnoreCase(side)) {
-			System.out.println("top");
-		} else if ("bottom".equalsIgnoreCase(side)) {
-			System.out.println("bottom");
-		}
-	}
 	
     @FXML
     private void openCampaignAction(ActionEvent event) {}
@@ -159,14 +162,65 @@ public class AuctionController extends AnchorPane {
     	System.exit(0);
     }
 
-    @FXML
-    private void preferenceAction2(ActionEvent event) {}
+    @SuppressWarnings("unchecked")
+	@FXML
+    private void preference_impressions(ActionEvent event) {
+		try {
+			application.getStage().setTitle(Preferences.productName + " - Impressions");
+			graphDisplay.getData().clear();
+			graphDisplay.getData().addAll(new ImpressionsGraphConstructor().fetchGraph());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+    
+    @SuppressWarnings("unchecked")
+	@FXML
+    private void preference_impressions_unique(ActionEvent event) {
+		try {
+			application.getStage().setTitle(Preferences.productName + " - Impressions (Unique)");
+			graphDisplay.getData().clear();
+			graphDisplay.getData().addAll(new UniqueImpressionsGraphConstructor().fetchGraph());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+    
+    @SuppressWarnings("unchecked")
+	@FXML
+    private void preference_clicks(ActionEvent event) {
+		try {
+			application.getStage().setTitle(Preferences.productName + " - Clicks");
+			graphDisplay.getData().clear();
+			graphDisplay.getData().addAll(new ClicksGraphConstructor().fetchGraph());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 
-    @FXML
-    private void preferenceAction3(ActionEvent event) {}
+    @SuppressWarnings("unchecked")
+	@FXML
+    private void preference_clicks_unique(ActionEvent event) {
+		try {
+			application.getStage().setTitle(Preferences.productName + " - Clicks (Unique)");
+			graphDisplay.getData().clear();
+			graphDisplay.getData().addAll(new UniqueClicksGraphConstructor().fetchGraph());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 	
-    @FXML
-    private void preferenceAction5(ActionEvent event) {}
+    @SuppressWarnings("unchecked")
+	@FXML
+    private void preference_conversions(ActionEvent event) {
+		try {
+			application.getStage().setTitle(Preferences.productName + " - Conversions");
+			graphDisplay.getData().clear();
+			graphDisplay.getData().addAll(new ConversionGraphConstructor().fetchGraph());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 
     @FXML
     private void prefOnAction(ActionEvent event) {}
