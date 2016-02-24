@@ -1,11 +1,10 @@
-package AuctionTool;
+package dashboard.model;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.sql.*;
 
-import dashboard.model.DatabaseConnection;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 
@@ -30,7 +29,7 @@ public class CSVReader {
 			&& verifyFile(new File(folder + "\\server_log.csv"));
 	}
 
-	public boolean readCsvs(String folder) {
+	public boolean readCSVs(String folder) {
 		try {
 			Connection conn = DatabaseConnection.getConnection();
 			System.out.println("Opened database successfully");

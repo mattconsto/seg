@@ -1,4 +1,4 @@
-package AuctionTool;
+package dashboard.controller;
 
 import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
@@ -57,7 +57,6 @@ public class Main extends Application {
 		try {
 			AuctionController auctionTool = (AuctionController) replaceSceneContent("/fxml/AuctionTool.fxml");
 			auctionTool.setApp(this);
-			auctionTool.initialize();
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}

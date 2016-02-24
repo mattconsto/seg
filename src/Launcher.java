@@ -1,4 +1,4 @@
-import AuctionTool.Main;
+import dashboard.controller.Main;
 import javafx.application.Application;
 
 /**

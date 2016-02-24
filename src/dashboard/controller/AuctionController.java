@@ -1,8 +1,8 @@
 package dashboard.controller;
 
 
-import dashboard.model.DatabaseImporter;
-import dashboard.view.Main;
+import dashboard.model.CSVReader;
+import dashboard.controller.Main;
 
 import java.io.File;
  
@@ -18,14 +18,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
-import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.RadioMenuItem;
-import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.DirectoryChooser;
-import org.controlsfx.control.CheckComboBox;
 
 /**
  * Auction Controller.
@@ -58,15 +54,6 @@ public class AuctionController extends AnchorPane {
     private ComboBox<String> filterContext;
     @FXML 
     private ComboBox<String> filterMetrics;
-     /*       
-    @FXML
-    private ComboBox<?> filterGender;
-    @FXML
-    private ComboBox<?> filterAge;
-    @FXML
-    private ComboBox<?> filterIncome;
-    @FXML
-    private ComboBox<?> filterContext;*/
     @FXML
     private DatePicker filterDateFrom;
     @FXML
@@ -109,7 +96,7 @@ public class AuctionController extends AnchorPane {
         File f = dirChooser.showDialog(application.getStage());
         if (f != null)
         {
-            DatabaseImporter importCsv = new DatabaseImporter();
+            CSVReader importCsv = new CSVReader();
             if (importCsv.checkFilesExist(f.getAbsolutePath())) {
                 
                 /* FileChooser fChooser = new FileChooser();
@@ -134,24 +121,7 @@ public class AuctionController extends AnchorPane {
     }
 
     @FXML
-    private void closeAction(ActionEvent event) {
-    }
-
-
-    private void preferenceAction4(ActionEvent event) {
-        MenuItem mItem = (MenuItem) event.getSource();
-                String side = mItem.getText();
-                if ("left".equalsIgnoreCase(side)) {
-                    System.out.println("left");
-                } else if ("right".equalsIgnoreCase(side)) {
-                    System.out.println("right");
-                } else if ("top".equalsIgnoreCase(side)) {
-                    System.out.println("top");
-                } else if ("bottom".equalsIgnoreCase(side)) {
-                    System.out.println("bottom");
-                }
-    }
-
+    private void closeAction(ActionEvent event) {}
     
     public void updateGraph(GraphConstructor graphConstructor, String yLabel, LineChart<String, Number> lineChart){
 		yAxis.setLabel(yLabel);
