@@ -1,4 +1,4 @@
-import dashboard.controller.Main;
+import dashboard.view.Main;
 import javafx.application.Application;
 
 /**
