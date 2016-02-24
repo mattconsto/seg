@@ -7,13 +7,15 @@ import javafx.scene.chart.XYChart;
 
 import dashboard.model.DatabaseConnection;
 
+/**
+ * Abstract class for graph data generation
+ */
 public abstract class GraphConstructor {
-
-	String filterGender;
-	String filterAge;
-	String filterIncome;
-	String filterContext;
-	String filterTime;
+	protected String filterGender;
+	protected String filterAge;
+	protected String filterIncome;
+	protected String filterContext;
+	protected String filterTime;
 
 	public GraphConstructor(String gender, String age, String income, String context, String time) {
 		switch(gender) {
@@ -73,9 +75,20 @@ public abstract class GraphConstructor {
 		}
 	}
 
+	/**
+	 * Connect to the database, and fetch the data
+	 * @return A Series<String, Number> containing the data
+	 * @throws SQLException If there is an issue connecting to the database
+	 */
 	public XYChart.Series<String, Number> fetchGraph() throws SQLException {
 		return generateGraph(DatabaseConnection.getConnection());
 	}
 
+	/**
+	 * Run an SQL query and return the data
+	 * @param conn A database connection
+	 * @return A Series<String, Number> containing the data
+	 * @throws SQLException There is an issue with the query
+	 */
 	protected abstract XYChart.Series<String, Number> generateGraph(Connection conn) throws SQLException;
 }

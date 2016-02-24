@@ -42,6 +42,7 @@ public class DatabaseConnection {
 	 */
 	public static boolean closeConnection() throws SQLException {
 		if(connection != null) {
+			System.out.println("Closed database");
 			connection.close();
 			return connection.isClosed();
 		} else {
