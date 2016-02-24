@@ -124,8 +124,8 @@
 								<Button fx:id="generateGraph" layoutX="10.0" layoutY="602.0" mnemonicParsing="false" onAction="#generateData" prefHeight="52.0" prefWidth="196.0" text="Generate" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
 								<Label layoutX="10.0" layoutY="455.0" prefHeight="17.0" prefWidth="87.0" text="Date from:" AnchorPane.leftAnchor="10.0" />
 								<Label layoutX="10.0" layoutY="517.0" prefHeight="17.0" prefWidth="87.0" text="Date to:" AnchorPane.leftAnchor="10.0" />
-								<DatePicker fx:id="filterDateFrom" layoutX="10.0" layoutY="537.0" prefHeight="31.0" prefWidth="94.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
-								<DatePicker fx:id="filterDateTo" layoutX="10.0" layoutY="474.0" prefHeight="31.0" prefWidth="91.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+								<DatePicker fx:id="filterDateFrom" layoutX="10.0" layoutY="474.0" prefHeight="31.0" prefWidth="94.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+								<DatePicker fx:id="filterDateTo" layoutX="10.0" layoutY="537.0" prefHeight="31.0" prefWidth="91.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
 								<Label layoutX="10.0" layoutY="11.0" prefHeight="25.0" prefWidth="118.0" text="Campaign Name:" AnchorPane.leftAnchor="10.0" />
 								<Label fx:id="campaignName" layoutX="10.0" layoutY="32.0" prefHeight="27.0" prefWidth="194.0" text="Two Weeks" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
 							</children>

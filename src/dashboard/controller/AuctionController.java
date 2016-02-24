@@ -1,13 +1,10 @@
 package dashboard.controller;
 
 
-import dashboard.model.CSVReader;
-import dashboard.controller.Main;
-
 import java.io.File;
- 
 import java.sql.SQLException;
- 
+import java.time.LocalDate;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
@@ -20,6 +17,7 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.DirectoryChooser;
+import dashboard.model.CSVReader;
 
 /**
  * Auction Controller.
@@ -63,6 +61,11 @@ public class AuctionController extends AnchorPane {
     
     public void setApp(Main application){
         this.application = application;
+    }
+    
+    public void init() {
+    	filterDateFrom.setValue((LocalDate.of(2014,01,01)));
+    	filterDateTo.setValue((LocalDate.of(2014,01,14)));
     }
 
     @FXML

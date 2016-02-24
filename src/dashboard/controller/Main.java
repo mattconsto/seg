@@ -57,6 +57,7 @@ public class Main extends Application {
 		try {
 			AuctionController auctionTool = (AuctionController) replaceSceneContent("/fxml/AuctionTool.fxml");
 			auctionTool.setApp(this);
+			auctionTool.init();
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
