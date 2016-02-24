@@ -8,6 +8,11 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.chart.XYChart.Series;
 
 public class UniqueImpressionsGraphConstructor extends GraphConstructor {
+
+	public UniqueImpressionsGraphConstructor(String gender, String age, String income, String context, String time) {
+		super(gender, age, income, context, time);
+	}
+	
 	@Override
 	protected Series<String, Number> generateGraph(Connection conn) throws SQLException {
 		ResultSet results = conn.createStatement().executeQuery("SELECT SUBSTR(DATE, 0, 14) AS DATE,COUNT(DISTINCT ID) AS Frequency FROM IMPRESSIONS GROUP BY SUBSTR(DATE, 0, 14);");

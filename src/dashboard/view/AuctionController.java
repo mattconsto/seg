@@ -122,35 +122,41 @@ public class AuctionController extends AnchorPane {
     private void generateData(ActionEvent event) {
     	lineChart.getData().clear();
     	
-        lineChart.getXAxis().setLabel("Date");
+        lineChart.getXAxis().setLabel(filterTime.getValue());
         
         GraphConstructor constructor;
+        
+        String gender = filterGender.getValue();
+        String age = filterAge.getValue();
+        String income = filterIncome.getValue();
+        String context = filterContext.getValue();
+        String time = filterTime.getValue();
         
         switch(filterMetrics.getValue()) {
         	default:
         	case "Bounces":
-        		constructor = new BounceGraphConstructor();
+        		constructor = new BounceGraphConstructor(gender, age, income, context, time);
         		break;
         	case "Impressions":
-        		constructor = new ImpressionsGraphConstructor();
+        		constructor = new ImpressionsGraphConstructor(gender, age, income, context, time);
         		break;
         	case "Clicks":
-        		constructor = new ClicksGraphConstructor();
+        		constructor = new ClicksGraphConstructor(gender, age, income, context, time);
         		break;
         	case "Unique Impressions":
-        		constructor = new UniqueImpressionsGraphConstructor();
+        		constructor = new UniqueImpressionsGraphConstructor(gender, age, income, context, time);
         		break;
         	case "Unique Clicks":
-        		constructor = new UniqueClicksGraphConstructor();
+        		constructor = new UniqueClicksGraphConstructor(gender, age, income, context, time);
         		break;
         	case "Conversions":
-        		constructor = new ConversionGraphConstructor();
+        		constructor = new ConversionGraphConstructor(gender, age, income, context, time);
         		break;
         }
 		
 		lineChart.setCreateSymbols(false);
 		lineChart.setLegendVisible(false);
-        updateGraph(constructor, "Impressions", lineChart);
+        updateGraph(constructor, filterMetrics.getValue(), lineChart);
     }
     
 }
