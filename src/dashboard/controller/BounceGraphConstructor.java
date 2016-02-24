@@ -16,7 +16,11 @@ public class BounceGraphConstructor extends GraphConstructor{
 	
 	@Override
 	protected Series<String, Number> generateGraph(Connection conn) throws SQLException {
-		ResultSet results = conn.createStatement().executeQuery("SELECT SUBSTR(ENTRYDATE, 0, 14) AS ENTRYDATE,COUNT(*) AS Frequency FROM SERVER WHERE PAGES = 1 GROUP BY SUBSTR(ENTRYDATE, 0, 14);");
+		ResultSet results = conn.createStatement().executeQuery("SELECT SUBSTR(ENTRYDATE, 0, 14) AS ENTRYDATE,COUNT(*) AS Frequency FROM "
+				+ "(SELECT IMPRESSIONS.CONTEXT, SERVER.* FROM IMPRESSIONS "
+				+ "INNER JOIN SERVER ON IMPRESSIONS.ID=SERVER.ID "
+				+ "GROUP BY SERVER.ENTRYDATE, SERVER.ID) AS SUBQUERY "
+				+ "WHERE PAGES = 1 AND " + filterContext + " GROUP BY SUBSTR(ENTRYDATE, 0, 14);");
 
 		XYChart.Series<String, Number> series = new XYChart.Series<String, Number>();
 		series.setName("Bounces (Pages visited = 1) by date");
