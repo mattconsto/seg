@@ -9,15 +9,8 @@ import dashboard.model.DatabaseConnection;
 
 public abstract class GraphConstructor {
 	public XYChart.Series<String, Number> fetchGraph() throws SQLException {
-		Connection conn = DatabaseConnection.getConnection();
-		System.out.println("Graph constructor successfully connected to database");
-
-		XYChart.Series<String, Number> series = generateSpecificGraph(conn);
-
-		DatabaseConnection.closeConnection();
-
-		return series;
+		return generateGraph(DatabaseConnection.getConnection());
 	}
 
-	protected abstract XYChart.Series<String, Number> generateSpecificGraph(Connection conn) throws SQLException;
+	protected abstract XYChart.Series<String, Number> generateGraph(Connection conn) throws SQLException;
 }

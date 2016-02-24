@@ -3,28 +3,22 @@ package dashboard.controller;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 import javafx.scene.chart.XYChart;
 import javafx.scene.chart.XYChart.Series;
 
 public class ConversionGraphConstructor extends GraphConstructor {
 	@Override
-	protected Series<String, Number> generateSpecificGraph(Connection conn) throws SQLException {
-		Statement selectStatement = conn.createStatement();
-		ResultSet selectResults = selectStatement.executeQuery(
-				"SELECT SUBSTR(ENTRYDATE, 0, 11) AS ENTRYDATE,COUNT(*) AS Frequency FROM SERVER WHERE CONVERSION = 1 GROUP BY SUBSTR(ENTRYDATE, 0, 11);");
+	protected Series<String, Number> generateGraph(Connection conn) throws SQLException {
+		ResultSet results = conn.createStatement().executeQuery("SELECT SUBSTR(ENTRYDATE, 0, 14) AS ENTRYDATE,COUNT(*) AS Frequency FROM SERVER WHERE CONVERSION = 1 GROUP BY SUBSTR(ENTRYDATE, 0, 14);");
 
 		XYChart.Series<String, Number> series = new XYChart.Series<String, Number>();
 		series.setName("Conversions by date");
 
-		while (selectResults.next()) {
-			series.getData().add(new XYChart.Data<String, Number>(selectResults.getString(1), selectResults.getInt(2)));
-			System.out.println(selectResults.getString(1));
-		}
+		while (results.next())
+			series.getData().add(new XYChart.Data<String, Number>(results.getString(1) + ":00", results.getInt(2)));
 
-		selectResults.close();
-		selectStatement.close();
+		results.close();
 		return series;
 	}
 }

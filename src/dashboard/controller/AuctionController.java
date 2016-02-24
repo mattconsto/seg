@@ -64,15 +64,6 @@ public class AuctionController extends AnchorPane {
     public void setApp(Main application){
         this.application = application;
     }
-    
-    public void initialize() {
-        filterGender.getItems().addAll("Female","Male");
-        filterAge.getItems().addAll("Less than 25","25 to 34","35 to 44","45 to 54","Greater than 55");
-        filterIncome.getItems().addAll("Low","Medium","High");
-        filterContext.getItems().addAll("News","Shopping","Social Media","Blog","Hobbies","Travel");
-        filterTime.getItems().addAll("Hours","Days","Weeks","Months");
-        filterMetrics.getItems().addAll("Impressions","Clicks","Unique Impressions","Unique Clicks","Conversions");
-    }
 
     @FXML
     private void importCampaignAction(ActionEvent event) {
@@ -128,12 +119,37 @@ public class AuctionController extends AnchorPane {
      
     @FXML
     private void generateData(ActionEvent event) {
+    	lineChart.getData().clear();
+    	
         lineChart.getXAxis().setLabel("Date");
+        
+        GraphConstructor constructor;
+        
+        switch(filterMetrics.getValue()) {
+        	default:
+        	case "Bounces":
+        		constructor = new BounceGraphConstructor();
+        		break;
+        	case "Impressions":
+        		constructor = new ImpressionsGraphConstructor();
+        		break;
+        	case "Clicks":
+        		constructor = new ClicksGraphConstructor();
+        		break;
+        	case "Unique Impressions":
+        		constructor = new UniqueImpressionsGraphConstructor();
+        		break;
+        	case "Unique Clicks":
+        		constructor = new UniqueClicksGraphConstructor();
+        		break;
+        	case "Conversions":
+        		constructor = new ConversionGraphConstructor();
+        		break;
+        }
 		
 		lineChart.setCreateSymbols(false);
 		lineChart.setLegendVisible(false);
-        updateGraph(new ImpressionsGraphConstructor(), "Impressions", lineChart);
-        
+        updateGraph(constructor, "Impressions", lineChart);
     }
     
 }
