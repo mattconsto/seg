@@ -9,13 +9,22 @@ import java.sql.SQLException;
  */
 public class DatabaseConnection {
 	private static Connection connection = null;
-	private static String     dbfile     = "auction.db";
+	private static String     dbfile     = "auction";
+
+   
 	
 	/**
 	 * Disallow initialisation
 	 */
 	private DatabaseConnection() {}
 	
+        public static String getDbfile() {
+            return dbfile;
+        }
+
+        public static void setDbfile(String dbfilename) {
+               dbfile = dbfilename;
+        }
 	/**
 	 * Get a connection to the database
 	 * @return A connection
@@ -29,7 +38,7 @@ public class DatabaseConnection {
 				System.err.println("SQLite JDBC Library no found!");
 				System.exit(1);
 			}
-			connection = DriverManager.getConnection("jdbc:sqlite:" + dbfile);
+			connection = DriverManager.getConnection("jdbc:sqlite:" + dbfile + ".db");
 			System.out.println("Opened database successfully");
 		}
 		return connection;

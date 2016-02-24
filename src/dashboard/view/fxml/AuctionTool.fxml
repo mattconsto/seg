@@ -11,13 +11,14 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.paint.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" id="AnchorPane" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="909.0" prefWidth="1278.0" styleClass="background" stylesheets="@AuctionTool.css" fx:controller="dashboard.view.AuctionController">
+<AnchorPane id="AnchorPane" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="909.0" prefWidth="1278.0" styleClass="background" stylesheets="@AuctionTool.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dashboard.view.AuctionController">
 	<children>
 		<MenuBar fx:id="menu" prefHeight="25.0" prefWidth="1278.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
 			<menus>
 				<Menu mnemonicParsing="false" text="File">
 					<items>
 						<MenuItem fx:id="importCampaign" mnemonicParsing="false" onAction="#importCampaignAction" text="Import Campaign" />
+                  <MenuItem fx:id="openCampaign" mnemonicParsing="false" onAction="#openCampaignAction" text="Open Campaign" />
 						<MenuItem fx:id="close" mnemonicParsing="false" onAction="#closeAction" text="Close" />
 					</items>
 				</Menu>
@@ -30,66 +31,18 @@
 					<items>
 						<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
 							<children>
-								<ComboBox fx:id="filterGender" layoutX="10.0" layoutY="96.0" prefHeight="25.0" prefWidth="195.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
-									<items>
-										<FXCollections fx:factory="observableArrayList">
-											<String fx:value="Any" />
-											<String fx:value="Male" />
-											<String fx:value="Female" />
-										</FXCollections>
-									</items>
-									<value>
-										<String fx:value="Any" />
-									</value>
-								</ComboBox>
-								<Label layoutX="10.0" layoutY="77.0" text="Gender" AnchorPane.leftAnchor="10.0" />
-								<ComboBox fx:id="filterAge" layoutX="10.0" layoutY="159.0" prefHeight="25.0" prefWidth="195.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
-								<items>
-										<FXCollections fx:factory="observableArrayList">
-											<String fx:value="Any" />
-											<String fx:value="Less than 25" />
-											<String fx:value="25 to 34" />
-											<String fx:value="35 to 44" />
-											<String fx:value="45 to 54" />
-											<String fx:value="Greater than 55" />
-										</FXCollections>
-									</items>
-									<value>
-										<String fx:value="Any" />
-									</value>
-								</ComboBox>
-								<Label layoutX="10.0" layoutY="134.0" prefHeight="25.0" prefWidth="25.0" text="Age" AnchorPane.leftAnchor="10.0" />
-								<ComboBox fx:id="filterIncome" layoutX="10.0" layoutY="223.0" prefWidth="150.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
-								<items>
-										<FXCollections fx:factory="observableArrayList">
-											<String fx:value="Any" />
-											<String fx:value="Low" />
-											<String fx:value="Medium" />
-											<String fx:value="High" />
-										</FXCollections>
-									</items>
-									<value>
-										<String fx:value="Any" />
-									</value>
-								</ComboBox>
-								<Label layoutX="10.0" layoutY="204.0" text="Income" AnchorPane.leftAnchor="10.0" />
-								<ComboBox fx:id="filterContext" layoutX="10.0" layoutY="286.0" prefWidth="150.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
-								<items>
-										<FXCollections fx:factory="observableArrayList">
-											<String fx:value="Any" />
-											<String fx:value="News" />
-											<String fx:value="Shopping" />
-											<String fx:value="Social Media" />
-											<String fx:value="Blog" />
-											<String fx:value="Hobbies" />
-											<String fx:value="Travel" />
-										</FXCollections>
-									</items>
-									<value>
-										<String fx:value="Any" />
-									</value>
-								</ComboBox>
-								<ComboBox fx:id="filterTime" layoutX="10.0" layoutY="345.0" prefWidth="150.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
+								<org.controlsfx.control.CheckComboBox fx:id="filterGender" layoutX="10.0" layoutY="57.0" prefHeight="25.0" prefWidth="195.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0"/>
+								 
+								<Label layoutX="10.0" layoutY="38.0" text="Gender" AnchorPane.leftAnchor="10.0" />
+								<org.controlsfx.control.CheckComboBox fx:id="filterAge" layoutX="10.0" layoutY="117.0" prefHeight="25.0" prefWidth="195.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0"/>
+							
+								<Label layoutX="10.0" layoutY="92.0" prefHeight="25.0" prefWidth="25.0" text="Age" AnchorPane.leftAnchor="10.0" />
+								<org.controlsfx.control.CheckComboBox fx:id="filterIncome" layoutX="10.0" layoutY="171.0" prefWidth="150.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0"/>
+																
+								<Label layoutX="10.0" layoutY="152.0" text="Income" AnchorPane.leftAnchor="10.0" />
+								<org.controlsfx.control.CheckComboBox fx:id="filterContext" layoutX="10.0" layoutY="226.0" prefWidth="150.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0"/>
+								
+								<ComboBox fx:id="filterTime" layoutX="10.0" layoutY="285.0" prefWidth="150.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
 								<items>
 										<FXCollections fx:factory="observableArrayList">
 											<String fx:value="Minutes" />
@@ -104,9 +57,9 @@
 										<String fx:value="Days" />
 									</value>
 								</ComboBox>
-								<Label layoutX="10.0" layoutY="321.0" prefHeight="25.0" prefWidth="88.0" text="Time Unit" AnchorPane.leftAnchor="10.0" />
-								<Label layoutX="10.0" layoutY="266.0" text="Context" AnchorPane.leftAnchor="10.0" />
-								<ComboBox fx:id="filterMetrics" layoutX="10.0" layoutY="409.0" prefHeight="25.0" prefWidth="195.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
+								<Label layoutX="10.0" layoutY="261.0" prefHeight="25.0" prefWidth="88.0" text="Time Unit" AnchorPane.leftAnchor="10.0" />
+								<Label layoutX="10.0" layoutY="206.0" text="Context" AnchorPane.leftAnchor="10.0" />
+								<ComboBox fx:id="filterMetrics" layoutX="10.0" layoutY="340.0" prefHeight="25.0" prefWidth="195.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
 								<items>
 										<FXCollections fx:factory="observableArrayList">
 											<String fx:value="Bounces" />
@@ -121,14 +74,13 @@
 										<String fx:value="Bounces" />
 									</value>
 								</ComboBox>
-								<Label layoutX="10.0" layoutY="390.0" text="Graph Metrics" AnchorPane.leftAnchor="10.0" />
-								<Button fx:id="generateGraph" layoutX="10.0" layoutY="602.0" mnemonicParsing="false" onAction="#generateData" prefHeight="52.0" prefWidth="196.0" text="Generate" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
-								<Label layoutX="10.0" layoutY="455.0" prefHeight="17.0" prefWidth="87.0" text="Date from:" AnchorPane.leftAnchor="10.0" />
-								<Label layoutX="10.0" layoutY="517.0" prefHeight="17.0" prefWidth="87.0" text="Date to:" AnchorPane.leftAnchor="10.0" />
-								<DatePicker fx:id="filterDateFrom" layoutX="10.0" layoutY="474.0" prefHeight="31.0" prefWidth="94.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
-								<DatePicker fx:id="filterDateTo" layoutX="10.0" layoutY="537.0" prefHeight="31.0" prefWidth="91.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
-								<Label layoutX="10.0" layoutY="11.0" prefHeight="25.0" prefWidth="118.0" text="Campaign Name:" AnchorPane.leftAnchor="10.0" />
-								<Label fx:id="campaignName" layoutX="10.0" layoutY="32.0" prefHeight="27.0" prefWidth="194.0" text="Two Weeks" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+								<Label layoutX="10.0" layoutY="321.0" text="Graph Metrics" AnchorPane.leftAnchor="10.0" />
+								<Button fx:id="generateGraph" disable="true" layoutX="10.0" layoutY="502.0" mnemonicParsing="false" onAction="#generateData" prefHeight="52.0" prefWidth="196.0" text="Generate" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+								<Label layoutX="10.0" layoutY="375.0" prefHeight="17.0" prefWidth="87.0" text="Date from:" AnchorPane.leftAnchor="10.0" />
+								<Label layoutX="10.0" layoutY="435.0" prefHeight="17.0" prefWidth="87.0" text="Date to:" AnchorPane.leftAnchor="10.0" />
+								<DatePicker fx:id="filterDateFrom" layoutX="10.0" layoutY="397.0" prefHeight="31.0" prefWidth="94.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+								<DatePicker fx:id="filterDateTo" layoutX="10.0" layoutY="455.0" prefHeight="31.0" prefWidth="91.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+								<Label fx:id="campaignName" layoutX="10.0" layoutY="4.0" prefHeight="27.0" prefWidth="182.0" text="Open Campaign" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
 							</children>
 						</AnchorPane>
 						<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="782.0" prefWidth="891.0">

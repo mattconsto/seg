@@ -8,10 +8,13 @@ import dashboard.controller.GraphConstructor;
 import dashboard.controller.ImpressionsGraphConstructor;
 import dashboard.controller.UniqueClicksGraphConstructor;
 import dashboard.controller.UniqueImpressionsGraphConstructor;
+import dashboard.model.DatabaseConnection;
 
 import java.io.File;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.Optional;
+import javafx.collections.ObservableList;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -25,9 +28,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.DirectoryChooser;
-
+import javafx.stage.FileChooser;
+import org.controlsfx.control.CheckComboBox;
 /**
  * Auction Controller.
  */
@@ -38,21 +43,19 @@ public class AuctionController extends AnchorPane {
     @FXML
     private MenuItem importCampaign;
     @FXML
-    private MenuItem openCampaign;
-    @FXML
     private MenuItem close;
     /* The controlsFX checkComboBox is not supported in scenebuilder. To be able 
        to open the view in scenebuilder replace org.controlsfx.control.CheckComboBox with ComboBox
        The .fxml file also needs to be edited to remove the org.controlsfx.control.CheckComboBox
     */
     @FXML
-    private ComboBox<String> filterGender;
+    private org.controlsfx.control.CheckComboBox<String> filterGender;
     @FXML
-    private ComboBox<String> filterAge;
+    private org.controlsfx.control.CheckComboBox<String> filterAge;
     @FXML
-    private ComboBox<String> filterIncome;
+    private org.controlsfx.control.CheckComboBox<String> filterIncome;
     @FXML
-    private ComboBox<String> filterContext;
+    private org.controlsfx.control.CheckComboBox<String> filterContext;
     @FXML 
     private ComboBox<String> filterMetrics;
     @FXML
@@ -69,6 +72,8 @@ public class AuctionController extends AnchorPane {
     private ComboBox<String> filterTime;
     @FXML
     private Label campaignName;
+    @FXML
+    private MenuItem openCampaign;
     
     public void setApp(Main application){
         this.application = application;
@@ -77,6 +82,17 @@ public class AuctionController extends AnchorPane {
     public void init() {
     	filterDateFrom.setValue((LocalDate.of(2014,01,01)));
     	filterDateTo.setValue((LocalDate.of(2014,01,14)));
+        filterGender.getItems().addAll("Any","Female","Male");
+        filterAge.getItems().addAll("Any","Less than 25","25 to 34","35 to 44","45 to 54","Greater than 55");
+      							
+        filterIncome.getItems().addAll("Any","Low","Medium","High");
+        filterContext.getItems().addAll("Any","News","Shopping","Social Media","Blog","Hobbies","Travel");
+      
+        
+       filterGender.getCheckModel().check(0);
+       filterAge.getCheckModel().check(0);
+       filterContext.getCheckModel().check(0);
+       filterIncome.getCheckModel().check(0);
     }
 
     @FXML
@@ -84,21 +100,36 @@ public class AuctionController extends AnchorPane {
         DirectoryChooser dirChooser = new DirectoryChooser();
         dirChooser.setTitle("Select folder to import campaign");
         
-        String userDirectoryString = System.getProperty("user.home");
+        String userDirectoryString = System.getProperty("user.dir");
         File userDirectory = new File(userDirectoryString);
         if(!userDirectory.canRead()) userDirectory = new File("c:/");
         dirChooser.setInitialDirectory(userDirectory);
 
         File f = dirChooser.showDialog(application.getStage());
         if (f != null) {
+            
             CSVReader importCsv = new CSVReader();
             if (importCsv.checkFilesExist(f)) {
-                if (importCsv.readCSVs(f)) {
-                   Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                   alert.setTitle("Campaign imported successfully");
-                   alert.setHeaderText(null);
-                   alert.setContentText("The files were imported successfully");
-                   alert.showAndWait();
+                
+                TextInputDialog input = new TextInputDialog();
+                input.getEditor().setPromptText("Enter name of campaign");
+                input.setTitle("New Auction Campaign");
+                input.setHeaderText("Enter name of campaign");
+                Optional<String> result = input.showAndWait();
+
+                if (result.isPresent()) {
+                    
+                    DatabaseConnection.setDbfile(result.get().trim());    // should check name has is alpha numeric only here as it forms part of the database filename
+             
+                    if (importCsv.readCSVs(f )) {
+                       Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                       alert.setTitle("Campaign imported successfully");
+                       alert.setHeaderText(null);
+                       alert.setContentText("The files were imported successfully");
+                       alert.showAndWait();
+                       campaignName.setText(DatabaseConnection.getDbfile());
+                       generateGraph.setDisable(false);
+                    }
                 }
             }
         }
@@ -129,37 +160,58 @@ public class AuctionController extends AnchorPane {
         
         GraphConstructor constructor;
         
-        String gender = filterGender.getValue();
-        String age = filterAge.getValue();
-        String income = filterIncome.getValue();
-        String context = filterContext.getValue();
+        ObservableList <String> gender =  filterGender.getCheckModel().getCheckedItems();
+        ObservableList <String> age =  filterGender.getCheckModel().getCheckedItems();
+        ObservableList <String> income =  filterGender.getCheckModel().getCheckedItems(); 
+        ObservableList <String> context =  filterGender.getCheckModel().getCheckedItems();
+       
+       /* String gender =  filterGender.getValue();
+        String age =  filterGender.getValue();
+        String income =  filterGender.getValue(); 
+        String context =  filterGender.getValue();*/
+        
         String time = filterTime.getValue();
         
         switch(filterMetrics.getValue()) {
         	default:
         	case "Bounces":
-        		constructor = new BounceGraphConstructor(gender, age, income, context, time);
+        		constructor = new BounceGraphConstructor(gender.get(0), age.get(0), income.get(0), context.get(0), time);
         		break;
         	case "Impressions":
-        		constructor = new ImpressionsGraphConstructor(gender, age, income, context, time);
+        		constructor = new ImpressionsGraphConstructor(gender.get(0), age.get(0), income.get(0), context.get(0), time);
         		break;
         	case "Clicks":
-        		constructor = new ClicksGraphConstructor(gender, age, income, context, time);
+        		constructor = new ClicksGraphConstructor(gender.get(0), age.get(0), income.get(0), context.get(0), time);
         		break;
         	case "Unique Impressions":
-        		constructor = new UniqueImpressionsGraphConstructor(gender, age, income, context, time);
+        		constructor = new UniqueImpressionsGraphConstructor(gender.get(0), age.get(0), income.get(0), context.get(0), time);
         		break;
         	case "Unique Clicks":
-        		constructor = new UniqueClicksGraphConstructor(gender, age, income, context, time);
+        		constructor = new UniqueClicksGraphConstructor(gender.get(0), age.get(0), income.get(0), context.get(0), time);
         		break;
         	case "Conversions":
-        		constructor = new ConversionGraphConstructor(gender, age, income, context, time);
+        		constructor = new ConversionGraphConstructor(gender.get(0), age.get(0), income.get(0), context.get(0), time);
         		break;
         }
 		
 		lineChart.setCreateSymbols(false);
 		lineChart.setLegendVisible(false);
         updateGraph(constructor, filterMetrics.getValue(), lineChart);
+    }
+
+    @FXML
+    private void openCampaignAction(ActionEvent event) {
+        
+           FileChooser fChooser = new FileChooser();
+           fChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
+           fChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Campaign files (*.db)", "*.db"));
+           fChooser.setTitle("Select campaign" );
+           File s = fChooser.showOpenDialog(application.getStage());
+           if (s != null) {  
+                 DatabaseConnection.setDbfile(s.getName().replace(".db", ""));
+                 campaignName.setText(DatabaseConnection.getDbfile());
+                 generateGraph.setDisable(false); 
+           }
     }
     
 }
