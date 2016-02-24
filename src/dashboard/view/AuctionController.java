@@ -1,8 +1,14 @@
-package dashboard.controller;
+package dashboard.view;
 
 
 import dashboard.model.CSVReader;
-import dashboard.controller.Main;
+import dashboard.controller.BounceGraphConstructor;
+import dashboard.controller.ClicksGraphConstructor;
+import dashboard.controller.ConversionGraphConstructor;
+import dashboard.controller.GraphConstructor;
+import dashboard.controller.ImpressionsGraphConstructor;
+import dashboard.controller.UniqueClicksGraphConstructor;
+import dashboard.controller.UniqueImpressionsGraphConstructor;
 
 import java.io.File;
  
@@ -72,29 +78,19 @@ public class AuctionController extends AnchorPane {
         
         String userDirectoryString = System.getProperty("user.home");
         File userDirectory = new File(userDirectoryString);
-        if(!userDirectory.canRead()) {
-            userDirectory = new File("c:/");
-        }
+        if(!userDirectory.canRead()) userDirectory = new File("c:/");
         dirChooser.setInitialDirectory(userDirectory);
 
         File f = dirChooser.showDialog(application.getStage());
-        if (f != null)
-        {
+        if (f != null) {
             CSVReader importCsv = new CSVReader();
             if (importCsv.checkFilesExist(f.getAbsolutePath())) {
-                
-                /* FileChooser fChooser = new FileChooser();
-                 fChooser.setTitle("Save As" );
-                 File s = fChooser.showSaveDialog(application.getStage());
-                 if (s != null)
-                 {*/
-                if (importCsv.readCSVs(f.getAbsolutePath()))
-                {
-                       Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                       alert.setTitle("Campaign imported successfully");
-                       alert.setHeaderText(null);
-                       alert.setContentText("The files were imported successfully");
-                       alert.showAndWait();
+                if (importCsv.readCSVs(f.getAbsolutePath())) {
+                   Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                   alert.setTitle("Campaign imported successfully");
+                   alert.setHeaderText(null);
+                   alert.setContentText("The files were imported successfully");
+                   alert.showAndWait();
                 }
             }
         }

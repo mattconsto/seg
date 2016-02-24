@@ -1,4 +1,4 @@
-package dashboard.controller;
+package dashboard.view;
 
 import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
@@ -30,7 +30,7 @@ public class Main extends Application {
 			for (int size : new int[] {512, 256, 128, 64, 48, 32, 16})
 				stage.getIcons().add(
 					new Image(getClass().getResourceAsStream(
-						String.format("/icons/icon%d.png", size))));
+						String.format("/icon%d.png", size))));
 			
 			// Get the window display scaling, so we can set the correct res.
 			double deviceScaling = Toolkit.getDefaultToolkit()
@@ -40,8 +40,6 @@ public class Main extends Application {
 								.getLocalGraphicsEnvironment()
 								.getMaximumWindowBounds();
 
-			stage.setMinWidth(Preferences.minimumWidth / deviceScaling);
-			stage.setMinHeight(Preferences.minimumHeight / deviceScaling);
 			stage.setWidth(Preferences.windowScaling * bounds.getWidth() / deviceScaling);
 			stage.setHeight(Preferences.windowScaling * bounds.getHeight() / deviceScaling);
 			stage.centerOnScreen();
@@ -55,7 +53,7 @@ public class Main extends Application {
 
 	private void gotoAuctionTool() {
 		try {
-			AuctionController auctionTool = (AuctionController) replaceSceneContent("/fxml/AuctionTool.fxml");
+			AuctionController auctionTool = (AuctionController) replaceSceneContent("/dashboard/view/fxml/AuctionTool.fxml");
 			auctionTool.setApp(this);
 		} catch (Exception ex) {
 			ex.printStackTrace();
