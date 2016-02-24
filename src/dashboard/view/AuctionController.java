@@ -66,7 +66,6 @@ public class AuctionController extends AnchorPane {
     private Button generateGraph;
     @FXML
     private LineChart<String,Number> lineChart;
-    @FXML
     private TableView<Series<String, Number>> metricTable;
     @FXML
     private ComboBox<String> filterTime;
@@ -74,6 +73,18 @@ public class AuctionController extends AnchorPane {
     private Label campaignName;
     @FXML
     private MenuItem openCampaign;
+    @FXML
+    private Label lbBounce;
+    @FXML
+    private Label lbClicks;
+    @FXML
+    private Label lbConversion;
+    @FXML
+    private Label lbImpressions;
+    @FXML
+    private Label lbUClicks;
+    @FXML
+    private Label lbUImpressions;
     
     public void setApp(Main application){
         this.application = application;
