@@ -8,9 +8,15 @@ import java.sql.*;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 
+/**
+ * Read a CSV file and load it into the database
+ */
 public class CSVReader {
-	public CSVReader() {}
-
+	/**
+	 * Check if file exists
+	 * @param file The file
+	 * @return If the file exists
+	 */
 	private boolean verifyFile(File file) {
 		if (!file.exists() || file.isDirectory()) {
 			Alert alert = new Alert(AlertType.ERROR);
@@ -23,16 +29,25 @@ public class CSVReader {
 		return true;
 	}
 
-	public boolean checkFilesExist(String folder) {
+	/**
+	 * Check if the required CSVs exist that we need for the dashboard
+	 * @param folder The folder
+	 * @return If the CSVs exist
+	 */
+	public boolean checkFilesExist(File folder) {
 		return verifyFile(new File(folder + "\\impression_log.csv"))
 			&& verifyFile(new File(folder + "\\click_log.csv"))
 			&& verifyFile(new File(folder + "\\server_log.csv"));
 	}
 
-	public boolean readCSVs(String folder) {
+	/**
+	 * Read the CSVs to the database
+	 * @param folder The folder
+	 * @return If they are read
+	 */
+	public boolean readCSVs(File folder) {
 		try {
 			Connection conn = DatabaseConnection.getConnection();
-			System.out.println("Opened database successfully");
 			readImpressions(new File(folder + "\\impression_log.csv"), conn);
 			readClicks(new File(folder + "\\click_log.csv"), conn);
 			readServer(new File(folder + "\\server_log.csv"), conn);
@@ -42,7 +57,7 @@ public class CSVReader {
 		return true;
 	}
 
-	public void readImpressions(File fname, Connection conn) {
+	protected void readImpressions(File fname, Connection conn) {
 		try {
 			Statement stmt = conn.createStatement();
 			stmt.executeUpdate("drop table if exists IMPRESSIONS;");
@@ -139,10 +154,10 @@ public class CSVReader {
 			e.printStackTrace();
 		}
 
-		System.out.println("IMPRESSION Table created successfully");
+		System.out.println("Impression Table created successfully");
 	}
 
-	public void readClicks(File fname, Connection conn) {
+	protected void readClicks(File fname, Connection conn) {
 		try {
 			Statement stmt = conn.createStatement();
 			stmt.executeUpdate("drop table if exists CLICKS;");
@@ -182,10 +197,10 @@ public class CSVReader {
 			e.printStackTrace();
 		}
 
-		System.out.println("CLICK Table created successfully");
+		System.out.println("Click Table created successfully");
 	}
 
-	public void readServer(File fname, Connection conn) {
+	protected void readServer(File fname, Connection conn) {
 		try {
 			Statement stmt = conn.createStatement();
 			stmt.executeUpdate("drop table if exists SERVER;");
@@ -231,5 +246,4 @@ public class CSVReader {
 
 		System.out.println("Server Table created successfully");
 	}
-
 }

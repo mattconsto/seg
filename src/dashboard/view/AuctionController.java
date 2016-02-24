@@ -1,6 +1,5 @@
 package dashboard.view;
 
-
 import dashboard.model.CSVReader;
 import dashboard.controller.BounceGraphConstructor;
 import dashboard.controller.ClicksGraphConstructor;
@@ -17,6 +16,7 @@ import java.time.LocalDate;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
+import javafx.scene.chart.XYChart.Series;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -24,6 +24,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TableView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.DirectoryChooser;
 
@@ -63,6 +64,8 @@ public class AuctionController extends AnchorPane {
     @FXML
     private LineChart<String,Number> lineChart;
     @FXML
+    private TableView<Series<String, Number>> metricTable;
+    @FXML
     private ComboBox<String> filterTime;
     @FXML
     private Label campaignName;
@@ -89,8 +92,8 @@ public class AuctionController extends AnchorPane {
         File f = dirChooser.showDialog(application.getStage());
         if (f != null) {
             CSVReader importCsv = new CSVReader();
-            if (importCsv.checkFilesExist(f.getAbsolutePath())) {
-                if (importCsv.readCSVs(f.getAbsolutePath())) {
+            if (importCsv.checkFilesExist(f)) {
+                if (importCsv.readCSVs(f)) {
                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
                    alert.setTitle("Campaign imported successfully");
                    alert.setHeaderText(null);
@@ -102,17 +105,17 @@ public class AuctionController extends AnchorPane {
     }
 
     @FXML
-    private void openCampaignAction(ActionEvent event) {
+    private void closeAction(ActionEvent event) {
+    	System.exit(0);
     }
-
-    @FXML
-    private void closeAction(ActionEvent event) {}
     
     public void updateGraph(GraphConstructor graphConstructor, String yLabel, LineChart<String, Number> lineChart){
 		lineChart.getYAxis().setLabel(yLabel);
 		
 		try {
-			lineChart.getData().add(graphConstructor.fetchGraph());
+			Series<String, Number> data = graphConstructor.fetchGraph();
+			metricTable.getItems().add(data);
+			lineChart.getData().add(data);
 		} catch (SQLException e) {
 			System.err.println("Unable to fetch data from database: " + e.getMessage());
 		}

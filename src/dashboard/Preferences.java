@@ -10,5 +10,5 @@ public class Preferences {
 	private Preferences() {}
 	
 	public static final String productName   = "Ad Auction Dashboard";
-	public static final double windowScaling = 0.9;
+	public static final double windowScaling = 0.9; // % of the screen taken
 }
