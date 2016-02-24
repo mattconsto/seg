@@ -229,13 +229,17 @@ Heading styles
 */
 div.details ul.blockList ul.blockList ul.blockList li.blockList h4, div.details ul.blockList ul.blockList ul.blockListLast li.blockList h4 {
     background-color:#dee3e9;
-    border:1px solid #d0d9e0;
+    border: 1px 1px 1px 1px;
+    border-style: solid;
+    border-color: #d0d9e0;
     margin:0 0 6px -8px;
     padding:7px 5px;
 }
 ul.blockList ul.blockList ul.blockList li.blockList h3 {
     background-color:#dee3e9;
-    border:1px solid #d0d9e0;
+    border: 1px 1px 1px 1px;
+    border-style: solid;
+    border-color: #d0d9e0;
     margin:0 0 6px -8px;
     padding:7px 5px;
 }
@@ -324,7 +328,9 @@ ul.blockList li.blockList, ul.blockListLast li.blockList {
 }
 ul.blockList ul.blockList li.blockList, ul.blockList ul.blockListLast li.blockList {
     padding:0px 20px 5px 10px;
-    border:1px solid #ededed; 
+    border: 1px 1px 1px 1px;
+    border-style: solid;
+    border-color: #ededed;
     background-color:#f8f8f8;
 }
 ul.blockList ul.blockList ul.blockList li.blockList, ul.blockList ul.blockList ul.blockListLast li.blockList {
@@ -352,9 +358,11 @@ Table styles
 */
 .overviewSummary, .memberSummary, .typeSummary, .useSummary, .constantsSummary, .deprecatedSummary {
     width:100%;
-    border-left:1px solid #EEE; 
-    border-right:1px solid #EEE; 
-    border-bottom:1px solid #EEE; 
+    border-left:1px; 
+    border-right:1px; 
+    border-bottom:1px; 
+    border-style: solid;
+    border-color: #eee;
 }
 .overviewSummary, .memberSummary  {
     padding:0px;

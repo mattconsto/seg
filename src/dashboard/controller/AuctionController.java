@@ -10,9 +10,7 @@ import java.sql.SQLException;
  
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
-import javafx.scene.chart.NumberAxis;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -26,11 +24,7 @@ import javafx.stage.DirectoryChooser;
 /**
  * Auction Controller.
  */
-public class AuctionController extends AnchorPane {
-
-   private final CategoryAxis xAxis = new CategoryAxis();
-   private final NumberAxis yAxis = new NumberAxis();
-        
+public class AuctionController extends AnchorPane {        
     private Main application;
     @FXML
     private MenuBar menu;
@@ -66,7 +60,6 @@ public class AuctionController extends AnchorPane {
     private ComboBox<String> filterTime;
     @FXML
     private Label campaignName;
-    
     
     public void setApp(Main application){
         this.application = application;
@@ -124,7 +117,7 @@ public class AuctionController extends AnchorPane {
     private void closeAction(ActionEvent event) {}
     
     public void updateGraph(GraphConstructor graphConstructor, String yLabel, LineChart<String, Number> lineChart){
-		yAxis.setLabel(yLabel);
+		lineChart.getYAxis().setLabel(yLabel);
 		
 		try {
 			lineChart.getData().add(graphConstructor.fetchGraph());
@@ -135,7 +128,7 @@ public class AuctionController extends AnchorPane {
      
     @FXML
     private void generateData(ActionEvent event) {
-        xAxis.setLabel("Date");
+        lineChart.getXAxis().setLabel("Date");
 		
 		lineChart.setCreateSymbols(false);
 		lineChart.setLegendVisible(false);
