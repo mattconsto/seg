@@ -30,7 +30,7 @@ public class CSVReader {
 			&& verifyFile(new File(folder + "\\server_log.csv"));
 	}
 
-	public boolean readCsvs(String folder, String name) {
+	public boolean readCsvs(String folder) {
 		try {
 			Connection conn = DatabaseConnection.getConnection();
 			System.out.println("Opened database successfully");

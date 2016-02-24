@@ -138,17 +138,12 @@ public class AuctionController extends AnchorPane {
 		if (f != null) {
 			CSVReader importCsv = new CSVReader();
 			if (importCsv.checkFilesExist(f.getAbsolutePath())) {
-				FileChooser fChooser = new FileChooser();
-				fChooser.setTitle("jk");
-				File s = fChooser.showSaveDialog(application.getStage());
-				if (s != null) {
-					if (importCsv.readCsvs(f.getAbsolutePath(), s.getAbsolutePath())) {
-						Alert alert = new Alert(Alert.AlertType.INFORMATION);
-						alert.setTitle("Campaign imported successfully");
-						alert.setHeaderText(null);
-						alert.setContentText("The files were imported successfully");
-						alert.showAndWait();
-					}
+				if (importCsv.readCsvs(f.getAbsolutePath())) {
+					Alert alert = new Alert(Alert.AlertType.INFORMATION);
+					alert.setTitle("Campaign imported successfully");
+					alert.setHeaderText(null);
+					alert.setContentText("The files were imported successfully");
+					alert.showAndWait();
 				}
 			}
 		}

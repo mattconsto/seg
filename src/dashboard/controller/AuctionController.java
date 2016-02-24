@@ -17,6 +17,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
@@ -43,22 +44,6 @@ public class AuctionController extends AnchorPane {
     private MenuItem openCampaign;
     @FXML
     private MenuItem close;
-    @FXML
-    private ToggleGroup viewGroup;
-    @FXML
-    private MenuItem importCampaign1;
-    @FXML
-    private Menu prefMenu;
-    @FXML
-    private RadioMenuItem pref1;
-    @FXML
-    private RadioMenuItem pref2;
-    @FXML
-    private RadioMenuItem pref3;
-    @FXML
-    private RadioMenuItem pref4;
-    @FXML
-    private RadioMenuItem pref5;
     /* The controlsFX checkComboBox is not supported in scenebuilder. To be able 
        to open the view in scenebuilder replace org.controlsfx.control.CheckComboBox with ComboBox
        The .fxml file also needs to be edited to remove the org.controlsfx.control.CheckComboBox
@@ -71,19 +56,17 @@ public class AuctionController extends AnchorPane {
     private ComboBox<String> filterIncome;
     @FXML
     private ComboBox<String> filterContext;
-    @FXML
+    @FXML 
     private ComboBox<String> filterMetrics;
-            
-  /*  @FXML
-    private org.controlsfx.control.CheckComboBox<String> filterGender;
+     /*       
     @FXML
-    private org.controlsfx.control.CheckComboBox<String> filterAge;
+    private ComboBox<?> filterGender;
     @FXML
-    private org.controlsfx.control.CheckComboBox<String> filterIncome;
+    private ComboBox<?> filterAge;
     @FXML
-    private org.controlsfx.control.CheckComboBox<String> filterContext;
+    private ComboBox<?> filterIncome;
     @FXML
-    private org.controlsfx.control.CheckComboBox<String> filterMetrics; */
+    private ComboBox<?> filterContext;*/
     @FXML
     private DatePicker filterDateFrom;
     @FXML
@@ -92,6 +75,10 @@ public class AuctionController extends AnchorPane {
     private Button generateGraph;
     @FXML
     private LineChart<String,Number> lineChart;
+    @FXML
+    private ComboBox<String> filterTime;
+    @FXML
+    private Label campaignName;
     
     
     public void setApp(Main application){
@@ -103,7 +90,8 @@ public class AuctionController extends AnchorPane {
         filterAge.getItems().addAll("Less than 25","25 to 34","35 to 44","45 to 54","Greater than 55");
         filterIncome.getItems().addAll("Low","Medium","High");
         filterContext.getItems().addAll("News","Shopping","Social Media","Blog","Hobbies","Travel");
-        filterMetrics.getItems().addAll("Hours","Days","Weeks","Months");
+        filterTime.getItems().addAll("Hours","Days","Weeks","Months");
+        filterMetrics.getItems().addAll("Impressions","Clicks","Unique Impressions","Unique Clicks","Conversions");
     }
 
     @FXML
@@ -149,15 +137,7 @@ public class AuctionController extends AnchorPane {
     private void closeAction(ActionEvent event) {
     }
 
-    @FXML
-    private void preferenceAction2(ActionEvent event) {
-    }
 
-    @FXML
-    private void preferenceAction3(ActionEvent event) {
-    }
-
-    @FXML
     private void preferenceAction4(ActionEvent event) {
         MenuItem mItem = (MenuItem) event.getSource();
                 String side = mItem.getText();
@@ -172,13 +152,6 @@ public class AuctionController extends AnchorPane {
                 }
     }
 
-    @FXML
-    private void preferenceAction5(ActionEvent event) {
-    }
-
-    @FXML
-    private void prefOnAction(ActionEvent event) {
-    }
     
     public void updateGraph(GraphConstructor graphConstructor, String yLabel, LineChart<String, Number> lineChart){
 		yAxis.setLabel(yLabel);
