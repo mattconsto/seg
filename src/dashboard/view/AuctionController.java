@@ -125,6 +125,7 @@ public class AuctionController extends AnchorPane {
                        alert.showAndWait();
                        campaignName.setText(DatabaseConnection.getDbfile());
                        generateGraph.setDisable(false);
+                       generateData(null);
                     }
                 }
             }
@@ -273,6 +274,7 @@ public class AuctionController extends AnchorPane {
                  DatabaseConnection.setDbfile(s.getName().replace(".db", ""));
                  campaignName.setText(DatabaseConnection.getDbfile());
                  generateGraph.setDisable(false); 
+                 generateData(null);
            }
     }   
 }
