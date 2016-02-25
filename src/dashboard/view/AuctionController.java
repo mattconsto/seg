@@ -1,13 +1,7 @@
 package dashboard.view;
 
 import dashboard.model.CSVReader;
-import dashboard.controller.BounceGraphConstructor;
-import dashboard.controller.ClicksGraphConstructor;
-import dashboard.controller.ConversionGraphConstructor;
-import dashboard.controller.GraphConstructor;
-import dashboard.controller.ImpressionsGraphConstructor;
-import dashboard.controller.UniqueClicksGraphConstructor;
-import dashboard.controller.UniqueImpressionsGraphConstructor;
+import dashboard.controller.*;
 
 import java.io.File;
 import java.sql.SQLException;
@@ -17,14 +11,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart.Series;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.DirectoryChooser;
 
