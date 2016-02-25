@@ -50,28 +50,32 @@ public abstract class GraphConstructor {
 		default:
 			break;
 		}
-		switch(context) {
-		case "News":
-			this.filterContext = "CONTEXT=0";
-			break;
-		case "Shopping":
-			this.filterContext = "CONTEXT=1";
-			break;
-		case "Social Media":
-			this.filterContext = "CONTEXT=2";
-			break;
-		case "Blog":
-			this.filterContext = "CONTEXT=3";
-			break;
-		case "Hobbies":
-			this.filterContext = "CONTEXT=4";
-			break;
-		case "Travel":
-			this.filterContext = "CONTEXT=5";
-			break;
-		default:
+		if(context != null) {
+			switch(context) {
+			case "News":
+				this.filterContext = "CONTEXT=0";
+				break;
+			case "Shopping":
+				this.filterContext = "CONTEXT=1";
+				break;
+			case "Social Media":
+				this.filterContext = "CONTEXT=2";
+				break;
+			case "Blog":
+				this.filterContext = "CONTEXT=3";
+				break;
+			case "Hobbies":
+				this.filterContext = "CONTEXT=4";
+				break;
+			case "Travel":
+				this.filterContext = "CONTEXT=5";
+				break;
+			default:
+				this.filterContext = "'1'='1'";
+				break;
+			}
+		}else {
 			this.filterContext = "'1'='1'";
-			break;
 		}
 	}
 

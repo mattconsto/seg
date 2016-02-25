@@ -47,6 +47,7 @@ public class CSVReader {
 	 */
 	public boolean readCSVs(File folder) {
 		try {
+                        
 			Connection conn = DatabaseConnection.getConnection();
 			readImpressions(new File(folder + "\\impression_log.csv"), conn);
 			readClicks(new File(folder + "\\click_log.csv"), conn);
