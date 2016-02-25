@@ -1,3 +1,3 @@
 @echo off
 
-java -jar dashboard.jar
+java -jar dashboard(24.02).jar
