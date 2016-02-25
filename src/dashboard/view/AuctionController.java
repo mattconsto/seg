@@ -1,21 +1,13 @@
 package dashboard.view;
 
-import dashboard.model.CSVReader;
-import dashboard.controller.BounceGraphConstructor;
-import dashboard.controller.ClicksGraphConstructor;
-import dashboard.controller.ConversionGraphConstructor;
-import dashboard.controller.GraphConstructor;
-import dashboard.controller.ImpressionsGraphConstructor;
-import dashboard.controller.UniqueClicksGraphConstructor;
-import dashboard.controller.UniqueImpressionsGraphConstructor;
-import dashboard.model.DatabaseConnection;
-
 import java.io.File;
+import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Optional;
-import javafx.collections.ObservableList;
 
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
@@ -27,12 +19,19 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.TableView;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
-import org.controlsfx.control.CheckComboBox;
+import dashboard.controller.BounceGraphConstructor;
+import dashboard.controller.ClicksGraphConstructor;
+import dashboard.controller.ConversionGraphConstructor;
+import dashboard.controller.GraphConstructor;
+import dashboard.controller.ImpressionsGraphConstructor;
+import dashboard.controller.UniqueClicksGraphConstructor;
+import dashboard.controller.UniqueImpressionsGraphConstructor;
+import dashboard.model.CSVReader;
+import dashboard.model.DatabaseConnection;
 /**
  * Auction Controller.
  */
@@ -66,7 +65,7 @@ public class AuctionController extends AnchorPane {
     private Button generateGraph;
     @FXML
     private LineChart<String,Number> lineChart;
-    private TableView<Series<String, Number>> metricTable;
+//    private TableView<Series<String, Number>> metricTable;
     @FXML
     private ComboBox<String> filterTime;
     @FXML
@@ -156,12 +155,74 @@ public class AuctionController extends AnchorPane {
 		
 		try {
 			Series<String, Number> data = graphConstructor.fetchGraph();
-			metricTable.getItems().add(data);
+//			metricTable.getItems().add(data);
 			lineChart.getData().add(data);
 		} catch (SQLException e) {
 			System.err.println("Unable to fetch data from database: " + e.getMessage());
 		}
 	}
+    
+    public void updateMetricsTable(String gender, String age, String income, String context, String time) throws SQLException{
+
+    	String fContext;
+    	if(context != null){
+    		switch(context) {
+    		case "News":
+    			fContext = "CONTEXT=0";
+    			break;
+    		case "Shopping":
+    			fContext = "CONTEXT=1";
+    			break;
+    		case "Social Media":
+    			fContext = "CONTEXT=2";
+    			break;
+    		case "Blog":
+    			fContext = "CONTEXT=3";
+    			break;
+    		case "Hobbies":
+    			fContext = "CONTEXT=4";
+    			break;
+    		case "Travel":
+    			fContext = "CONTEXT=5";
+    			break;
+    		default:
+    			fContext = "'1'='1'";
+    			break;
+    		}
+    	}else {
+    		fContext = "'1'='1'";
+    	}
+    	
+    	Connection conn = DatabaseConnection.getConnection();
+    	ResultSet results = conn.createStatement().executeQuery("SELECT COUNT(*) AS Frequency FROM "
+				+ "(SELECT IMPRESSIONS.CONTEXT, SERVER.* FROM IMPRESSIONS "
+				+ "INNER JOIN SERVER ON IMPRESSIONS.ID=SERVER.ID "
+				+ "GROUP BY SERVER.ENTRYDATE, SERVER.ID) AS SUBQUERY "
+				+ "WHERE PAGES = 1 AND " + fContext + ";");
+        lbBounce.setText(Integer.toString(results.getInt(1)));
+        results = conn.createStatement().executeQuery("SELECT COUNT(*) AS Frequency FROM"
+				+ "(SELECT IMPRESSIONS.CONTEXT, CLICKS.* FROM IMPRESSIONS"
+				+ " INNER JOIN CLICKS ON IMPRESSIONS.ID=CLICKS.ID"
+				+ " GROUP BY CLICKS.DATE, CLICKS.ID) AS SUBQUERY"
+				+ " WHERE " + fContext + ";");
+        lbClicks.setText(Integer.toString(results.getInt(1)));
+        results = conn.createStatement().executeQuery("SELECT COUNT(*) AS Frequency "
+				+ "FROM (SELECT IMPRESSIONS.CONTEXT, SERVER.* FROM "
+				+ "IMPRESSIONS INNER JOIN SERVER ON IMPRESSIONS.ID=SERVER.ID "
+				+ "GROUP BY SERVER.ENTRYDATE, SERVER.ID) AS SUBQUERY "
+				+ "WHERE CONVERSION = 1 AND " + fContext + ";");
+        lbConversion.setText(Integer.toString(results.getInt(1)));
+        results = conn.createStatement().executeQuery("SELECT COUNT(*) AS Frequency FROM IMPRESSIONS WHERE " + fContext +";");
+        lbImpressions.setText(Integer.toString(results.getInt(1)));
+        results = conn.createStatement().executeQuery("SELECT COUNT(DISTINCT ID) AS Frequency FROM"
+				+ "(SELECT IMPRESSIONS.CONTEXT, CLICKS.* FROM IMPRESSIONS"
+				+ " INNER JOIN CLICKS ON IMPRESSIONS.ID=CLICKS.ID"
+				+ " GROUP BY CLICKS.DATE, CLICKS.ID) AS SUBQUERY"
+				+ " WHERE " + fContext + ";");
+        lbUClicks.setText(Integer.toString(results.getInt(1)));
+        results = conn.createStatement().executeQuery("SELECT COUNT(DISTINCT ID) AS Frequency FROM IMPRESSIONS WHERE " + fContext +";");
+        lbUImpressions.setText(Integer.toString(results.getInt(1)));
+    }
      
     @FXML
     private void generateData(ActionEvent event) {
@@ -172,9 +233,9 @@ public class AuctionController extends AnchorPane {
         GraphConstructor constructor;
         
         ObservableList <String> gender =  filterGender.getCheckModel().getCheckedItems();
-        ObservableList <String> age =  filterGender.getCheckModel().getCheckedItems();
-        ObservableList <String> income =  filterGender.getCheckModel().getCheckedItems(); 
-        ObservableList <String> context =  filterGender.getCheckModel().getCheckedItems();
+        ObservableList <String> age =  filterAge.getCheckModel().getCheckedItems();
+        ObservableList <String> income =  filterIncome.getCheckModel().getCheckedItems(); 
+        ObservableList <String> context =  filterContext.getCheckModel().getCheckedItems();
        
        /* String gender =  filterGender.getValue();
         String age =  filterGender.getValue();
@@ -208,6 +269,11 @@ public class AuctionController extends AnchorPane {
 		lineChart.setCreateSymbols(false);
 		lineChart.setLegendVisible(false);
         updateGraph(constructor, filterMetrics.getValue(), lineChart);
+        try {
+        updateMetricsTable(gender.get(0), age.get(0), income.get(0), context.get(0), time);
+        } catch (SQLException e) {
+        	System.err.println(e.getMessage());
+        }
     }
 
     @FXML
