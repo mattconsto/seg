@@ -12,12 +12,26 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart.Series;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
-import dashboard.controller.*;
-import dashboard.model.*;
+import dashboard.controller.BounceGraphConstructor;
+import dashboard.controller.ClicksGraphConstructor;
+import dashboard.controller.ConversionGraphConstructor;
+import dashboard.controller.GraphConstructor;
+import dashboard.controller.ImpressionsGraphConstructor;
+import dashboard.controller.UniqueClicksGraphConstructor;
+import dashboard.controller.UniqueImpressionsGraphConstructor;
+import dashboard.model.CSVReader;
+import dashboard.model.DatabaseConnection;
 /**
  * Auction Controller.
  */
@@ -230,7 +244,6 @@ public class AuctionController extends AnchorPane {
         String context =  filterGender.getValue();*/
         
         String time = filterTime.getValue();
-        
         switch(filterMetrics.getValue()) {
         	default:
         	case "Bounces":
@@ -271,7 +284,7 @@ public class AuctionController extends AnchorPane {
            fChooser.setTitle("Select campaign" );
            File s = fChooser.showOpenDialog(application.getStage());
            if (s != null) {  
-                 DatabaseConnection.setDbfile(s.getName().replace(".db", ""));
+                 DatabaseConnection.setDbfile(s.getPath().replace(".db", ""));
                  campaignName.setText(DatabaseConnection.getDbfile());
                  generateGraph.setDisable(false); 
                  generateData(null);
