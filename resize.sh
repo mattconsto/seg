@@ -1,4 +1,4 @@
-cp icon.png icons/icon512.png
+cp icons/icon.png icons/icon512.png
 convert icons/icon512.png -resize 50% icons/icon256.png
 convert icons/icon256.png -resize 50% icons/icon128.png
 convert icons/icon128.png -resize 50% icons/icon64.png

@@ -12,26 +12,12 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart.Series;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
-import dashboard.controller.BounceGraphConstructor;
-import dashboard.controller.ClicksGraphConstructor;
-import dashboard.controller.ConversionGraphConstructor;
-import dashboard.controller.GraphConstructor;
-import dashboard.controller.ImpressionsGraphConstructor;
-import dashboard.controller.UniqueClicksGraphConstructor;
-import dashboard.controller.UniqueImpressionsGraphConstructor;
-import dashboard.model.CSVReader;
-import dashboard.model.DatabaseConnection;
+import dashboard.controller.*;
+import dashboard.model.*;
 /**
  * Auction Controller.
  */
@@ -278,7 +264,6 @@ public class AuctionController extends AnchorPane {
 
     @FXML
     private void openCampaignAction(ActionEvent event) {
-        
            FileChooser fChooser = new FileChooser();
            fChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
            fChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Campaign files (*.db)", "*.db"));
@@ -289,6 +274,5 @@ public class AuctionController extends AnchorPane {
                  campaignName.setText(DatabaseConnection.getDbfile());
                  generateGraph.setDisable(false); 
            }
-    }
-    
+    }   
 }
