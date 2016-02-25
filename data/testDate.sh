@@ -31,7 +31,7 @@ done
 echo "Date,csvCount,databaseCount,correct?" >> ServerDates.txt
 for number in {01..14}
 do
-	XVAR="$(grep "2015-01-$number" server_log.csv | wc -l)"
+	XVAR="$(awk -F',' '{print $1}' server_log.csv | grep "2015-01-$number" | wc -l)"
 	DBVAR="$(sqlite3 $1 'SELECT COUNT(*) AS Frequency FROM SERVER WHERE SUBSTR(ENTRYDATE, 9, 2) = "'$number'"')"
 	if [ $XVAR == $DBVAR ];
 	then
