@@ -10,7 +10,6 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.JavaFXBuilderFactory;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
@@ -63,7 +62,8 @@ public class Main extends Application {
 		FXMLLoader loader = new FXMLLoader();
 		loader.setBuilderFactory(new JavaFXBuilderFactory());
 		loader.setLocation(Main.class.getResource(fxml));
-		stage.setScene(new Scene((Parent) loader.load(Main.class.getResourceAsStream(fxml))));
+		AnchorPane page = (AnchorPane) loader.load(Main.class.getResourceAsStream(fxml));
+		stage.setScene(new Scene(page));
 		return (Node) loader.getController();
 	}
 }
