@@ -7,19 +7,25 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Optional;
 
+import org.controlsfx.control.CheckComboBox;
+
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart.Series;
+import javafx.scene.control.Accordion;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.TitledPane;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
@@ -48,13 +54,13 @@ public class AuctionController extends AnchorPane {
        The .fxml file also needs to be edited to remove the org.controlsfx.control.CheckComboBox
     */
     @FXML
-    private org.controlsfx.control.CheckComboBox<String> filterGender;
+    private CheckComboBox<String> filterGender;
     @FXML
-    private org.controlsfx.control.CheckComboBox<String> filterAge;
+    private CheckComboBox<String> filterAge;
     @FXML
-    private org.controlsfx.control.CheckComboBox<String> filterIncome;
+    private CheckComboBox<String> filterIncome;
     @FXML
-    private org.controlsfx.control.CheckComboBox<String> filterContext;
+    private CheckComboBox<String> filterContext;
     @FXML 
     private ComboBox<String> filterMetrics;
     @FXML
@@ -85,6 +91,18 @@ public class AuctionController extends AnchorPane {
     @FXML
     private Label lbUImpressions;
     
+    @FXML private Accordion        accordion;
+    @FXML private TitledPane       titledpane_open;
+    
+    @FXML private ComboBox<String> campaigns_list;
+    @FXML private Button           campaigns_open;
+    @FXML private Button           campaigns_delete;
+    @FXML private Button           campaigns_import;
+    
+    @FXML private ComboBox<String> export_list;
+    @FXML private Button           export_save;
+    @FXML private Button           export_print;
+    
     public void setApp(Main application){
         this.application = application;
     }
@@ -92,21 +110,50 @@ public class AuctionController extends AnchorPane {
     public void init() {
     	filterDateFrom.setValue((LocalDate.of(2015,01,01)));
     	filterDateTo.setValue((LocalDate.of(2015,01,14)));
-        filterGender.getItems().addAll("Any","Female","Male");
-        filterAge.getItems().addAll("Any","Less than 25","25 to 34","35 to 44","45 to 54","Greater than 55");
-      							
-        filterIncome.getItems().addAll("Any","Low","Medium","High");
-        filterContext.getItems().addAll("Any","News","Shopping","Social Media","Blog","Hobbies","Travel");
-      
         
        filterGender.getCheckModel().check(0);
        filterAge.getCheckModel().check(0);
        filterContext.getCheckModel().check(0);
        filterIncome.getCheckModel().check(0);
+       
+       campaigns_list_update();
+       
+       accordion.setExpandedPane(titledpane_open);
     }
+    
+    @FXML private void campaigns_list_action() {
+    	boolean value = campaigns_list.getValue().equals("Select a Campaign");
+    	campaigns_open.setDisable(value);
+    	campaigns_delete.setDisable(value);
+    }
+    
+    private void campaigns_list_update() {
+    	campaigns_list.getItems().clear();
+        for (File file : new File(".").listFiles((d, n) -> n.endsWith(".db")))
+            campaigns_list.getItems().add(file.getName().replace(".db", ""));
+        campaigns_list.setValue("Select a Campaign");
+    }
+    
+    @FXML private void campaigns_open_action() {
+    	System.out.println("Opening: " + campaigns_list.getValue());
+    	DatabaseConnection.setDbfile(campaigns_list.getValue());
+        generateGraph.setDisable(false); 
+        generateData(null);
+    }
+    
+    @FXML private void campaigns_delete_action() {
+    	Alert alert = new Alert(AlertType.CONFIRMATION);
+    	alert.setTitle("Delete Campaign");
+    	alert.setHeaderText("Deleting " + campaigns_list.getValue());
+    	alert.setContentText("Are you ok with this?");
 
-    @FXML
-    private void importCampaignAction(ActionEvent event) {
+    	if (alert.showAndWait().get() == ButtonType.OK) {
+    	    new File(campaigns_list.getValue() + ".db").delete();
+    	    campaigns_list_update();
+    	}
+    }
+    
+    @FXML private void campaigns_import_action() {
         DirectoryChooser dirChooser = new DirectoryChooser();
         dirChooser.setTitle("Select folder to import campaign");
         
@@ -137,18 +184,29 @@ public class AuctionController extends AnchorPane {
                        alert.setHeaderText(null);
                        alert.setContentText("The files were imported successfully");
                        alert.showAndWait();
-                       campaignName.setText(DatabaseConnection.getDbfile());
+//                       campaignName.setText(DatabaseConnection.getDbfile());
                        generateGraph.setDisable(false);
                        generateData(null);
+                       
+                       campaigns_list_update();
                     }
                 }
             }
         }
     }
-
-    @FXML
-    private void closeAction(ActionEvent event) {
-    	System.exit(0);
+    
+    @FXML private void export_list_action() {
+    	boolean value = export_list.getValue().equals("Select an Option");
+    	export_print.setDisable(value);
+    	export_save.setDisable(value);
+    }
+    
+    @FXML private void export_save_action() {
+    	new Alert(AlertType.INFORMATION, "Not Implemented").show();
+    }
+    
+    @FXML private void export_print_action() {
+    	new Alert(AlertType.INFORMATION, "Not Implemented").show();
     }
     
     public void updateGraph(GraphConstructor graphConstructor, String yLabel, LineChart<String, Number> lineChart){
@@ -164,7 +222,6 @@ public class AuctionController extends AnchorPane {
 	}
     
     public void updateMetricsTable(String gender, String age, String income, String context, String time) throws SQLException{
-
     	String fContext;
     	if(context != null){
     		switch(context) {
@@ -269,25 +326,10 @@ public class AuctionController extends AnchorPane {
 		lineChart.setCreateSymbols(false);
 		lineChart.setLegendVisible(false);
         updateGraph(constructor, filterMetrics.getValue(), lineChart);
-        try {
-        updateMetricsTable(gender.get(0), age.get(0), income.get(0), context.get(0), time);
-        } catch (SQLException e) {
-        	System.err.println(e.getMessage());
-        }
+//        try {
+////        updateMetricsTable(gender.get(0), age.get(0), income.get(0), context.get(0), time);
+//        } catch (SQLException e) {
+//        	System.err.println(e.getMessage());
+//        }
     }
-
-    @FXML
-    private void openCampaignAction(ActionEvent event) {
-           FileChooser fChooser = new FileChooser();
-           fChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
-           fChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Campaign files (*.db)", "*.db"));
-           fChooser.setTitle("Select campaign" );
-           File s = fChooser.showOpenDialog(application.getStage());
-           if (s != null) {  
-                 DatabaseConnection.setDbfile(s.getPath().replace(".db", ""));
-                 campaignName.setText(s.getName().replace(".db", ""));
-                 generateGraph.setDisable(false); 
-                 generateData(null);
-           }
-    }   
 }
