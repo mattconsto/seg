@@ -27,9 +27,9 @@ public class Main extends Application {
 		stage = primaryStage;
 		stage.setTitle(Preferences.productName);
 		for (int size : new int[] {512, 256, 128, 64, 48, 32, 16})
-			stage.getIcons().add(
+			/*stage.getIcons().add(
 				new Image(getClass().getResourceAsStream(
-					String.format("/icon%d.png", size))));
+					String.format("/icon%d.png", size))))*/;
 		
 		// Get the window display scaling, so we can set the correct res.
 		double deviceScaling = Toolkit.getDefaultToolkit()

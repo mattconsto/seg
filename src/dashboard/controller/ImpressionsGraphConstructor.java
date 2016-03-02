@@ -1,5 +1,6 @@
 package dashboard.controller;
 
+import dashboard.model.Filter;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,13 +10,13 @@ import javafx.scene.chart.XYChart.Series;
 
 public class ImpressionsGraphConstructor extends GraphConstructor {
 
-	public ImpressionsGraphConstructor(String gender, String age, String income, String context, String time) {
-		super(gender, age, income, context, time);
+	public ImpressionsGraphConstructor(Filter filter) {
+		super(filter);
 	}
 	
 	@Override
 	protected Series<String, Number> generateGraph(Connection conn) throws SQLException {
-		ResultSet results = conn.createStatement().executeQuery("SELECT SUBSTR(DATE, 0, 14) AS DATE,COUNT(*) AS Frequency FROM IMPRESSIONS WHERE " + filterContext +" GROUP BY SUBSTR(DATE, 0, 14);");
+		ResultSet results = conn.createStatement().executeQuery("SELECT SUBSTR(DATE, 0, 14) AS DATE,COUNT(*) AS Frequency FROM IMPRESSIONS WHERE " + filter.getContextSQL() +" GROUP BY SUBSTR(DATE, 0, 14);");
 
 		XYChart.Series<String, Number> series = new XYChart.Series<String, Number>();
 		series.setName("Impressions by date");

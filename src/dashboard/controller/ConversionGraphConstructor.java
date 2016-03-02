@@ -1,5 +1,6 @@
 package dashboard.controller;
 
+import dashboard.model.Filter;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,8 +10,8 @@ import javafx.scene.chart.XYChart.Series;
 
 public class ConversionGraphConstructor extends GraphConstructor {
 
-	public ConversionGraphConstructor(String gender, String age, String income, String context, String time) {
-		super(gender, age, income, context, time);
+	public ConversionGraphConstructor(Filter filter) {
+		super(filter);
 	}
 	
 	@Override
@@ -19,7 +20,7 @@ public class ConversionGraphConstructor extends GraphConstructor {
 				+ "FROM (SELECT IMPRESSIONS.CONTEXT, SERVER.* FROM "
 				+ "IMPRESSIONS INNER JOIN SERVER ON IMPRESSIONS.ID=SERVER.ID "
 				+ "GROUP BY SERVER.ENTRYDATE, SERVER.ID) AS SUBQUERY "
-				+ "WHERE CONVERSION = 1 AND " + filterContext
+				+ "WHERE CONVERSION = 1 AND " + filter.getContextSQL()
 				+ " GROUP BY SUBSTR(ENTRYDATE, 0, 14);");
 
 		XYChart.Series<String, Number> series = new XYChart.Series<String, Number>();

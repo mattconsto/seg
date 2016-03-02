@@ -34,7 +34,7 @@ public class CSVReader {
 	 * @param folder The folder
 	 * @return If the CSVs exist
 	 */
-	public boolean checkFilesExist(File folder) {
+	public boolean checkFilesExist(String folder) {
 		return verifyFile(new File(folder + "\\impression_log.csv"))
 			&& verifyFile(new File(folder + "\\click_log.csv"))
 			&& verifyFile(new File(folder + "\\server_log.csv"));
@@ -45,7 +45,7 @@ public class CSVReader {
 	 * @param folder The folder
 	 * @return If they are read
 	 */
-	public boolean readCSVs(File folder) {
+	public boolean readCSVs(String folder) {
 		try {
                         
 			Connection conn = DatabaseConnection.getConnection();

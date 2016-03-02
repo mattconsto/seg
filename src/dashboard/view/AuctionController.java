@@ -32,6 +32,13 @@ import dashboard.controller.UniqueClicksGraphConstructor;
 import dashboard.controller.UniqueImpressionsGraphConstructor;
 import dashboard.model.CSVReader;
 import dashboard.model.DatabaseConnection;
+import dashboard.model.Filter;
+import dashboard.model.ObservableMetrics;
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 /**
  * Auction Controller.
  */
@@ -84,12 +91,22 @@ public class AuctionController extends AnchorPane {
     private Label lbUClicks;
     @FXML
     private Label lbUImpressions;
+    @FXML
+    private TableView<ObservableMetrics> tableResults;
+    @FXML
+    private TableColumn<ObservableMetrics, String> metricCol;
+    @FXML
+    private TableColumn<ObservableMetrics, String> resultCol;
     
+    final ObservableList<ObservableMetrics> tableContent = FXCollections.observableArrayList();
+    private Filter filter;
     public void setApp(Main application){
         this.application = application;
     }
     
     public void init() {
+        filter = new Filter();
+        
     	filterDateFrom.setValue((LocalDate.of(2014,01,01)));
     	filterDateTo.setValue((LocalDate.of(2014,01,14)));
         filterGender.getItems().addAll("Any","Female","Male");
@@ -103,23 +120,55 @@ public class AuctionController extends AnchorPane {
        filterAge.getCheckModel().check(0);
        filterContext.getCheckModel().check(0);
        filterIncome.getCheckModel().check(0);
-    }
+     
+       metricCol.setCellValueFactory(cellData -> cellData.getValue().descriptionProperty());
+       resultCol.setCellValueFactory(cellData -> cellData.getValue().resultProperty());
+       configureTable();
+        
+       
+       
+  }
+  private final ListChangeListener<ObservableMetrics> tableSelectionChanged =
+            new ListChangeListener<ObservableMetrics>() {
 
+                @Override
+                public void onChanged(ListChangeListener.Change<? extends ObservableMetrics> c) {
+                    //do something here
+                    ObservableMetrics s1 =  tableResults.getSelectionModel().getSelectedItem();
+                    
+                    drawGraph(s1.getDescription());
+                    
+                }
+            };
+
+    
+    // Configure the table widget: set up its column, and register the
+    // selection changed listener.
+    private void configureTable() {
+        metricCol.setCellValueFactory(new PropertyValueFactory<>("description"));
+        resultCol.setCellValueFactory(new PropertyValueFactory<>("result"));
+        tableResults.setItems(tableContent);
+        assert tableResults.getItems() == tableContent;
+
+        final ObservableList<ObservableMetrics> tableSelection = tableResults.getSelectionModel().getSelectedItems();
+
+        tableSelection.addListener(tableSelectionChanged);
+        
+        
+    }
     @FXML
     private void importCampaignAction(ActionEvent event) {
-        DirectoryChooser dirChooser = new DirectoryChooser();
-        dirChooser.setTitle("Select folder to import campaign");
         
-        String userDirectoryString = System.getProperty("user.dir");
-        File userDirectory = new File(userDirectoryString);
-        if(!userDirectory.canRead()) userDirectory = new File("c:/");
-        dirChooser.setInitialDirectory(userDirectory);
-
-        File f = dirChooser.showDialog(application.getStage());
-        if (f != null) {
-            
+         FileChooser fChooser = new FileChooser();
+         fChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
+         fChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Campaign files (*.csv)", "*.csv"));
+         fChooser.setTitle("Select campaign to import" );
+         File fl = fChooser.showOpenDialog(application.getStage());
+         
+        if (fl != null) {
+           
             CSVReader importCsv = new CSVReader();
-            if (importCsv.checkFilesExist(f)) {
+            if (importCsv.checkFilesExist(fl.getParent())) {
                 
                 TextInputDialog input = new TextInputDialog();
                 input.getEditor().setPromptText("Enter name of campaign");
@@ -131,7 +180,7 @@ public class AuctionController extends AnchorPane {
                     
                     DatabaseConnection.setDbfile(result.get().trim());    // should check name has is alpha numeric only here as it forms part of the database filename
              
-                    if (importCsv.readCSVs(f )) {
+                    if (importCsv.readCSVs(fl.getParent())) {
                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
                        alert.setTitle("Campaign imported successfully");
                        alert.setHeaderText(null);
@@ -163,114 +212,100 @@ public class AuctionController extends AnchorPane {
 		}
 	}
     
-    public void updateMetricsTable(String gender, String age, String income, String context, String time) throws SQLException{
-
-    	String fContext;
-    	if(context != null){
-    		switch(context) {
-    		case "News":
-    			fContext = "CONTEXT=0";
-    			break;
-    		case "Shopping":
-    			fContext = "CONTEXT=1";
-    			break;
-    		case "Social Media":
-    			fContext = "CONTEXT=2";
-    			break;
-    		case "Blog":
-    			fContext = "CONTEXT=3";
-    			break;
-    		case "Hobbies":
-    			fContext = "CONTEXT=4";
-    			break;
-    		case "Travel":
-    			fContext = "CONTEXT=5";
-    			break;
-    		default:
-    			fContext = "'1'='1'";
-    			break;
-    		}
-    	}else {
-    		fContext = "'1'='1'";
-    	}
-    	
-    	Connection conn = DatabaseConnection.getConnection();
+    public void updateMetricsTable() throws SQLException{
+        tableContent.clear();
+       	Connection conn = DatabaseConnection.getConnection();
     	ResultSet results = conn.createStatement().executeQuery("SELECT COUNT(*) AS Frequency FROM "
 				+ "(SELECT IMPRESSIONS.CONTEXT, SERVER.* FROM IMPRESSIONS "
 				+ "INNER JOIN SERVER ON IMPRESSIONS.ID=SERVER.ID "
 				+ "GROUP BY SERVER.ENTRYDATE, SERVER.ID) AS SUBQUERY "
-				+ "WHERE PAGES = 1 AND " + fContext + ";");
-        lbBounce.setText(Integer.toString(results.getInt(1)));
+				+ "WHERE PAGES = 1 AND " + filter.getContextSQL() + ";");
+      
+        tableContent.add(new dashboard.model.ObservableMetrics("Bounces",Integer.toString(results.getInt(1))));
+         
         results = conn.createStatement().executeQuery("SELECT COUNT(*) AS Frequency FROM"
 				+ "(SELECT IMPRESSIONS.CONTEXT, CLICKS.* FROM IMPRESSIONS"
 				+ " INNER JOIN CLICKS ON IMPRESSIONS.ID=CLICKS.ID"
 				+ " GROUP BY CLICKS.DATE, CLICKS.ID) AS SUBQUERY"
-				+ " WHERE " + fContext + ";");
-        lbClicks.setText(Integer.toString(results.getInt(1)));
+				+ " WHERE " + filter.getSql() + ";");
+       
+        tableContent.add(new dashboard.model.ObservableMetrics("Clicks",Integer.toString(results.getInt(1))));
+     
         results = conn.createStatement().executeQuery("SELECT COUNT(*) AS Frequency "
 				+ "FROM (SELECT IMPRESSIONS.CONTEXT, SERVER.* FROM "
 				+ "IMPRESSIONS INNER JOIN SERVER ON IMPRESSIONS.ID=SERVER.ID "
 				+ "GROUP BY SERVER.ENTRYDATE, SERVER.ID) AS SUBQUERY "
-				+ "WHERE CONVERSION = 1 AND " + fContext + ";");
-        lbConversion.setText(Integer.toString(results.getInt(1)));
-        results = conn.createStatement().executeQuery("SELECT COUNT(*) AS Frequency FROM IMPRESSIONS WHERE " + fContext +";");
-        lbImpressions.setText(Integer.toString(results.getInt(1)));
+				+ "WHERE CONVERSION = 1 AND " + filter.getContextSQL() + ";");
+         
+        tableContent.add(new dashboard.model.ObservableMetrics("Conversions",Integer.toString(results.getInt(1))));
+     
+        results = conn.createStatement().executeQuery("SELECT COUNT(*) AS Frequency FROM IMPRESSIONS WHERE " +  filter.getContextSQL() +";");
+       
+        tableContent.add(new dashboard.model.ObservableMetrics("Impressions",Integer.toString(results.getInt(1))));
+     
         results = conn.createStatement().executeQuery("SELECT COUNT(DISTINCT ID) AS Frequency FROM"
 				+ "(SELECT IMPRESSIONS.CONTEXT, CLICKS.* FROM IMPRESSIONS"
 				+ " INNER JOIN CLICKS ON IMPRESSIONS.ID=CLICKS.ID"
 				+ " GROUP BY CLICKS.DATE, CLICKS.ID) AS SUBQUERY"
-				+ " WHERE " + fContext + ";");
-        lbUClicks.setText(Integer.toString(results.getInt(1)));
-        results = conn.createStatement().executeQuery("SELECT COUNT(DISTINCT ID) AS Frequency FROM IMPRESSIONS WHERE " + fContext +";");
-        lbUImpressions.setText(Integer.toString(results.getInt(1)));
-    }
+				+ " WHERE " +  filter.getContextSQL() + ";");
+         
+        tableContent.add(new dashboard.model.ObservableMetrics("Unique Clicks",Integer.toString(results.getInt(1))));
      
-    @FXML
-    private void generateData(ActionEvent event) {
-    	lineChart.getData().clear();
-    	
-        lineChart.getXAxis().setLabel(filterTime.getValue());
-        
+        results = conn.createStatement().executeQuery("SELECT COUNT(DISTINCT ID) AS Frequency FROM IMPRESSIONS WHERE " +  filter.getContextSQL() +";");
+       
+        tableContent.add(new dashboard.model.ObservableMetrics("Unique Impressions",Integer.toString(results.getInt(1))));
+      
+        tableContent.add(new dashboard.model.ObservableMetrics("Total Cost","0.00"));
+        tableContent.add(new dashboard.model.ObservableMetrics("CTR","...."));
+        tableContent.add(new dashboard.model.ObservableMetrics("CPA","...."));
+        tableContent.add(new dashboard.model.ObservableMetrics("CPC","...."));
+        tableContent.add(new dashboard.model.ObservableMetrics("CPM","...."));
+     
+    
+    }
+    private void drawGraph(String metric)
+    {
+        lineChart.getData().clear();
+        lineChart.getXAxis().setLabel(filterTime.getValue());  
+        lineChart.getYAxis().setLabel(metric);
         GraphConstructor constructor;
         
-        ObservableList <String> gender =  filterGender.getCheckModel().getCheckedItems();
-        ObservableList <String> age =  filterAge.getCheckModel().getCheckedItems();
-        ObservableList <String> income =  filterIncome.getCheckModel().getCheckedItems(); 
-        ObservableList <String> context =  filterContext.getCheckModel().getCheckedItems();
-       
-       /* String gender =  filterGender.getValue();
-        String age =  filterGender.getValue();
-        String income =  filterGender.getValue(); 
-        String context =  filterGender.getValue();*/
-        
-        String time = filterTime.getValue();
-        switch(filterMetrics.getValue()) {
+        switch(metric) {
         	default:
         	case "Bounces":
-        		constructor = new BounceGraphConstructor(gender.get(0), age.get(0), income.get(0), context.get(0), time);
+        		constructor = new BounceGraphConstructor(filter);
         		break;
         	case "Impressions":
-        		constructor = new ImpressionsGraphConstructor(gender.get(0), age.get(0), income.get(0), context.get(0), time);
+        		constructor = new ImpressionsGraphConstructor(filter);
         		break;
         	case "Clicks":
-        		constructor = new ClicksGraphConstructor(gender.get(0), age.get(0), income.get(0), context.get(0), time);
+        		constructor = new ClicksGraphConstructor(filter);
         		break;
         	case "Unique Impressions":
-        		constructor = new UniqueImpressionsGraphConstructor(gender.get(0), age.get(0), income.get(0), context.get(0), time);
+        		constructor = new UniqueImpressionsGraphConstructor(filter);
         		break;
         	case "Unique Clicks":
-        		constructor = new UniqueClicksGraphConstructor(gender.get(0), age.get(0), income.get(0), context.get(0), time);
+        		constructor = new UniqueClicksGraphConstructor(filter);
         		break;
         	case "Conversions":
-        		constructor = new ConversionGraphConstructor(gender.get(0), age.get(0), income.get(0), context.get(0), time);
+        		constructor = new ConversionGraphConstructor(filter);
         		break;
         }
 		
 		lineChart.setCreateSymbols(false);
 		lineChart.setLegendVisible(false);
-        updateGraph(constructor, filterMetrics.getValue(), lineChart);
+        updateGraph(constructor, metric, lineChart);
+        
+    }
+    @FXML
+    private void generateData(ActionEvent event) {
+        filter.setGender(filterGender.getCheckModel().getCheckedItems());
+        filter.setAge(filterAge.getCheckModel().getCheckedItems());
+        filter.setIncome(filterIncome.getCheckModel().getCheckedItems()); 
+        filter.setContext(filterContext.getCheckModel().getCheckedItems());
+        drawGraph("Bounces");
         try {
-        updateMetricsTable(gender.get(0), age.get(0), income.get(0), context.get(0), time);
+            updateMetricsTable();
         } catch (SQLException e) {
         	System.err.println(e.getMessage());
         }
