@@ -122,9 +122,10 @@ public class AuctionController extends AnchorPane {
     }
     
     @FXML private void campaigns_list_action() {
-    	boolean value = campaigns_list.getValue().equals("Select a Campaign");
+    	boolean value = campaigns_list.getValue() == null || campaigns_list.getValue().equals("Select a Campaign");
     	campaigns_open.setDisable(value);
     	campaigns_delete.setDisable(value);
+    	campaigns_list.setDisable(campaigns_list.getItems().size() == 0);
     }
     
     private void campaigns_list_update() {
@@ -132,6 +133,8 @@ public class AuctionController extends AnchorPane {
         for (File file : new File(".").listFiles((d, n) -> n.endsWith(".db")))
             campaigns_list.getItems().add(file.getName().replace(".db", ""));
         campaigns_list.setValue("Select a Campaign");
+        
+        campaigns_list_action();
     }
     
     @FXML private void campaigns_open_action() {
@@ -148,6 +151,13 @@ public class AuctionController extends AnchorPane {
     	alert.setContentText("Are you ok with this?");
 
     	if (alert.showAndWait().get() == ButtonType.OK) {
+    		System.out.println("Deleting");
+    		try {
+				DatabaseConnection.closeConnection();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
     	    new File(campaigns_list.getValue() + ".db").delete();
     	    campaigns_list_update();
     	}
@@ -189,6 +199,7 @@ public class AuctionController extends AnchorPane {
                        generateData(null);
                        
                        campaigns_list_update();
+                       campaigns_list.setValue(result.get().trim());
                     }
                 }
             }
