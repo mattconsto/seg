@@ -55,12 +55,16 @@ public class AuctionController extends AnchorPane {
        The .fxml file also needs to be edited to remove the org.controlsfx.control.CheckComboBox
     */
     @FXML
+   
     private org.controlsfx.control.CheckComboBox<String> filterGender;
     @FXML
+     
     private org.controlsfx.control.CheckComboBox<String> filterAge;
     @FXML
+    
     private org.controlsfx.control.CheckComboBox<String> filterIncome;
     @FXML
+     
     private org.controlsfx.control.CheckComboBox<String> filterContext;
     @FXML 
     private ComboBox<String> filterMetrics;
@@ -126,7 +130,24 @@ public class AuctionController extends AnchorPane {
        configureTable();
         
        
+<<<<<<< .mine
+
+
+
+
+
+
+=======
+    @FXML private void campaigns_list_action() {
+    	boolean value = campaigns_list.getValue() == null || campaigns_list.getValue().equals("Select a Campaign");
+    	campaigns_open.setDisable(value);
+    	campaigns_delete.setDisable(value);
+    	campaigns_list.setDisable(campaigns_list.getItems().size() == 0);
+    }
+>>>>>>> .theirs
        
+        
+        campaigns_list_action();
   }
   private final ListChangeListener<ObservableMetrics> tableSelectionChanged =
             new ListChangeListener<ObservableMetrics>() {
@@ -142,6 +163,7 @@ public class AuctionController extends AnchorPane {
             };
 
     
+<<<<<<< .mine
     // Configure the table widget: set up its column, and register the
     // selection changed listener.
     private void configureTable() {
@@ -155,6 +177,21 @@ public class AuctionController extends AnchorPane {
         tableSelection.addListener(tableSelectionChanged);
         
         
+=======
+    	if (alert.showAndWait().get() == ButtonType.OK) {
+    		System.out.println("Deleting");
+    		try {
+				DatabaseConnection.closeConnection();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	    new File(campaigns_list.getValue() + ".db").delete();
+    	    campaigns_list_update();
+
+
+
+>>>>>>> .theirs
     }
     @FXML
     private void importCampaignAction(ActionEvent event) {
@@ -189,6 +226,7 @@ public class AuctionController extends AnchorPane {
                        campaignName.setText(DatabaseConnection.getDbfile());
                        generateGraph.setDisable(false);
                        generateData(null);
+                       campaigns_list.setValue(result.get().trim());
                     }
                 }
             }
