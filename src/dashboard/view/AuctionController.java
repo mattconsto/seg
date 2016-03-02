@@ -107,8 +107,8 @@ public class AuctionController extends AnchorPane {
     public void init() {
         filter = new Filter();
         
-    	filterDateFrom.setValue((LocalDate.of(2014,01,01)));
-    	filterDateTo.setValue((LocalDate.of(2014,01,14)));
+    	filterDateFrom.setValue((LocalDate.of(2015,01,01)));
+	filterDateTo.setValue((LocalDate.of(2015,01,14)));
         filterGender.getItems().addAll("Any","Female","Male");
         filterAge.getItems().addAll("Any","Less than 25","25 to 34","35 to 44","45 to 54","Greater than 55");
       							
@@ -320,7 +320,8 @@ public class AuctionController extends AnchorPane {
            File s = fChooser.showOpenDialog(application.getStage());
            if (s != null) {  
                  DatabaseConnection.setDbfile(s.getPath().replace(".db", ""));
-                 campaignName.setText(DatabaseConnection.getDbfile());
+                 
+                 campaignName.setText(s.getName().replace(".db", ""));
                  generateGraph.setDisable(false); 
                  generateData(null);
            }
