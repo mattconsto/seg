@@ -2,16 +2,9 @@ package tests;
 import static org.junit.Assert.*;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
 
-import javafx.beans.InvalidationListener;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.scene.chart.XYChart;
 import junit.framework.TestCase;
@@ -26,7 +19,6 @@ import dashboard.model.Filter;
  * Class tests for accuracy of Impressions series under various filter combinations
  */
 public class ImpressionsDataTest extends TestCase{
-	private static Connection connection = null;
 	Filter filter;
 	
 	@Override
@@ -152,6 +144,40 @@ public class ImpressionsDataTest extends TestCase{
 	@Test
 	public void testFirstHourContext() throws SQLException
 	{
+		filter.setContext(FXCollections.observableArrayList("News"));
+		ImpressionsGraphConstructor impressionsConstructor = new ImpressionsGraphConstructor(filter);
 		
+		ObservableList<XYChart.Data<String, Number>> data = impressionsConstructor.fetchGraph().getData();
+		assertEquals(642, data.get(0).getYValue());
+		
+		filter.setContext(FXCollections.observableArrayList("Shopping"));
+		impressionsConstructor = new ImpressionsGraphConstructor(filter);
+		
+		data = impressionsConstructor.fetchGraph().getData();
+		assertEquals(575, data.get(0).getYValue());
+		
+		filter.setContext(FXCollections.observableArrayList("Social Media"));
+		impressionsConstructor = new ImpressionsGraphConstructor(filter);
+		
+		data = impressionsConstructor.fetchGraph().getData();
+		assertEquals(594, data.get(0).getYValue());
+		
+		filter.setContext(FXCollections.observableArrayList("Blog"));
+		impressionsConstructor = new ImpressionsGraphConstructor(filter);
+		
+		data = impressionsConstructor.fetchGraph().getData();
+		assertEquals(315, data.get(0).getYValue());
+		
+		filter.setContext(FXCollections.observableArrayList("Hobbies"));
+		impressionsConstructor = new ImpressionsGraphConstructor(filter);
+		
+		data = impressionsConstructor.fetchGraph().getData();
+		assertEquals(0, data.size());
+		
+		filter.setContext(FXCollections.observableArrayList("Travel"));
+		impressionsConstructor = new ImpressionsGraphConstructor(filter);
+		
+		data = impressionsConstructor.fetchGraph().getData();
+		assertEquals(0, data.size());
 	}
 }
