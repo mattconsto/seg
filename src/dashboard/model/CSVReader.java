@@ -35,9 +35,9 @@ public class CSVReader {
 	 * @return If the CSVs exist
 	 */
 	public boolean checkFilesExist(String folder) {
-		return verifyFile(new File(folder + "\\impression_log.csv"))
-			&& verifyFile(new File(folder + "\\click_log.csv"))
-			&& verifyFile(new File(folder + "\\server_log.csv"));
+		return verifyFile(new File(folder + "/impression_log.csv"))
+			&& verifyFile(new File(folder + "/click_log.csv"))
+			&& verifyFile(new File(folder + "/server_log.csv"));
 	}
 
 	/**
@@ -49,9 +49,9 @@ public class CSVReader {
 		try {
                         
 			Connection conn = DatabaseConnection.getConnection();
-			readImpressions(new File(folder + "\\impression_log.csv"), conn);
-			readClicks(new File(folder + "\\click_log.csv"), conn);
-			readServer(new File(folder + "\\server_log.csv"), conn);
+			readImpressions(new File(folder + "/impression_log.csv"), conn);
+			readClicks(new File(folder + "/click_log.csv"), conn);
+			readServer(new File(folder + "/server_log.csv"), conn);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
