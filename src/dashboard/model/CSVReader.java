@@ -35,9 +35,9 @@ public class CSVReader {
 	 * @return If the CSVs exist
 	 */
 	public boolean checkFilesExist(String folder) {
-		return verifyFile(new File(folder + "\\impression_log.csv"))
-				&& verifyFile(new File(folder + "\\click_log.csv"))
-				&& verifyFile(new File(folder + "\\server_log.csv"));
+		return verifyFile(new File(folder + "/impression_log.csv"))
+			&& verifyFile(new File(folder + "/click_log.csv"))
+			&& verifyFile(new File(folder + "/server_log.csv"));
 	}
 
 	/**
@@ -47,11 +47,10 @@ public class CSVReader {
 	 */
 	public boolean readCSVs(String folder) {
 		try {
-
 			Connection conn = DatabaseConnection.getConnection();
-			readImpressions(new File(folder + "\\impression_log.csv"), conn);
-			readClicks(new File(folder + "\\click_log.csv"), conn);
-			readServer(new File(folder + "\\server_log.csv"), conn);
+			readImpressions(new File(folder + "/impression_log.csv"), conn);
+			readClicks(new File(folder + "/click_log.csv"), conn);
+			readServer(new File(folder + "/server_log.csv"), conn);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -94,7 +93,7 @@ public class CSVReader {
 			long i = 0;
 			long j = 0; // commit count
 			String line = br.readLine(); // ignore first line - todo check file
-			// is not empty
+										// is not empty
 			while ((line = br.readLine()) != null) {
 				String[] values = line.split(",");
 
@@ -102,7 +101,6 @@ public class CSVReader {
 				prep.setLong(2, Long.parseLong(values[1]));
 				prep.setBoolean(3, values[2].toUpperCase().equals("FEMALE"));
 
-				// Age group of user: <25, 25-Â­â€�34, 35-Â­â€�44 , 45-Â­â€� 54, >54
 				// (store as 0 - 4)
 				switch (values[3]) {
 				case "<25":   prep.setInt(4, 0); break;
@@ -111,14 +109,12 @@ public class CSVReader {
 				case "45-54": prep.setInt(4, 3); break;
 				default:      prep.setInt(4, 4); break;
 				}
-
 				if (values[4].toUpperCase().equals("LOW"))
 					prep.setInt(5, 0);
 				else if (values[4].toUpperCase().equals("HIGH"))
 					prep.setInt(5, 2);
 				else
 					prep.setInt(5, 1);
-
 				switch (values[5].toUpperCase()) {
 				case "NEWS":         prep.setInt(6, 0); break;
 				case "SHOPPING":     prep.setInt(6, 1); break;
