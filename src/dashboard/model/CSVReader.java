@@ -47,7 +47,6 @@ public class CSVReader {
 	 */
 	public boolean readCSVs(String folder) {
 		try {
-                        
 			Connection conn = DatabaseConnection.getConnection();
 			readImpressions(new File(folder + "/impression_log.csv"), conn);
 			readClicks(new File(folder + "/click_log.csv"), conn);
@@ -69,19 +68,19 @@ public class CSVReader {
 			// strings
 
 			String sql = "CREATE TABLE IMPRESSIONS " + "(DATE      TEXT NOT NULL," + " ID        INTEGER   NOT NULL,"
-				+ " GENDER    INTEGER NOT NULL," + // store this as integer
-													// as it will be faster
-													// to filter
-				" AGE       INTEGER NOT NULL," + // store 0 - <25, 1 =
-													// 25-34, 2 = 35-44, 3 =
-													// 45-54, 4=>54
-				" INCOME    INTEGER NOT NULL," + // 0 = Low, 1 = Medium, 2 =
-													// High
-				" CONTEXT   INTEGER NOT NULL," + // store as 0 = News
-													// 1=,Shopping,2=Social
-													// Media, 3 =Blog, 4 =
-													// Hobbies, 5 = Travel
-				" COST      REAL NOT NULL) ";
+					+ " GENDER    INTEGER NOT NULL," + // store this as integer
+					// as it will be faster
+					// to filter
+					" AGE       INTEGER NOT NULL," + // store 0 - <25, 1 =
+					// 25-34, 2 = 35-44, 3 =
+					// 45-54, 4=>54
+					" INCOME    INTEGER NOT NULL," + // 0 = Low, 1 = Medium, 2 =
+					// High
+					" CONTEXT   INTEGER NOT NULL," + // store as 0 = News
+					// 1=,Shopping,2=Social
+					// Media, 3 =Blog, 4 =
+					// Hobbies, 5 = Travel
+					" COST      REAL NOT NULL) ";
 
 			stmt.executeUpdate(sql);
 			stmt.close();
@@ -94,7 +93,7 @@ public class CSVReader {
 			long i = 0;
 			long j = 0; // commit count
 			String line = br.readLine(); // ignore first line - todo check file
-											// is not empty
+										// is not empty
 			while ((line = br.readLine()) != null) {
 				String[] values = line.split(",");
 
@@ -102,30 +101,27 @@ public class CSVReader {
 				prep.setLong(2, Long.parseLong(values[1]));
 				prep.setBoolean(3, values[2].toUpperCase().equals("FEMALE"));
 
-				// Age group of user: <25, 25-­‐34, 35-­‐44 , 45-­‐ 54, >54
 				// (store as 0 - 4)
 				switch (values[3]) {
-					case "<25":   prep.setInt(4, 0); break;
-					case "25-34": prep.setInt(4, 1); break;
-					case "35-44": prep.setInt(4, 2); break;
-					case "45-54": prep.setInt(4, 3); break;
-					default:      prep.setInt(4, 4); break;
+				case "<25":   prep.setInt(4, 0); break;
+				case "25-34": prep.setInt(4, 1); break;
+				case "35-44": prep.setInt(4, 2); break;
+				case "45-54": prep.setInt(4, 3); break;
+				default:      prep.setInt(4, 4); break;
 				}
-				
 				if (values[4].toUpperCase().equals("LOW"))
 					prep.setInt(5, 0);
 				else if (values[4].toUpperCase().equals("HIGH"))
 					prep.setInt(5, 2);
 				else
 					prep.setInt(5, 1);
-				
 				switch (values[5].toUpperCase()) {
-					case "NEWS":         prep.setInt(6, 0); break;
-					case "SHOPPING":     prep.setInt(6, 1); break;
-					case "SOCIAL MEDIA": prep.setInt(6, 2); break;
-					case "BLOG":         prep.setInt(6, 3); break;
-					case "HOBBIES":      prep.setInt(6, 4); break;
-					default:             prep.setInt(6, 5); break;
+				case "NEWS":         prep.setInt(6, 0); break;
+				case "SHOPPING":     prep.setInt(6, 1); break;
+				case "SOCIAL MEDIA": prep.setInt(6, 2); break;
+				case "BLOG":         prep.setInt(6, 3); break;
+				case "HOBBIES":      prep.setInt(6, 4); break;
+				default:             prep.setInt(6, 5); break;
 				}
 
 				prep.setDouble(7, Double.parseDouble(values[6]));
@@ -177,7 +173,7 @@ public class CSVReader {
 
 			while ((line = br.readLine()) != null) {
 				String[] values = line.split(",");
-				
+
 				prep.setString(1, values[0]);
 				prep.setLong(2, Long.parseLong(values[1]));
 				prep.setDouble(3, Double.parseDouble(values[2]));
@@ -217,10 +213,10 @@ public class CSVReader {
 
 			String line = br.readLine();
 			long i = 0, j = 0; // commit count
-			
+
 			while ((line = br.readLine()) != null) {
 				String[] values = line.split(",");
-				
+
 				prep.setString(1, values[0]);
 				prep.setLong(2, Long.parseLong(values[1]));
 				prep.setString(3, values[2]);

@@ -11,20 +11,20 @@ public class DatabaseConnection {
 	private static Connection connection = null;
 	private static String     dbfile     = "auction";
 
-   
-	
+
+
 	/**
 	 * Disallow initialisation
 	 */
 	private DatabaseConnection() {}
-	
-        public static String getDbfile() {
-            return dbfile;
-        }
 
-        public static void setDbfile(String dbfilename) {
-               dbfile = dbfilename;
-        }
+	public static String getDbfile() {
+		return dbfile;
+	}
+
+	public static void setDbfile(String dbfilename) {
+		dbfile = dbfilename;
+	}
 	/**
 	 * Get a connection to the database
 	 * @return A connection
@@ -38,23 +38,27 @@ public class DatabaseConnection {
 				System.err.println("SQLite JDBC Library no found!");
 				System.exit(1);
 			}
-			connection = DriverManager.getConnection("jdbc:sqlite:" + dbfile + ".db");
+			connection = DriverManager.getConnection("jdbc:sqlite:" + dbfile);
 			System.out.println("Opened database successfully");
 		}
 		return connection;
 	}
-	
+
 	/**
 	 * Close our connection to the database
 	 * @return
 	 * @throws SQLException
 	 */
-	public static boolean closeConnection() throws SQLException {
-		if(connection != null) {
-			System.out.println("Closed database");
-			connection.close();
-			return connection.isClosed();
-		} else {
+	public static boolean closeConnection(){
+		try {
+			if(connection != null) {
+				System.out.println("Closed database");
+				connection.close();
+				return connection.isClosed();
+			} else {
+				return true;
+			}
+		} catch (SQLException e){
 			return true;
 		}
 	}
