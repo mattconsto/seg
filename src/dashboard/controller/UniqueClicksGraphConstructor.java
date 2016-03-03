@@ -17,10 +17,10 @@ public class UniqueClicksGraphConstructor extends GraphConstructor {
 	@Override
 	protected Series<String, Number> generateGraph(Connection conn) throws SQLException {
 		ResultSet results = conn.createStatement().executeQuery("SELECT SUBSTR(DATE, 0, 14) AS DATE,COUNT(DISTINCT ID) AS Frequency FROM"
-				+ "(SELECT IMPRESSIONS.CONTEXT, CLICKS.* FROM IMPRESSIONS"
+				+ "(SELECT IMPRESSIONS.*, CLICKS.* FROM IMPRESSIONS"
 				+ " INNER JOIN CLICKS ON IMPRESSIONS.ID=CLICKS.ID"
 				+ " GROUP BY CLICKS.DATE, CLICKS.ID) AS SUBQUERY"
-				+ " WHERE " + filter.getContextSQL()
+				+ " WHERE " + filter.getSql()
 				+ " GROUP BY SUBSTR(DATE, 0, 14);");
 
 		XYChart.Series<String, Number> series = new XYChart.Series<String, Number>();

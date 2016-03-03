@@ -17,10 +17,10 @@ public class ConversionGraphConstructor extends GraphConstructor {
 	@Override
 	protected Series<String, Number> generateGraph(Connection conn) throws SQLException {
 		ResultSet results = conn.createStatement().executeQuery("SELECT SUBSTR(ENTRYDATE, 0, 14) AS ENTRYDATE,COUNT(*) AS Frequency "
-				+ "FROM (SELECT IMPRESSIONS.CONTEXT, SERVER.* FROM "
+				+ "FROM (SELECT IMPRESSIONS.*, SERVER.* FROM "
 				+ "IMPRESSIONS INNER JOIN SERVER ON IMPRESSIONS.ID=SERVER.ID "
 				+ "GROUP BY SERVER.ENTRYDATE, SERVER.ID) AS SUBQUERY "
-				+ "WHERE CONVERSION = 1 AND " + filter.getContextSQL()
+				+ "WHERE CONVERSION = 1 AND " + filter.getSql()
 				+ " GROUP BY SUBSTR(ENTRYDATE, 0, 14);");
 
 		XYChart.Series<String, Number> series = new XYChart.Series<String, Number>();

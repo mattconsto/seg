@@ -15,10 +15,10 @@ public class Filter {
         ObservableList <String> context;
         String dateTo;
         String dateFrom;
-        String contextSQL = "(1 = 1)";
-        String ageSQL = "(1 = 1)";
-        String incomeSQL =  "(1 = 1)";
-        String genderSQL =  "(1 = 1)";
+        String contextSQL;
+        String ageSQL;
+        String incomeSQL;
+        String genderSQL;
         
 
     public ObservableList<String> getGender() {
@@ -53,11 +53,11 @@ public class Filter {
     }
     
     private void setGenderSQL() {
-        
+        genderSQL = "";
         if (gender.isEmpty() || gender.contains("Any") || (gender.contains("Female") && gender.contains("Male"))){
             genderSQL = "1 = 1";
         }
-        else if (gender.contains("Male("))
+        else if (gender.contains("Male"))
             genderSQL = "gender = 0";
         else
             genderSQL = "gender = 1";
@@ -82,9 +82,8 @@ public class Filter {
                         break;
                 case "High":
                         incomeSQL += "INCOME=2";
-
                 default:
-                    incomeSQL = "1=1";
+                    incomeSQL = "1 = 1";
                     break;
             }
         }
@@ -131,7 +130,7 @@ public class Filter {
      
     public String getSql()
     {
-        return "(" + contextSQL + ") and (" + ageSQL + ")";
+        return "(" + contextSQL + ") and (" + ageSQL + ") and (" + incomeSQL + ") and (" + genderSQL + ")";
         
     }
     public String getIncomeSQL() {
@@ -150,35 +149,35 @@ public class Filter {
     }
     private void setContextSQL()
     {
-        ageSQL = "";
+        contextSQL = "";
         if (context.isEmpty() || context.contains("Any") ) {
-            ageSQL = "1 = 1";
+            contextSQL = "1 = 1";
         }
         else {
             for (String s: context) {
-                if (!ageSQL.isEmpty())
-                    ageSQL += " OR ";
+                if (!contextSQL.isEmpty())
+                    contextSQL += " OR ";
                 switch(s) {
                     case "News":
-                            ageSQL += "CONTEXT=0";
+                            contextSQL += "CONTEXT=0";
                             break;
                     case "Shopping":
-                            ageSQL += "CONTEXT=1";
+                            contextSQL += "CONTEXT=1";
                             break;
                     case "Social Media":
-                            ageSQL += "CONTEXT=2";
+                            contextSQL += "CONTEXT=2";
                             break;
                     case "Blog":
-                            ageSQL += "CONTEXT=3";
+                            contextSQL += "CONTEXT=3";
                             break;
                     case "Hobbies":
-                            ageSQL += "CONTEXT=4";
+                            contextSQL += "CONTEXT=4";
                             break;
                     case "Travel":
-                            ageSQL += "CONTEXT=5";
+                            contextSQL += "CONTEXT=5";
                             break;
                     default:
-                            ageSQL += "1 = 1";
+                            contextSQL += "1 = 1";
                             break;
                     }
                 }

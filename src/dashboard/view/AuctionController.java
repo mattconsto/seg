@@ -7,6 +7,9 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Optional;
 
+import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -100,6 +103,7 @@ public class AuctionController extends AnchorPane {
     
     final ObservableList<ObservableMetrics> tableContent = FXCollections.observableArrayList();
     private Filter filter;
+    
     public void setApp(Main application){
         this.application = application;
     }
@@ -108,7 +112,7 @@ public class AuctionController extends AnchorPane {
         filter = new Filter();
         
     	filterDateFrom.setValue((LocalDate.of(2015,01,01)));
-	filterDateTo.setValue((LocalDate.of(2015,01,14)));
+    	filterDateTo.setValue((LocalDate.of(2015,01,14)));
         filterGender.getItems().addAll("Any","Female","Male");
         filterAge.getItems().addAll("Any","Less than 25","25 to 34","35 to 44","45 to 54","Greater than 55");
       							
@@ -123,12 +127,10 @@ public class AuctionController extends AnchorPane {
      
        metricCol.setCellValueFactory(cellData -> cellData.getValue().descriptionProperty());
        resultCol.setCellValueFactory(cellData -> cellData.getValue().resultProperty());
-       configureTable();
-        
-       
-       
+       configureTable();       
   }
-  private final ListChangeListener<ObservableMetrics> tableSelectionChanged =
+    
+    private final ListChangeListener<ObservableMetrics> tableSelectionChanged =
             new ListChangeListener<ObservableMetrics>() {
 
                 @Override
@@ -140,6 +142,7 @@ public class AuctionController extends AnchorPane {
                     
                 }
             };
+
 
     
     // Configure the table widget: set up its column, and register the
@@ -205,7 +208,6 @@ public class AuctionController extends AnchorPane {
 		
 		try {
 			Series<String, Number> data = graphConstructor.fetchGraph();
-//			metricTable.getItems().add(data);
 			lineChart.getData().add(data);
 		} catch (SQLException e) {
 			System.err.println("Unable to fetch data from database: " + e.getMessage());
@@ -215,52 +217,51 @@ public class AuctionController extends AnchorPane {
     public void updateMetricsTable() throws SQLException{
         tableContent.clear();
        	Connection conn = DatabaseConnection.getConnection();
-    	ResultSet results = conn.createStatement().executeQuery("SELECT COUNT(*) AS Frequency FROM "
-				+ "(SELECT IMPRESSIONS.CONTEXT, SERVER.* FROM IMPRESSIONS "
+    	ResultSet results = conn.createStatement().executeQuery("SELECT COUNT(*) AS Frequency, * FROM "
+				+ "(SELECT IMPRESSIONS.*, SERVER.* FROM IMPRESSIONS "
 				+ "INNER JOIN SERVER ON IMPRESSIONS.ID=SERVER.ID "
 				+ "GROUP BY SERVER.ENTRYDATE, SERVER.ID) AS SUBQUERY "
-				+ "WHERE PAGES = 1 AND " + filter.getContextSQL() + ";");
+				+ "WHERE PAGES = 1 AND " + filter.getSql() + ";");
       
         tableContent.add(new dashboard.model.ObservableMetrics("Bounces",Integer.toString(results.getInt(1))));
          
-        results = conn.createStatement().executeQuery("SELECT COUNT(*) AS Frequency FROM"
-				+ "(SELECT IMPRESSIONS.CONTEXT, CLICKS.* FROM IMPRESSIONS"
+        results = conn.createStatement().executeQuery("SELECT COUNT(*) AS Frequency, * FROM"
+				+ "(SELECT IMPRESSIONS.*, CLICKS.* FROM IMPRESSIONS"
 				+ " INNER JOIN CLICKS ON IMPRESSIONS.ID=CLICKS.ID"
 				+ " GROUP BY CLICKS.DATE, CLICKS.ID) AS SUBQUERY"
 				+ " WHERE " + filter.getSql() + ";");
        
         tableContent.add(new dashboard.model.ObservableMetrics("Clicks",Integer.toString(results.getInt(1))));
      
-        results = conn.createStatement().executeQuery("SELECT COUNT(*) AS Frequency "
-				+ "FROM (SELECT IMPRESSIONS.CONTEXT, SERVER.* FROM "
+        results = conn.createStatement().executeQuery("SELECT COUNT(*) AS Frequency, * "
+				+ "FROM (SELECT IMPRESSIONS.*, SERVER.* FROM "
 				+ "IMPRESSIONS INNER JOIN SERVER ON IMPRESSIONS.ID=SERVER.ID "
 				+ "GROUP BY SERVER.ENTRYDATE, SERVER.ID) AS SUBQUERY "
-				+ "WHERE CONVERSION = 1 AND " + filter.getContextSQL() + ";");
+				+ "WHERE CONVERSION = 1 AND " + filter.getSql() + ";");
          
         tableContent.add(new dashboard.model.ObservableMetrics("Conversions",Integer.toString(results.getInt(1))));
      
-        results = conn.createStatement().executeQuery("SELECT COUNT(*) AS Frequency FROM IMPRESSIONS WHERE " +  filter.getContextSQL() +";");
+        results = conn.createStatement().executeQuery("SELECT COUNT(*) AS Frequency, * FROM IMPRESSIONS WHERE " +  filter.getSql() +";");
        
         tableContent.add(new dashboard.model.ObservableMetrics("Impressions",Integer.toString(results.getInt(1))));
      
-        results = conn.createStatement().executeQuery("SELECT COUNT(DISTINCT ID) AS Frequency FROM"
-				+ "(SELECT IMPRESSIONS.CONTEXT, CLICKS.* FROM IMPRESSIONS"
+        results = conn.createStatement().executeQuery("SELECT COUNT(DISTINCT ID) AS Frequency, * FROM"
+				+ "(SELECT IMPRESSIONS.*, CLICKS.* FROM IMPRESSIONS"
 				+ " INNER JOIN CLICKS ON IMPRESSIONS.ID=CLICKS.ID"
 				+ " GROUP BY CLICKS.DATE, CLICKS.ID) AS SUBQUERY"
-				+ " WHERE " +  filter.getContextSQL() + ";");
+				+ " WHERE " +  filter.getSql() + ";");
          
         tableContent.add(new dashboard.model.ObservableMetrics("Unique Clicks",Integer.toString(results.getInt(1))));
      
-        results = conn.createStatement().executeQuery("SELECT COUNT(DISTINCT ID) AS Frequency FROM IMPRESSIONS WHERE " +  filter.getContextSQL() +";");
+        results = conn.createStatement().executeQuery("SELECT COUNT(DISTINCT ID) AS Frequency, * FROM IMPRESSIONS WHERE " +  filter.getSql() +";");
        
         tableContent.add(new dashboard.model.ObservableMetrics("Unique Impressions",Integer.toString(results.getInt(1))));
-      
+
         tableContent.add(new dashboard.model.ObservableMetrics("Total Cost","0.00"));
         tableContent.add(new dashboard.model.ObservableMetrics("CTR","...."));
         tableContent.add(new dashboard.model.ObservableMetrics("CPA","...."));
         tableContent.add(new dashboard.model.ObservableMetrics("CPC","...."));
         tableContent.add(new dashboard.model.ObservableMetrics("CPM","...."));
-     
     
     }
     private void drawGraph(String metric)
@@ -303,7 +304,8 @@ public class AuctionController extends AnchorPane {
         filter.setAge(filterAge.getCheckModel().getCheckedItems());
         filter.setIncome(filterIncome.getCheckModel().getCheckedItems()); 
         filter.setContext(filterContext.getCheckModel().getCheckedItems());
-        drawGraph("Bounces");
+        
+        drawGraph(filterMetrics.getValue());
         try {
             updateMetricsTable();
         } catch (SQLException e) {

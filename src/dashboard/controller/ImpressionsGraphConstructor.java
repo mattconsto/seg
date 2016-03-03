@@ -16,7 +16,7 @@ public class ImpressionsGraphConstructor extends GraphConstructor {
 	
 	@Override
 	protected Series<String, Number> generateGraph(Connection conn) throws SQLException {
-		ResultSet results = conn.createStatement().executeQuery("SELECT SUBSTR(DATE, 0, 14) AS DATE,COUNT(*) AS Frequency FROM IMPRESSIONS WHERE " + filter.getContextSQL() +" GROUP BY SUBSTR(DATE, 0, 14);");
+		ResultSet results = conn.createStatement().executeQuery("SELECT SUBSTR(DATE, 0, 14) AS DATE,COUNT(*) AS Frequency, * FROM IMPRESSIONS WHERE " + filter.getSql() +" GROUP BY SUBSTR(DATE, 0, 14);");
 
 		XYChart.Series<String, Number> series = new XYChart.Series<String, Number>();
 		series.setName("Impressions by date");
