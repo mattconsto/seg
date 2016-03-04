@@ -1,0 +1,180 @@
+1,Male,<25,Low,News
+2,Female,<25,Low,News
+3,Male,25-34,Low,News
+4,Female,25-34,Low,News
+5,Male,35-44,Low,News
+6,Female,35-44,Low,News
+7,Male,45-54,Low,News
+8,Female,45-54,Low,News
+9,Male,>54,Low,News
+10,Female,>54,Medium,News
+11,Male,<25,Medium,News
+12,Female,<25,Medium,News
+13,Male,25-34,Medium,News
+14,Female,25-34,Medium,News
+15,Male,35-44,Medium,News
+16,Female,35-44,Medium,News
+17,Male,45-54,Medium,News
+18,Female,45-54,Medium,News
+19,Male,>54,Medium,News
+20,Female,>54,Medium,News
+21,Male,<25,High,News
+22,Female,<25,High,News
+23,Male,25-34,High,News
+24,Female,25-34,High,News
+25,Male,35-44,High,News
+26,Female,35-44,High,News
+27,Male,45-54,High,News
+28,Female,45-54,High,News
+29,Male,>54,High,News
+30,Female,>54,High,News
+31,Male,<25,Low,Shopping
+32,Female,<25,Low,Shopping
+33,Male,25-34,Low,Shopping
+34,Female,25-34,Low,Shopping
+35,Male,35-44,Low,Shopping
+36,Female,35-44,Low,Shopping
+37,Male,45-54,Low,Shopping
+38,Female,45-54,Low,Shopping
+39,Male,>54,Low,Shopping
+40,Female,>54,Medium,Shopping
+41,Male,<25,Medium,Shopping
+42,Female,<25,Medium,Shopping
+43,Male,25-34,Medium,Shopping
+44,Female,25-34,Medium,Shopping
+45,Male,35-44,Medium,Shopping
+46,Female,35-44,Medium,Shopping
+47,Male,45-54,Medium,Shopping
+48,Female,45-54,Medium,Shopping
+49,Male,>54,Medium,Shopping
+50,Female,>54,Medium,Shopping
+51,Male,<25,High,Shopping
+52,Female,<25,High,Shopping
+53,Male,25-34,High,Shopping
+54,Female,25-34,High,Shopping
+55,Male,35-44,High,Shopping
+56,Female,35-44,High,Shopping
+57,Male,45-54,High,Shopping
+58,Female,45-54,High,Shopping
+59,Male,>54,High,Shopping
+60,Female,>54,High,Shopping
+61,Male,<25,Low,Social Media
+62,Female,<25,Low,Social Media
+63,Male,25-34,Low,Social Media
+64,Female,25-34,Low,Social Media
+65,Male,35-44,Low,Social Media
+66,Female,35-44,Low,Social Media
+67,Male,45-54,Low,Social Media
+68,Female,45-54,Low,Social Media
+69,Male,>54,Low,Social Media
+70,Female,>54,Medium,Social Media
+71,Male,<25,Medium,Social Media
+72,Female,<25,Medium,Social Media
+73,Male,25-34,Medium,Social Media
+74,Female,25-34,Medium,Social Media
+75,Male,35-44,Medium,Social Media
+76,Female,35-44,Medium,Social Media
+77,Male,45-54,Medium,Social Media
+78,Female,45-54,Medium,Social Media
+79,Male,>54,Medium,Social Media
+80,Female,>54,Medium,Social Media
+81,Male,<25,High,Social Media
+82,Female,<25,High,Social Media
+83,Male,25-34,High,Social Media
+84,Female,25-34,High,Social Media
+85,Male,35-44,High,Social Media
+86,Female,35-44,High,Social Media
+87,Male,45-54,High,Social Media
+88,Female,45-54,High,Social Media
+89,Male,>54,High,Social Media
+90,Female,>54,High,Social Media
+91,Male,<25,Low,Blog
+92,Female,<25,Low,Blog
+93,Male,25-34,Low,Blog
+94,Female,25-34,Low,Blog
+95,Male,35-44,Low,Blog
+96,Female,35-44,Low,Blog
+97,Male,45-54,Low,Blog
+98,Female,45-54,Low,Blog
+99,Male,>54,Low,Blog
+100,Female,>54,Medium,Blog
+101,Male,<25,Medium,Blog
+102,Female,<25,Medium,Blog
+103,Male,25-34,Medium,Blog
+104,Female,25-34,Medium,Blog
+105,Male,35-44,Medium,Blog
+106,Female,35-44,Medium,Blog
+107,Male,45-54,Medium,Blog
+108,Female,45-54,Medium,Blog
+109,Male,>54,Medium,Blog
+110,Female,>54,Medium,Blog
+111,Male,<25,High,Blog
+112,Female,<25,High,Blog
+113,Male,25-34,High,Blog
+114,Female,25-34,High,Blog
+115,Male,35-44,High,Blog
+116,Female,35-44,High,Blog
+117,Male,45-54,High,Blog
+118,Female,45-54,High,Blog
+119,Male,>54,High,Blog
+120,Female,>54,High,Blog
+121,Male,<25,Low,Hobbies
+122,Female,<25,Low,Hobbies
+123,Male,25-34,Low,Hobbies
+124,Female,25-34,Low,Hobbies
+125,Male,35-44,Low,Hobbies
+126,Female,35-44,Low,Hobbies
+127,Male,45-54,Low,Hobbies
+128,Female,45-54,Low,Hobbies
+129,Male,>54,Low,Hobbies
+130,Female,>54,Medium,Hobbies
+131,Male,<25,Medium,Hobbies
+132,Female,<25,Medium,Hobbies
+133,Male,25-34,Medium,Hobbies
+134,Female,25-34,Medium,Hobbies
+135,Male,35-44,Medium,Hobbies
+136,Female,35-44,Medium,Hobbies
+137,Male,45-54,Medium,Hobbies
+138,Female,45-54,Medium,Hobbies
+139,Male,>54,Medium,Hobbies
+140,Female,>54,Medium,Hobbies
+141,Male,<25,High,Hobbies
+142,Female,<25,High,Hobbies
+143,Male,25-34,High,Hobbies
+144,Female,25-34,High,Hobbies
+145,Male,35-44,High,Hobbies
+146,Female,35-44,High,Hobbies
+147,Male,45-54,High,Hobbies
+148,Female,45-54,High,Hobbies
+149,Male,>54,High,Hobbies
+150,Female,>54,High,Hobbies
+151,Male,<25,Low,Travel
+152,Female,<25,Low,Travel
+153,Male,25-34,Low,Travel
+154,Female,25-34,Low,Travel
+155,Male,35-44,Low,Travel
+156,Female,35-44,Low,Travel
+157,Male,45-54,Low,Travel
+158,Female,45-54,Low,Travel
+159,Male,>54,Low,Travel
+160,Female,>54,Medium,Travel
+161,Male,<25,Medium,Travel
+162,Female,<25,Medium,Travel
+163,Male,25-34,Medium,Travel
+164,Female,25-34,Medium,Travel
+165,Male,35-44,Medium,Travel
+166,Female,35-44,Medium,Travel
+167,Male,45-54,Medium,Travel
+168,Female,45-54,Medium,Travel
+169,Male,>54,Medium,Travel
+170,Female,>54,Medium,Travel
+171,Male,<25,High,Travel
+172,Female,<25,High,Travel
+173,Male,25-34,High,Travel
+174,Female,25-34,High,Travel
+175,Male,35-44,High,Travel
+176,Female,35-44,High,Travel
+177,Male,45-54,High,Travel
+178,Female,45-54,High,Travel
+179,Male,>54,High,Travel
+180,Female,>54,High,Travel
