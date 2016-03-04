@@ -3,6 +3,9 @@
  */
 package dashboard.model;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+
 import javafx.collections.ObservableList;
 
  
@@ -13,12 +16,13 @@ public class Filter {
         ObservableList <String> age ;
         ObservableList <String> income; 
         ObservableList <String> context;
-        String dateTo;
-        String dateFrom;
+        LocalDate dateTo;
+        LocalDate dateFrom;
         String contextSQL;
         String ageSQL;
         String incomeSQL;
         String genderSQL;
+        String dateSQL;
         
 
     public ObservableList<String> getGender() {
@@ -130,7 +134,7 @@ public class Filter {
      
     public String getSql()
     {
-        return "(" + contextSQL + ") and (" + ageSQL + ") and (" + incomeSQL + ") and (" + genderSQL + ")";
+        return "(" + contextSQL + ") and (" + ageSQL + ") and (" + incomeSQL + ") and (" + genderSQL + ") and " + dateSQL;
         
     }
     public String getIncomeSQL() {
@@ -192,20 +196,37 @@ public class Filter {
         
     }
 
-    public String getDateTo() {
+    public LocalDate getDateTo() {
         return dateTo;
     }
 
-    public void setDateTo(String dateTo) {
+    public void setDateTo(LocalDate dateTo) {
         this.dateTo = dateTo;
+        if(dateFrom != null)
+        	setDateSQL();
+    }
+    
+    public void setDateSQL() {
+    	dateSQL = "(";
+    	for(int i = 0; i < ChronoUnit.DAYS.between(dateFrom, dateTo)+1; i++ ) {
+    		LocalDate date = dateFrom.plusDays(i);
+    		dateSQL += (i==0?"":" or ") + "DATE LIKE '%" + date.getYear() + "-" + (date.getMonthValue()<10? "0" + date.getMonthValue():date.getMonthValue())  + "-" +  (date.getDayOfMonth()<10?"0" + date.getDayOfMonth():date.getDayOfMonth())+"%'";
+    	}
+    	dateSQL +=")";
     }
 
-    public String getDateFrom() {
+    public LocalDate getDateFrom() {
         return dateFrom;
     }
 
-    public void setDateFrom(String dateFrom) {
+    public void setDateFrom(LocalDate dateFrom) {
         this.dateFrom = dateFrom;
+        if(dateTo != null)
+        	setDateSQL();
+    }
+    
+    public void setDateFromSQL() {
+    	
     }
     public Filter() {
         

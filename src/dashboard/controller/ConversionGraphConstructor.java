@@ -20,7 +20,7 @@ public class ConversionGraphConstructor extends GraphConstructor {
 				+ "FROM (SELECT IMPRESSIONS.*, SERVER.* FROM "
 				+ "IMPRESSIONS INNER JOIN SERVER ON IMPRESSIONS.ID=SERVER.ID "
 				+ "GROUP BY SERVER.ENTRYDATE, SERVER.ID) AS SUBQUERY "
-				+ "WHERE CONVERSION = 1 AND " + filter.getSql()
+				+ "WHERE CONVERSION = 1 AND " + filter.getSql().replace("DATE", "ENTRYDATE")
 				+ " GROUP BY SUBSTR(ENTRYDATE, 0, 14);");
 
 		XYChart.Series<String, Number> series = new XYChart.Series<String, Number>();

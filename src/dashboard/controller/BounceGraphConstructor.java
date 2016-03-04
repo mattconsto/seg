@@ -21,7 +21,7 @@ public class BounceGraphConstructor extends GraphConstructor{
 				+ "(SELECT IMPRESSIONS.*, SERVER.* FROM IMPRESSIONS "
 				+ "INNER JOIN SERVER ON IMPRESSIONS.ID=SERVER.ID "
 				+ "GROUP BY SERVER.ENTRYDATE, SERVER.ID) AS SUBQUERY "
-				+ "WHERE PAGES = 1 AND " + filter.getSql()+ " GROUP BY SUBSTR(ENTRYDATE, 0, 14);");
+				+ "WHERE PAGES = 1 AND " + filter.getSql().replace("DATE", "ENTRYDATE")+ " GROUP BY SUBSTR(ENTRYDATE, 0, 14);");
 
 		XYChart.Series<String, Number> series = new XYChart.Series<String, Number>();
 		series.setName("Bounces (Pages visited = 1) by date");

@@ -27,7 +27,8 @@ import javafx.beans.value.ObservableValue;
         public String getResult() {
             return result.get();
         }
-        private void setResult(String title) {
+        @SuppressWarnings("unused")
+		private void setResult(String title) {
             this.result.set(title);
         }
       
@@ -38,7 +39,8 @@ import javafx.beans.value.ObservableValue;
         public String getDescription() {
             return description.get();
         }
-        private void setDescription(String description) {
+        @SuppressWarnings("unused")
+		private void setDescription(String description) {
             this.description.set(description);
         }
      

@@ -7,9 +7,8 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Optional;
 
-import javafx.beans.property.ReadOnlyObjectProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -22,9 +21,11 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import dashboard.controller.BounceGraphConstructor;
 import dashboard.controller.ClicksGraphConstructor;
@@ -37,11 +38,6 @@ import dashboard.model.CSVReader;
 import dashboard.model.DatabaseConnection;
 import dashboard.model.Filter;
 import dashboard.model.ObservableMetrics;
-import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
 /**
  * Auction Controller.
  */
@@ -305,7 +301,9 @@ public class AuctionController extends AnchorPane {
 		filter.setAge(filterAge.getCheckModel().getCheckedItems());
 		filter.setIncome(filterIncome.getCheckModel().getCheckedItems()); 
 		filter.setContext(filterContext.getCheckModel().getCheckedItems());
-
+		filter.setDateFrom(filterDateFrom.getValue());
+		filter.setDateTo(filterDateTo.getValue());
+		
 		drawGraph(filterMetrics.getValue());
 		try {
 			updateMetricsTable();
