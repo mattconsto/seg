@@ -133,8 +133,8 @@ public class AuctionController extends AnchorPane {
 		public void onChanged(ListChangeListener.Change<? extends ObservableMetrics> c) {
 			//do something here
 			ObservableMetrics s1 =  tableResults.getSelectionModel().getSelectedItem();
-
-			drawGraph(s1.getDescription());
+			if(s1 != null)
+				drawGraph(s1.getDescription());
 
 		}
 	};
