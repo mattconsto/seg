@@ -301,7 +301,9 @@ public class AuctionController extends AnchorPane {
 		filter.setAge(filterAge.getCheckModel().getCheckedItems());
 		filter.setIncome(filterIncome.getCheckModel().getCheckedItems()); 
 		filter.setContext(filterContext.getCheckModel().getCheckedItems());
-
+		filter.setDateFrom(filterDateFrom.getValue());
+		filter.setDateTo(filterDateTo.getValue());
+		
 		drawGraph(filterMetrics.getValue());
 		try {
 			updateMetricsTable();
