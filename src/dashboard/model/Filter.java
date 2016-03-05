@@ -4,7 +4,6 @@
 package dashboard.model;
 
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -92,8 +91,6 @@ public class Filter {
 		                break;
 		        }
 		    }
-		    
-		    System.out.println(incomeSQL);
 		}
     }
  
