@@ -26,10 +26,6 @@ public class ImpressionsDataTest extends TestCase{
 	{
 		DatabaseConnection.setDbfile("TestData.db");
 		filter = new Filter();
-		filter.setGender(FXCollections.observableArrayList("Any"));
-		filter.setAge(FXCollections.observableArrayList("Any"));
-		filter.setIncome(FXCollections.observableArrayList("Any"));
-		filter.setContext(FXCollections.observableArrayList("Any"));
 	}
 	
 	@Test
@@ -172,12 +168,12 @@ public class ImpressionsDataTest extends TestCase{
 		impressionsConstructor = new ImpressionsGraphConstructor(filter);
 		
 		data = impressionsConstructor.fetchGraph().getData();
-		assertEquals(480, data.size());
+		assertEquals(480, data.get(0).getYValue());
 		
 		filter.setContext(FXCollections.observableArrayList("Travel"));
 		impressionsConstructor = new ImpressionsGraphConstructor(filter);
 		
 		data = impressionsConstructor.fetchGraph().getData();
-		assertEquals(480, data.size());
+		assertEquals(480, data.get(0).getYValue());
 	}
 }

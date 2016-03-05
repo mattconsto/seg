@@ -6,6 +6,7 @@ package dashboard.model;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
  
@@ -207,12 +208,27 @@ public class Filter {
     }
     
     public void setDateSQL() {
-    	dateSQL = "(";
-    	for(int i = 0; i < ChronoUnit.DAYS.between(dateFrom, dateTo)+1; i++ ) {
-    		LocalDate date = dateFrom.plusDays(i);
-    		dateSQL += (i==0?"":" or ") + "DATE LIKE '%" + date.getYear() + "-" + (date.getMonthValue()<10? "0" + date.getMonthValue():date.getMonthValue())  + "-" +  (date.getDayOfMonth()<10?"0" + date.getDayOfMonth():date.getDayOfMonth())+"%'";
+    	StringBuilder dateQuery = new StringBuilder("(");
+    	
+    	if(dateFrom != null)
+    	{
+    		dateQuery.append("DATE >= '" + dateFrom.toString() + " 00:00:00'");
     	}
-    	dateSQL +=")";
+    	else
+    		dateQuery.append("1");
+    	
+    	dateQuery.append(" AND ");
+    	
+    	if(dateTo != null)
+    	{
+    		dateQuery.append("DATE < '" + dateTo.toString() + " 24:00:00'");
+    	}
+    	else
+    		dateQuery.append("1");
+    	
+    	dateQuery.append(")");
+    	
+    	dateSQL = dateQuery.toString();
     }
 
     public LocalDate getDateFrom() {
@@ -225,12 +241,17 @@ public class Filter {
         	setDateSQL();
     }
     
+    //TODO: Either make this do something or delete it
     public void setDateFromSQL() {
     	
     }
-    public Filter() {
-        
+    
+    /* Default constructor sets all fields to 'any', and leaves date range unrestricted */
+    public Filter()
+    {
+    	setGender(FXCollections.observableArrayList("Any"));
+		setAge(FXCollections.observableArrayList("Any"));
+		setIncome(FXCollections.observableArrayList("Any"));
+		setContext(FXCollections.observableArrayList("Any"));
     }
-  
-   
 }
