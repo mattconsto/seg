@@ -1,7 +1,5 @@
 package tests;
 
-import static org.junit.Assert.*;
-
 import java.sql.SQLException;
 
 import javafx.collections.FXCollections;
@@ -11,8 +9,6 @@ import junit.framework.TestCase;
 
 import org.junit.Test;
 
-import dashboard.controller.ClicksGraphConstructor;
-import dashboard.controller.ImpressionsGraphConstructor;
 import dashboard.controller.UniqueImpressionsGraphConstructor;
 import dashboard.model.DatabaseConnection;
 import dashboard.model.Filter;
