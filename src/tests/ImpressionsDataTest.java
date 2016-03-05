@@ -29,45 +29,79 @@ public class ImpressionsDataTest extends TestCase{
 	}
 	
 	@Test
-	public void testFirstMinuteTotal() throws SQLException
+	public void testFirstMinuteTotal()
 	{
+		try
+		{
 		ImpressionsGraphConstructor impressionsConstructor = new ImpressionsGraphConstructor(filter);
 		
 		ObservableList<XYChart.Data<String, Number>> data = impressionsConstructor.fetchGraph().getData();
 		assertEquals(1440, data.get(0).getYValue());
+		}
+		catch(SQLException sqle)
+		{
+			System.err.println(sqle.getMessage());
+			fail("SQL error");
+		}
 	}
 
 	
 	@Test
-	public void testFirstHourTotal() throws SQLException
+	public void testFirstHourTotal()
 	{
+		try
+		{
 		ImpressionsGraphConstructor impressionsConstructor = new ImpressionsGraphConstructor(filter);
 		
 		ObservableList<XYChart.Data<String, Number>> data = impressionsConstructor.fetchGraph().getData();
 		assertEquals(2880, data.get(0).getYValue());
+		}
+		catch(SQLException sqle)
+		{
+			System.err.println(sqle.getMessage());
+			fail("SQL error");
+		}
 	}
 
 	@Test
-	public void testFirstDayTotal() throws SQLException
+	public void testFirstDayTotal()
 	{
+		try
+		{
 		ImpressionsGraphConstructor impressionsConstructor = new ImpressionsGraphConstructor(filter);
 		
 		ObservableList<XYChart.Data<String, Number>> data = impressionsConstructor.fetchGraph().getData();
 		assertEquals(4320, data.get(0).getYValue());
+		}
+		catch(SQLException sqle)
+		{
+			System.err.println(sqle.getMessage());
+			fail("SQL error");
+		}
 	}
 	
 	@Test
-	public void testFirstWeekTotal() throws SQLException
+	public void testFirstWeekTotal()
 	{
+		try
+		{
 		ImpressionsGraphConstructor impressionsConstructor = new ImpressionsGraphConstructor(filter);
 		
 		ObservableList<XYChart.Data<String, Number>> data = impressionsConstructor.fetchGraph().getData();
 		assertEquals(5760, data.get(0).getYValue());
+		}
+		catch(SQLException sqle)
+		{
+			System.err.println(sqle.getMessage());
+			fail("SQL error");
+		}
 	}
 	
 	@Test
-	public void testFirstHourGender() throws SQLException
+	public void testFirstHourGender()
 	{
+		try
+		{
 		filter.setGender(FXCollections.observableArrayList("Female"));
 		ImpressionsGraphConstructor impressionsConstructor = new ImpressionsGraphConstructor(filter);
 		
@@ -79,11 +113,19 @@ public class ImpressionsDataTest extends TestCase{
 		
 		data = impressionsConstructor.fetchGraph().getData();
 		assertEquals(1440, data.get(0).getYValue());
+		}
+		catch(SQLException sqle)
+		{
+			System.err.println(sqle.getMessage());
+			fail("SQL error");
+		}
 	}
 	
 	@Test
-	public void testFirstHourAge() throws SQLException
+	public void testFirstHourAge()
 	{
+		try
+		{
 		filter.setAge(FXCollections.observableArrayList("Less than 25"));
 		ImpressionsGraphConstructor impressionsConstructor = new ImpressionsGraphConstructor(filter);
 		
@@ -113,11 +155,19 @@ public class ImpressionsDataTest extends TestCase{
 		
 		data = impressionsConstructor.fetchGraph().getData();
 		assertEquals(576, data.get(0).getYValue());
+		}
+		catch(SQLException sqle)
+		{
+			System.err.println(sqle.getMessage());
+			fail("SQL error");
+		}
 	}
 	
 	@Test
-	public void testFirstHourIncome() throws SQLException
+	public void testFirstHourIncome()
 	{
+		try
+		{
 		filter.setIncome(FXCollections.observableArrayList("Low"));
 		ImpressionsGraphConstructor impressionsConstructor = new ImpressionsGraphConstructor(filter);
 		
@@ -135,11 +185,19 @@ public class ImpressionsDataTest extends TestCase{
 		
 		data = impressionsConstructor.fetchGraph().getData();
 		assertEquals(960, data.get(0).getYValue());
+		}
+		catch(SQLException sqle)
+		{
+			System.err.println(sqle.getMessage());
+			fail("SQL error");
+		}
 	}
 	
 	@Test
-	public void testFirstHourContext() throws SQLException
+	public void testFirstHourContext()
 	{
+		try
+		{
 		filter.setContext(FXCollections.observableArrayList("News"));
 		ImpressionsGraphConstructor impressionsConstructor = new ImpressionsGraphConstructor(filter);
 		
@@ -175,5 +233,11 @@ public class ImpressionsDataTest extends TestCase{
 		
 		data = impressionsConstructor.fetchGraph().getData();
 		assertEquals(480, data.get(0).getYValue());
+		}
+		catch(SQLException sqle)
+		{
+			System.err.println(sqle.getMessage());
+			fail("SQL error");
+		}
 	}
 }
