@@ -77,7 +77,7 @@ public class Filter {
 		    for (String s: income) {
 		        if (!incomeSQL.isEmpty())
 		            incomeSQL += " OR ";
-		    switch(s) {
+		        switch(s) {
 		        case "Low":
 		                incomeSQL += "INCOME=0";
 		                break;
@@ -86,11 +86,14 @@ public class Filter {
 		                break;
 		        case "High":
 		                incomeSQL += "INCOME=2";
+		                break;
 		        default:
 		            incomeSQL = "1";
 		                break;
 		        }
 		    }
+		    
+		    System.out.println(incomeSQL);
 		}
     }
  
