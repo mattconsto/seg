@@ -13,17 +13,17 @@ import javafx.collections.ObservableList;
 
 public class Filter {
 
-        ObservableList <String> gender ;
-        ObservableList <String> age ;
-        ObservableList <String> income; 
-        ObservableList <String> context;
-        LocalDate dateTo;
-        LocalDate dateFrom;
-        String contextSQL;
-        String ageSQL;
-        String incomeSQL;
-        String genderSQL;
-        String dateSQL;
+	ObservableList <String> gender ;
+	ObservableList <String> age ;
+	ObservableList <String> income; 
+	ObservableList <String> context;
+	LocalDate dateTo;
+    LocalDate dateFrom;
+    String contextSQL;
+    String ageSQL;
+    String incomeSQL;
+    String genderSQL;
+    String dateSQL;
         
 
     public ObservableList<String> getGender() {
@@ -60,40 +60,39 @@ public class Filter {
     private void setGenderSQL() {
         genderSQL = "";
         if (gender.isEmpty() || gender.contains("Any") || (gender.contains("Female") && gender.contains("Male"))){
-            genderSQL = "1 = 1";
+            genderSQL = "1";
         }
         else if (gender.contains("Male"))
             genderSQL = "gender = 0";
         else
-            genderSQL = "gender = 1";
-         
-  }
-  private void setIncomeSQL()
-  {
-    incomeSQL = "";
-    if (income.isEmpty() || income.contains("Any")) {
-        incomeSQL = "1 = 1";
+            genderSQL = "gender = 1";   
     }
-    else {
-        for (String s: income) {
-            if (!incomeSQL.isEmpty())
-                incomeSQL += " OR ";
-            switch(s) {
-                case "Low":
-                        incomeSQL += "INCOME=0";
-                        break;
-                case "Medium":
-                        incomeSQL += "INCOME=1";
-                        break;
-                case "High":
-                        incomeSQL += "INCOME=2";
-                default:
-                    incomeSQL = "1 = 1";
-                    break;
-            }
-        }
+    
+    private void setIncomeSQL() {
+		incomeSQL = "";
+		if (income.isEmpty() || income.contains("Any")) {
+			incomeSQL = "1";
+		}
+		else {
+		    for (String s: income) {
+		        if (!incomeSQL.isEmpty())
+		            incomeSQL += " OR ";
+		    switch(s) {
+		        case "Low":
+		                incomeSQL += "INCOME=0";
+		                break;
+		        case "Medium":
+		                incomeSQL += "INCOME=1";
+		                break;
+		        case "High":
+		                incomeSQL += "INCOME=2";
+		        default:
+		            incomeSQL = "1";
+		                break;
+		        }
+		    }
+		}
     }
-  }
  
       
       
@@ -101,7 +100,7 @@ public class Filter {
     {
         ageSQL = "";
         if (age.isEmpty() || age.contains("Any")) {
-            ageSQL = "1 = 1";
+            ageSQL = "1";
         }
         else {
             for (String s: age) {
@@ -127,9 +126,9 @@ public class Filter {
                     default:
                             ageSQL += "1 = 1";
                             break;
-                    }
                 }
             }
+        }
     }
     	 
      
@@ -143,7 +142,7 @@ public class Filter {
     }
      public String getGenderSQL() {
          return "(" + genderSQL + ")";
-     }      
+    }      
     public String getContextSQL()
     {
         return "(" + contextSQL + ")";
@@ -203,26 +202,21 @@ public class Filter {
 
     public void setDateTo(LocalDate dateTo) {
         this.dateTo = dateTo;
-        if(dateFrom != null)
-        	setDateSQL();
+        setDateSQL();
     }
     
     public void setDateSQL() {
     	StringBuilder dateQuery = new StringBuilder("(");
     	
     	if(dateFrom != null)
-    	{
     		dateQuery.append("DATE >= '" + dateFrom.toString() + " 00:00:00'");
-    	}
     	else
     		dateQuery.append("1");
     	
     	dateQuery.append(" AND ");
     	
     	if(dateTo != null)
-    	{
     		dateQuery.append("DATE < '" + dateTo.toString() + " 24:00:00'");
-    	}
     	else
     		dateQuery.append("1");
     	
@@ -237,8 +231,7 @@ public class Filter {
 
     public void setDateFrom(LocalDate dateFrom) {
         this.dateFrom = dateFrom;
-        if(dateTo != null)
-        	setDateSQL();
+        setDateSQL();
     }
     
     //TODO: Either make this do something or delete it
@@ -253,5 +246,6 @@ public class Filter {
 		setAge(FXCollections.observableArrayList("Any"));
 		setIncome(FXCollections.observableArrayList("Any"));
 		setContext(FXCollections.observableArrayList("Any"));
+		setDateSQL();
     }
 }
