@@ -16,12 +16,14 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import dashboard.Preferences;
 import dashboard.model.DatabaseConnection;
+import javafx.stage.Modality;
 
 /**
  * Main Application. This class handles navigation and user session.
  */
 public class Main extends Application {
 	private Stage stage;
+        private Stage openForm;
 
 	@Override
 	public void start(Stage primaryStage) {
@@ -33,7 +35,38 @@ public class Main extends Application {
 				new Image(getClass().getResourceAsStream(
 					String.format("/icon%d.png", size))));
 */
-		// Get the window display scaling, so we can set the correct res.
+		gotoOpenForm();
+     
+              
+      
+	}
+        private void gotoOpenForm() {
+        try {
+            OpenCampaignController openCampaign;
+            try {
+                openCampaign = (OpenCampaignController) replaceSceneContent("/dashboard/view/fxml/OpenCampaign.fxml",stage);
+             
+                openCampaign.setApp(this);
+                openCampaign.init();
+  
+            } catch (IOException ex) {
+			ex.printStackTrace();
+	     }
+
+            stage.centerOnScreen();
+            stage.show();
+            stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+			public void handle(WindowEvent we) {
+				DatabaseConnection.closeConnection();
+			}
+		});
+        } catch (Exception ex) {
+             
+        }
+        }
+        
+        public void gotoMainForm() {
+        // Get the window display scaling, so we can set the correct res.
 		double deviceScaling = Toolkit.getDefaultToolkit()
 				.getScreenResolution() / 96.0;
 
@@ -45,9 +78,9 @@ public class Main extends Application {
 		stage.setHeight(Preferences.windowScaling * bounds.getHeight() / deviceScaling);
 		stage.centerOnScreen();
 
-		AuctionController auctionTool;
+            AuctionController auctionTool;
 		try {
-			auctionTool = (AuctionController) replaceSceneContent("/dashboard/view/fxml/AuctionTool.fxml");
+			auctionTool = (AuctionController) replaceSceneContent("/dashboard/view/fxml/AuctionTool.fxml", stage);
 			auctionTool.setApp(this);
 			auctionTool.init();
 		} catch (IOException ex) {
@@ -60,13 +93,14 @@ public class Main extends Application {
 				DatabaseConnection.closeConnection();
 			}
 		});  
-	}
-
+        }
+        
 	public Stage getStage() {
 		return stage;
 	}
+        
 
-	private Node replaceSceneContent(String fxml) throws IOException {
+	private Node replaceSceneContent(String fxml, Stage stage) throws IOException {
 		FXMLLoader loader = new FXMLLoader();
 		loader.setBuilderFactory(new JavaFXBuilderFactory());
 		loader.setLocation(Main.class.getResource(fxml));

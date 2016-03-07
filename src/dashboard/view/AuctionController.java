@@ -38,6 +38,9 @@ import dashboard.model.CSVReader;
 import dashboard.model.DatabaseConnection;
 import dashboard.model.Filter;
 import dashboard.model.ObservableMetrics;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 /**
  * Auction Controller.
  */
@@ -79,18 +82,6 @@ public class AuctionController extends AnchorPane {
 	@FXML
 	private MenuItem openCampaign;
 	@FXML
-	private Label lbBounce;
-	@FXML
-	private Label lbClicks;
-	@FXML
-	private Label lbConversion;
-	@FXML
-	private Label lbImpressions;
-	@FXML
-	private Label lbUClicks;
-	@FXML
-	private Label lbUImpressions;
-	@FXML
 	private TableView<ObservableMetrics> tableResults;
 	@FXML
 	private TableColumn<ObservableMetrics, String> metricCol;
@@ -99,33 +90,90 @@ public class AuctionController extends AnchorPane {
 
 	final ObservableList<ObservableMetrics> tableContent = FXCollections.observableArrayList();
 	private Filter filter;
+    @FXML
+    private MenuItem deleteCampaign;
+    @FXML
+    private MenuItem exportCampaign;
+    @FXML
+    private MenuItem printCampaign;
+    @FXML
+    private MenuItem mnuColour;
+    @FXML
+    private MenuItem mnuFont;
+    @FXML
+    private MenuItem mnuPaths;
+    @FXML
+    private MenuItem mnuUnits;
+    @FXML
+    private MenuItem mnuDefinitions;
+    @FXML
+    private MenuItem mnuSearch;
+    @FXML
+    private MenuItem mnuList;
+    @FXML
+    private MenuItem mnuAbout;
+    @FXML
+    private TextField txtBounceTime;
+    @FXML
+    private TextField txtBouncePages;
+    @FXML
+    private RadioButton rbByBounceTime;
+    @FXML
+    private ToggleGroup grBounce;
+    @FXML
+    private RadioButton rbByBouncePages;
 
 	public void setApp(Main application){
 		this.application = application;
 	}
 
 	public void init() {
-		filter = new Filter();
+            filter = new Filter();
 
-		filterDateFrom.setValue((LocalDate.of(2015,01,01)));
-		filterDateTo.setValue((LocalDate.of(2015,01,14)));
-		filterGender.getItems().addAll("Any","Female","Male");
-		filterAge.getItems().addAll("Any","Less than 25","25 to 34","35 to 44","45 to 54","Greater than 55");
+            filterDateFrom.setValue((LocalDate.of(2015,01,01)));
+            filterDateTo.setValue((LocalDate.of(2015,01,14)));
+            filterGender.getItems().addAll("Any","Female","Male");
+            filterAge.getItems().addAll("Any","Less than 25","25 to 34","35 to 44","45 to 54","Greater than 55");
 
-		filterIncome.getItems().addAll("Any","Low","Medium","High");
-		filterContext.getItems().addAll("Any","News","Shopping","Social Media","Blog","Hobbies","Travel");
+            filterIncome.getItems().addAll("Any","Low","Medium","High");
+            filterContext.getItems().addAll("Any","News","Shopping","Social Media","Blog","Hobbies","Travel");
 
 
-		filterGender.getCheckModel().check(0);
-		filterAge.getCheckModel().check(0);
-		filterContext.getCheckModel().check(0);
-		filterIncome.getCheckModel().check(0);
+            filterGender.getCheckModel().check(0);
+            filterAge.getCheckModel().check(0);
+            filterContext.getCheckModel().check(0);
+            filterIncome.getCheckModel().check(0);
 
-		metricCol.setCellValueFactory(cellData -> cellData.getValue().descriptionProperty());
-		resultCol.setCellValueFactory(cellData -> cellData.getValue().resultProperty());
-		configureTable();       
-	}
+            metricCol.setCellValueFactory(cellData -> cellData.getValue().descriptionProperty());
+            resultCol.setCellValueFactory(cellData -> cellData.getValue().resultProperty());
+            configureTable();  
 
+           
+        filterGender.getCheckModel().getCheckedItems().addListener(new ListChangeListener<String>() {
+            public void onChanged(ListChangeListener.Change<? extends String> c) {
+                    filter.setGender(filterGender);
+                    
+       
+                  
+        }
+        });
+        
+       filterAge.getCheckModel().getCheckedItems().addListener(new ListChangeListener<String>() {
+            public void onChanged(ListChangeListener.Change<? extends String> c) {
+                    filter.setAge(filterAge);
+                    
+       
+                  
+        }
+        });
+            
+            campaignName.setText(DatabaseConnection.getDbfile().replace(".db", ""));
+            generateGraph.setDisable(false);
+            //generateData(null);
+
+        }
+         
+       
 	private final ListChangeListener<ObservableMetrics> tableSelectionChanged =
 			new ListChangeListener<ObservableMetrics>() {
 
@@ -138,8 +186,8 @@ public class AuctionController extends AnchorPane {
 
 		}
 	};
-
-
+      
+       
 
 	// Configure the table widget: set up its column, and register the
 	// selection changed listener.
@@ -158,41 +206,15 @@ public class AuctionController extends AnchorPane {
 	@FXML
 	private void importCampaignAction(ActionEvent event) {
 
-		FileChooser fChooser = new FileChooser();
-		fChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
-		fChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Campaign files (*.csv)", "*.csv"));
-		fChooser.setTitle("Select campaign to import" );
-		File fl = fChooser.showOpenDialog(application.getStage());
-
-		if (fl != null) {
-
-			CSVReader importCsv = new CSVReader();
-			if (importCsv.checkFilesExist(fl.getParent())) {
-
-				TextInputDialog input = new TextInputDialog();
-				input.getEditor().setPromptText("Enter name of campaign");
-				input.setTitle("New Auction Campaign");
-				input.setHeaderText("Enter name of campaign");
-				Optional<String> result = input.showAndWait();
-
-				if (result.isPresent()) {
-					DatabaseConnection.closeConnection();
-					DatabaseConnection.setDbfile(result.get().trim() + ".db");    // should check name has is alpha numeric only here as it forms part of the database filename
-
-					if (importCsv.readCSVs(fl.getParent())) {
-						Alert alert = new Alert(Alert.AlertType.INFORMATION);
-						alert.setTitle("Campaign imported successfully");
-						alert.setHeaderText(null);
-						alert.setContentText("The files were imported successfully");
-						alert.showAndWait();
-						campaignName.setText(DatabaseConnection.getDbfile().replace(".db", ""));
-						generateGraph.setDisable(false);
-						generateData(null);
-					}
-				}
-			}
-		}
-	}
+		/* CSVReader importCsv = new CSVReader();
+                if (importCsv.importCampaign(application.getStage()))
+                {   
+                        campaignName.setText(DatabaseConnection.getDbfile().replace(".db", ""));
+                        generateGraph.setDisable(false);
+                        generateData(null);
+                }*/
+             
+        }
 
 	@FXML
 	private void closeAction(ActionEvent event) {

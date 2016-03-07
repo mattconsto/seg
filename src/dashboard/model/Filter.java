@@ -4,16 +4,22 @@
 package dashboard.model;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import org.controlsfx.control.CheckComboBox;
+import org.controlsfx.control.IndexedCheckModel;
 
  
 
 public class Filter {
 
-	ObservableList <String> gender ;
-	ObservableList <String> age ;
+	 boolean genderEnabled = true;
+        boolean ageEnabled = true;
+        List <String> gender ;
+        List <String> age ;
 	ObservableList <String> income; 
 	ObservableList <String> context;
 	LocalDate dateTo;
@@ -23,25 +29,114 @@ public class Filter {
     String incomeSQL;
     String genderSQL;
     String dateSQL;
-        
 
-    public ObservableList<String> getGender() {
+
+    public String getDateSQL() {
+        return dateSQL;
+    }
+
+    public void setDateSQL(String dateSQL) {
+        this.dateSQL = dateSQL;
+    }
+
+   
+
+    public List<String> getGender() {
         return gender;
     }
 
+     /**
+     *
+     * @param gender
+     */
     public void setGender(ObservableList<String> gender) {
-        this.gender = gender;
+        
+        this.gender.clear();
+        for (String s : gender)
+            this.gender.add (s);
         setGenderSQL();
     }
-
-    public ObservableList<String> getAge() {
+     private void setAnyGender(CheckComboBox<String> c )
+     {
+           c.getItems().clear();
+           c.getItems().addAll("Any","Female","Male");
+           c.getCheckModel().clearChecks(); 
+           c.getCheckModel().check(0); 
+           c.getCheckModel().check("Any");
+     }
+     public void setGender(CheckComboBox<String> c) {
+        if (!genderEnabled)
+            return;
+        genderEnabled = false;
+        IndexedCheckModel<String> genderModel = c.getCheckModel();
+        if (genderModel.getCheckedIndices().isEmpty()) {
+            genderModel.check(0); 
+        }
+        else if (genderModel.isChecked(0)) {
+            if (gender.contains("Any")) { // already checked 
+                if (genderModel.getCheckedIndices().size() == genderModel.getItemCount()) // they are all ticked so 
+                    setAnyGender(c);
+                else if (genderModel.getCheckedIndices().size() > 1)
+                    genderModel.clearCheck(0);
+            }
+            else 
+                setAnyGender(c);
+        }
+        else if (genderModel.getCheckedIndices().size() == genderModel.getItemCount()-1) { // they are all ticked so 
+            setAnyGender(c);
+        }
+        setGender(genderModel.getCheckedItems());
+        genderEnabled = true;
+    }
+   /**
+     *
+     * @param age
+     * 
+     */
+    public void setAge(ObservableList<String> age) {
+       
+        this.age.clear();
+        for (String s : age)
+            this.age.add (s);
+        setAgeSQL();
+    }
+     private void setAnyAge(CheckComboBox<String> c )
+     {
+           c.getItems().clear();
+           c.getItems().addAll("Any","Less than 25","25 to 34","35 to 44","45 to 54","Greater than 55");
+           c.getCheckModel().clearChecks(); 
+           c.getCheckModel().check(0); 
+           c.getCheckModel().check("Any");
+     }
+     public void setAge(CheckComboBox<String> c) {
+        if (!ageEnabled)
+            return;
+        ageEnabled = false;
+        IndexedCheckModel<String> genderModel = c.getCheckModel();
+        if (genderModel.getCheckedIndices().isEmpty()) {
+            genderModel.check(0); 
+        }
+        else if (genderModel.isChecked(0)) {
+            if (age.contains("Any")) { // already checked 
+                if (genderModel.getCheckedIndices().size() == genderModel.getItemCount()) // they are all ticked so 
+                    setAnyAge(c);
+                else if (genderModel.getCheckedIndices().size() > 1)
+                    genderModel.clearCheck(0);
+            }
+            else 
+                setAnyAge(c);
+        }
+        else if (genderModel.getCheckedIndices().size() == genderModel.getItemCount()-1) { // they are all ticked so 
+            setAnyAge(c);
+        }
+        setAge(genderModel.getCheckedItems());
+        ageEnabled = true;
+    }
+    public List<String> getAge() {
         return age;
     }
 
-    public void setAge(ObservableList<String> age) {
-        this.age = age;
-        setAgeSQL();
-    }
+    
 
     public ObservableList<String> getIncome() {
         return income;
@@ -242,10 +337,15 @@ public class Filter {
     /* Default constructor sets all fields to 'any', and leaves date range unrestricted */
     public Filter()
     {
-    	setGender(FXCollections.observableArrayList("Any"));
-		setAge(FXCollections.observableArrayList("Any"));
-		setIncome(FXCollections.observableArrayList("Any"));
-		setContext(FXCollections.observableArrayList("Any"));
-		setDateSQL();
+         gender = new ArrayList();
+         gender.add("Any");
+         age = new ArrayList();
+         age.add("Any");
+    	 
+        setIncome(FXCollections.observableArrayList("Any"));
+        setContext(FXCollections.observableArrayList("Any"));
+        setDateSQL();
+                 
+                
     }
 }

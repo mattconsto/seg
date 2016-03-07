@@ -4,9 +4,13 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.sql.*;
+import java.util.Optional;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.TextInputDialog;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
 /**
  * Read a CSV file and load it into the database
@@ -243,4 +247,30 @@ public class CSVReader {
 
 		System.out.println("Server Table created successfully");
 	}
+        public boolean importCampaign(Stage stage, String dbName)
+        {
+        	FileChooser fChooser = new FileChooser();
+		fChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
+		fChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Campaign files (*.csv)", "*.csv"));
+		fChooser.setTitle("Select campaign to import" );
+		File fl = fChooser.showOpenDialog(stage);
+
+		if (fl != null) {
+
+			
+			if (checkFilesExist(fl.getParent())) {
+                        	DatabaseConnection.closeConnection();
+                                DatabaseConnection.setDbfile(dbName.trim() + ".db");    // should check name has is alpha numeric only here as it forms part of the database filename
+				if (readCSVs(fl.getParent())) {
+        				Alert alert = new Alert(Alert.AlertType.INFORMATION);
+					alert.setTitle("Campaign imported successfully");
+					alert.setHeaderText(null);
+					alert.setContentText("The files were imported successfully");
+					alert.showAndWait();
+					return true;   
+				}
+			}
+		}
+                return false;
+        }
 }
