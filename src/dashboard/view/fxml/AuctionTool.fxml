@@ -86,7 +86,11 @@
 											<String fx:value="Impressions" />
 											<String fx:value="Unique Clicks" />
 											<String fx:value="Unique Impression" />
+											<String fx:value="Total Cost" />
+											<String fx:value="CTR" />
+											<String fx:value="CPA" />
 											<String fx:value="CPC" />
+											<String fx:value="CPM" />
 										</FXCollections>
 									</items>
 									<value>
