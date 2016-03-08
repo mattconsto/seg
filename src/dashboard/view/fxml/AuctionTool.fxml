@@ -81,11 +81,12 @@
 								<items>
 										<FXCollections fx:factory="observableArrayList">
 											<String fx:value="Bounces" />
-											<String fx:value="Impressions" />
-											<String fx:value="Unique Impressions" />
 											<String fx:value="Clicks" />
-											<String fx:value="Unique Clicks" />
 											<String fx:value="Conversions" />
+											<String fx:value="Impressions" />
+											<String fx:value="Unique Clicks" />
+											<String fx:value="Unique Impression" />
+											<String fx:value="CPC" />
 										</FXCollections>
 									</items>
 									<value>

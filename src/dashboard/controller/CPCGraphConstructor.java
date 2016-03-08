@@ -24,9 +24,10 @@ public class CPCGraphConstructor extends GraphConstructor{
 				+ "INNER JOIN CLICKS "
 				+ "ON IMPRESSIONS.ID=CLICKS.ID "
 				+ "GROUP BY CLICKS.DATE, CLICKS.ID) "
-				+ "GROUP BY SUBSTR(CLICKDATE, 0, 14)) "
+				+ "WHERE " + filter.getSql().replace("DATE", "CLICKDATE")+ " GROUP BY SUBSTR(CLICKDATE, 0, 14)) "
 				+ "INNER JOIN "
-				+ "(SELECT SUBSTR(DATE,0,14) AS IMPDATE, SUM(COST) AS IMPCOST FROM IMPRESSIONS  GROUP BY SUBSTR(DATE, 0, 14)) "
+				+ "(SELECT SUBSTR(DATE,0,14) AS IMPDATE, SUM(COST) AS IMPCOST FROM IMPRESSIONS "
+				+ "WHERE " + filter.getSql()+ " GROUP BY SUBSTR(DATE, 0, 14)) "
 				+ "ON IMPDATE=CLICKDATE");
 				//+ "WHERE " + filter.getSql().replace("DATE", "CLICKDATE")+ " GROUP BY SUBSTR(CLICKDATE, 0, 14);");
 
