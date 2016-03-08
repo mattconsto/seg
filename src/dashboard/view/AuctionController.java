@@ -5,7 +5,6 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.Optional;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -14,20 +13,23 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart.Series;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import dashboard.controller.BounceGraphConstructor;
+import dashboard.controller.CPMGraphConstructor;
+import dashboard.controller.CPAGraphConstructor;
 import dashboard.controller.CPCGraphConstructor;
 import dashboard.controller.ClicksGraphConstructor;
 import dashboard.controller.ConversionGraphConstructor;
@@ -35,13 +37,9 @@ import dashboard.controller.GraphConstructor;
 import dashboard.controller.ImpressionsGraphConstructor;
 import dashboard.controller.UniqueClicksGraphConstructor;
 import dashboard.controller.UniqueImpressionsGraphConstructor;
-import dashboard.model.CSVReader;
 import dashboard.model.DatabaseConnection;
 import dashboard.model.Filter;
 import dashboard.model.ObservableMetrics;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleGroup;
 /**
  * Auction Controller.
  */
@@ -313,6 +311,12 @@ public class AuctionController extends AnchorPane {
 			break;
 		case "CPC":
 			constructor = new CPCGraphConstructor(filter);
+			break;
+		case "CPA":
+			constructor = new CPAGraphConstructor(filter);
+			break;
+		case "CPM":
+			constructor = new CPMGraphConstructor(filter);
 		}
 
 		lineChart.setCreateSymbols(false);
