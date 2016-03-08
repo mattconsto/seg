@@ -28,6 +28,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import dashboard.controller.BounceGraphConstructor;
+import dashboard.controller.BounceRateGraphConstructor;
 import dashboard.controller.CPAGraphConstructor;
 import dashboard.controller.CPCGraphConstructor;
 import dashboard.controller.CPMGraphConstructor;
@@ -282,6 +283,7 @@ public class AuctionController extends AnchorPane {
 		tableContent.add(new dashboard.model.ObservableMetrics("CPA","...."));
 		tableContent.add(new dashboard.model.ObservableMetrics("CPC","...."));
 		tableContent.add(new dashboard.model.ObservableMetrics("CPM","...."));
+		tableContent.add(new dashboard.model.ObservableMetrics("Bounce Rate","...."));
 
 	}
 	private void drawGraph(String metric)
@@ -325,6 +327,9 @@ public class AuctionController extends AnchorPane {
 			break;
 		case "Total Cost":
 			constructor = new TotalCostGraphConstructor(filter);
+			break;
+		case "Bounce Rate":
+			constructor = new BounceRateGraphConstructor(filter);
 			break;
 		}
 
