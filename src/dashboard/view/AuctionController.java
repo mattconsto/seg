@@ -28,6 +28,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import dashboard.controller.BounceGraphConstructor;
+import dashboard.controller.CPCGraphConstructor;
 import dashboard.controller.ClicksGraphConstructor;
 import dashboard.controller.ConversionGraphConstructor;
 import dashboard.controller.GraphConstructor;
@@ -310,6 +311,8 @@ public class AuctionController extends AnchorPane {
 		case "Conversions":
 			constructor = new ConversionGraphConstructor(filter);
 			break;
+		case "CPC":
+			constructor = new CPCGraphConstructor(filter);
 		}
 
 		lineChart.setCreateSymbols(false);

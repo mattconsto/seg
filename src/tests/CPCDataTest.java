@@ -31,7 +31,7 @@ Filter filter;
 			CPCGraphConstructor cpcConstructor = new CPCGraphConstructor(filter);
 			
 			ObservableList<XYChart.Data<String, Number>> data = cpcConstructor.fetchGraph().getData();
-			assertEquals(12, data.get(0).getYValue());
+			assertEquals(12f, data.get(0).getYValue());
 		}
 		catch(SQLException sqle)
 		{
@@ -49,7 +49,7 @@ Filter filter;
 			CPCGraphConstructor cpcConstructor = new CPCGraphConstructor(filter);
 			
 			ObservableList<XYChart.Data<String, Number>> data = cpcConstructor.fetchGraph().getData();
-			assertEquals(12, data.get(0).getYValue());
+			assertEquals(12f, data.get(0).getYValue());
 		}
 		catch(SQLException sqle)
 		{
@@ -66,7 +66,7 @@ Filter filter;
 			CPCGraphConstructor cpcConstructor = new CPCGraphConstructor(filter);
 			
 			ObservableList<XYChart.Data<String, Number>> data = cpcConstructor.fetchGraph().getData();
-			assertEquals(12, data.get(0).getYValue());
+			assertEquals(12f, data.get(0).getYValue());
 		}
 		catch(SQLException sqle)
 		{
@@ -83,7 +83,7 @@ Filter filter;
 			CPCGraphConstructor cpcConstructor = new CPCGraphConstructor(filter);
 			
 			ObservableList<XYChart.Data<String, Number>> data = cpcConstructor.fetchGraph().getData();
-			assertEquals(12, data.get(0).getYValue());
+			assertEquals(12f, data.get(0).getYValue());
 		}
 		catch(SQLException sqle)
 		{
@@ -101,13 +101,13 @@ Filter filter;
 			CPCGraphConstructor cpcConstructor = new CPCGraphConstructor(filter);
 			
 			ObservableList<XYChart.Data<String, Number>> data = cpcConstructor.fetchGraph().getData();
-			assertEquals(12, data.get(0).getYValue());
+			assertEquals(12f, data.get(0).getYValue());
 			
 			filter.setGender(FXCollections.observableArrayList("Male"));
 			cpcConstructor = new CPCGraphConstructor(filter);
 			
 			data = cpcConstructor.fetchGraph().getData();
-			assertEquals(0.5, data.get(0).getYValue());
+			assertEquals(12f, data.get(0).getYValue());
 		}
 		catch(SQLException sqle)
 		{
@@ -125,31 +125,31 @@ Filter filter;
 			CPCGraphConstructor cpcConstructor = new CPCGraphConstructor(filter);
 			
 			ObservableList<XYChart.Data<String, Number>> data = cpcConstructor.fetchGraph().getData();
-			assertEquals(12, data.get(0).getYValue());
+			assertEquals(12f, data.get(0).getYValue());
 			
 			filter.setAge(FXCollections.observableArrayList("25 to 34"));
 			cpcConstructor = new CPCGraphConstructor(filter);
 			
 			data = cpcConstructor.fetchGraph().getData();
-			assertEquals(12, data.get(0).getYValue());
+			assertEquals(12f, data.get(0).getYValue());
 			
 			filter.setAge(FXCollections.observableArrayList("35 to 44"));
 			cpcConstructor = new CPCGraphConstructor(filter);
 			
 			data = cpcConstructor.fetchGraph().getData();
-			assertEquals(12, data.get(0).getYValue());
+			assertEquals(12f, data.get(0).getYValue());
 			
 			filter.setAge(FXCollections.observableArrayList("45 to 54"));
 			cpcConstructor = new CPCGraphConstructor(filter);
 			
 			data = cpcConstructor.fetchGraph().getData();
-			assertEquals(12, data.get(0).getYValue());
+			assertEquals(12f, data.get(0).getYValue());
 			
 			filter.setAge(FXCollections.observableArrayList("Greater than 55"));
 			cpcConstructor = new CPCGraphConstructor(filter);
 			
 			data = cpcConstructor.fetchGraph().getData();
-			assertEquals(0.5, data.get(0).getYValue());
+			assertEquals(12f, data.get(0).getYValue());
 		}
 		catch(SQLException sqle)
 		{
@@ -167,19 +167,19 @@ Filter filter;
 			CPCGraphConstructor cpcConstructor = new CPCGraphConstructor(filter);
 			
 			ObservableList<XYChart.Data<String, Number>> data = cpcConstructor.fetchGraph().getData();
-			assertEquals(12, data.get(0).getYValue());
+			assertEquals(12f, data.get(0).getYValue());
 			
 			filter.setIncome(FXCollections.observableArrayList("Medium"));
 			cpcConstructor = new CPCGraphConstructor(filter);
 			
 			data = cpcConstructor.fetchGraph().getData();
-			assertEquals(12, data.get(0).getYValue());
+			assertEquals(12f, data.get(0).getYValue());
 			
 			filter.setIncome(FXCollections.observableArrayList("High"));
 			cpcConstructor = new CPCGraphConstructor(filter);
 			
 			data = cpcConstructor.fetchGraph().getData();
-			assertEquals(12, data.get(0).getYValue());
+			assertEquals(12f, data.get(0).getYValue());
 		}
 		catch(SQLException sqle)
 		{
@@ -197,37 +197,37 @@ Filter filter;
 			CPCGraphConstructor cpcConstructor = new CPCGraphConstructor(filter);
 			
 			ObservableList<XYChart.Data<String, Number>> data = cpcConstructor.fetchGraph().getData();
-			assertEquals(12, data.get(0).getYValue());
+			assertEquals(12f, data.get(0).getYValue());
 			
 			filter.setContext(FXCollections.observableArrayList("Shopping"));
 			cpcConstructor = new CPCGraphConstructor(filter);
 			
 			data = cpcConstructor.fetchGraph().getData();
-			assertEquals(12, data.get(0).getYValue());
+			assertEquals(12f, data.get(0).getYValue());
 			
 			filter.setContext(FXCollections.observableArrayList("Social Media"));
 			cpcConstructor = new CPCGraphConstructor(filter);
 			
 			data = cpcConstructor.fetchGraph().getData();
-			assertEquals(12, data.get(0).getYValue());
+			assertEquals(12f, data.get(0).getYValue());
 			
 			filter.setContext(FXCollections.observableArrayList("Blog"));
 			cpcConstructor = new CPCGraphConstructor(filter);
 			
 			data = cpcConstructor.fetchGraph().getData();
-			assertEquals(12, data.get(0).getYValue());
+			assertEquals(12f, data.get(0).getYValue());
 			
 			filter.setContext(FXCollections.observableArrayList("Hobbies"));
 			cpcConstructor = new CPCGraphConstructor(filter);
 			
 			data = cpcConstructor.fetchGraph().getData();
-			assertEquals(12, data.get(0).getYValue());
+			assertEquals(12f, data.get(0).getYValue());
 			
 			filter.setContext(FXCollections.observableArrayList("Travel"));
 			cpcConstructor = new CPCGraphConstructor(filter);
 			
 			data = cpcConstructor.fetchGraph().getData();
-			assertEquals(12, data.get(0).getYValue());
+			assertEquals(12f, data.get(0).getYValue());
 		}
 		catch(SQLException sqle)
 		{
