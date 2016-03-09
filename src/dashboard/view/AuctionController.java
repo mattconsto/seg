@@ -135,45 +135,49 @@ public class AuctionController extends AnchorPane {
 		filterDateTo.setValue((LocalDate.of(2015,01,14)));
 		filterGender.getItems().addAll("Any","Female","Male");
 		filterAge.getItems().addAll("Any","Less than 25","25 to 34","35 to 44","45 to 54","Greater than 55");
-
 		filterIncome.getItems().addAll("Any","Low","Medium","High");
 		filterContext.getItems().addAll("Any","News","Shopping","Social Media","Blog","Hobbies","Travel");
-
-
 		filterGender.getCheckModel().check(0);
 		filterAge.getCheckModel().check(0);
 		filterContext.getCheckModel().check(0);
 		filterIncome.getCheckModel().check(0);
-
 		metricCol.setCellValueFactory(cellData -> cellData.getValue().descriptionProperty());
 		resultCol.setCellValueFactory(cellData -> cellData.getValue().resultProperty());
 		configureTable();  
-
-
-		filterGender.getCheckModel().getCheckedItems().addListener(new ListChangeListener<String>() {
-			public void onChanged(ListChangeListener.Change<? extends String> c) {
-				filter.setGender(filterGender);
-
-
-
-			}
-		});
-
-		filterAge.getCheckModel().getCheckedItems().addListener(new ListChangeListener<String>() {
-			public void onChanged(ListChangeListener.Change<? extends String> c) {
-				filter.setAge(filterAge);
-
-
-
-			}
-		});
+                configureFilters();
 
 		campaignName.setText(DatabaseConnection.getDbfile().replace(".db", ""));
 		generateGraph.setDisable(false);
 		//generateData(null);
 
 	}
-
+        private void configureFilters() {
+            filterGender.getCheckModel().getCheckedItems().addListener(new ListChangeListener<String>() {
+                @Override
+                public void onChanged(ListChangeListener.Change<? extends String> c) {
+                    filter.setGender(filterGender);
+                }
+            });
+            filterAge.getCheckModel().getCheckedItems().addListener(new ListChangeListener<String>() {
+                @Override
+                public void onChanged(ListChangeListener.Change<? extends String> c) {
+                    filter.setAge(filterAge);
+		}
+            });
+            filterIncome.getCheckModel().getCheckedItems().addListener(new ListChangeListener<String>() {
+                @Override
+                public void onChanged(ListChangeListener.Change<? extends String> c) {
+                    filter.setIncome(filterIncome);
+		}
+            });
+            filterContext.getCheckModel().getCheckedItems().addListener(new ListChangeListener<String>() {
+                @Override
+                public void onChanged(ListChangeListener.Change<? extends String> c) {
+                    filter.setContext(filterContext);
+		}
+            });
+                    
+        }
 
 	private final ListChangeListener<ObservableMetrics> tableSelectionChanged =
 			new ListChangeListener<ObservableMetrics>() {
@@ -207,14 +211,7 @@ public class AuctionController extends AnchorPane {
 	@FXML
 	private void importCampaignAction(ActionEvent event) {
 
-		/* CSVReader importCsv = new CSVReader();
-                if (importCsv.importCampaign(application.getStage()))
-                {   
-                        campaignName.setText(DatabaseConnection.getDbfile().replace(".db", ""));
-                        generateGraph.setDisable(false);
-                        generateData(null);
-                }*/
-
+		
 	}
 
 	@FXML
@@ -335,13 +332,10 @@ public class AuctionController extends AnchorPane {
 	}
 	@FXML
 	private void generateData(ActionEvent event) {
-		filter.setGender(filterGender.getCheckModel().getCheckedItems());
-		filter.setAge(filterAge.getCheckModel().getCheckedItems());
-		filter.setIncome(filterIncome.getCheckModel().getCheckedItems()); 
-		filter.setContext(filterContext.getCheckModel().getCheckedItems());
+		
 		filter.setDateFrom(filterDateFrom.getValue());
 		filter.setDateTo(filterDateTo.getValue());
-
+              
 		drawGraph(filterMetrics.getValue());
 		try {
 			updateMetricsTable();

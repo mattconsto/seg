@@ -16,18 +16,20 @@ import org.controlsfx.control.IndexedCheckModel;
 
 public class Filter {
 
-	 boolean genderEnabled = true;
-        boolean ageEnabled = true;
-        List <String> gender ;
-        List <String> age ;
-	ObservableList <String> income; 
-	ObservableList <String> context;
-	LocalDate dateTo;
+    boolean genderEnabled = true;
+    boolean ageEnabled = true;
+    boolean incomeEnabled = true;
+    boolean contextEnabled = true;
+    List <String> gender ;
+    List <String> age ;
+    List <String> income; 
+    List <String> context;
+    LocalDate dateTo;
     LocalDate dateFrom;
-    String contextSQL;
-    String ageSQL;
-    String incomeSQL;
-    String genderSQL;
+    String contextSQL = "1";
+    String ageSQL = "1";
+    String incomeSQL = "1";
+    String genderSQL = "1";
     String dateSQL;
 
 
@@ -135,19 +137,101 @@ public class Filter {
     public List<String> getAge() {
         return age;
     }
-
-    
-
-    public ObservableList<String> getIncome() {
-        return income;
-    }
-
+ 
+     /**
+     *
+     * @param income
+     */
     public void setIncome(ObservableList<String> income) {
-        this.income = income;
+        
+        this.income.clear();
+        for (String s : income)
+            this.income.add (s);
         setIncomeSQL();
     }
+     private void setAnyIncome(CheckComboBox<String> c )
+     {
+           c.getItems().clear();
+           c.getItems().addAll("Any","Low","Medium","High" );
+           c.getCheckModel().clearChecks(); 
+           c.getCheckModel().check(0); 
+           c.getCheckModel().check("Any");
+     }
+     public void setIncome(CheckComboBox<String> c) {
+        if (!incomeEnabled)
+            return;
+        incomeEnabled = false;
+        IndexedCheckModel<String> genderModel = c.getCheckModel();
+        if (genderModel.getCheckedIndices().isEmpty()) {
+            genderModel.check(0); 
+        }
+        else if (genderModel.isChecked(0)) {
+            if (income.contains("Any")) { // already checked 
+                if (genderModel.getCheckedIndices().size() == genderModel.getItemCount()) // they are all ticked so 
+                    setAnyIncome(c);
+                else if (genderModel.getCheckedIndices().size() > 1)
+                    genderModel.clearCheck(0);
+            }
+            else 
+                setAnyIncome(c);
+        }
+        else if (genderModel.getCheckedIndices().size() == genderModel.getItemCount()-1) { // they are all ticked so 
+            setAnyIncome(c);
+        }
+        setIncome(genderModel.getCheckedItems());
+        incomeEnabled = true;
+    }
+    
 
-    public ObservableList<String> getContext() {
+    public List<String> getIncome() {
+        return income;
+    }
+    /**
+     *
+     * @param context
+     */
+    public void setContext(ObservableList<String> ct) {
+        
+        this.context.clear();
+        for (String s : ct)
+            this.context.add (s);
+        setContextSQL();
+    }
+     private void setAnyContext(CheckComboBox<String> c )
+     {
+           c.getItems().clear();
+           c.getItems().addAll("Any","News","Shopping","Social Media","Blog","Hobbies","Travel" );
+           c.getCheckModel().clearChecks(); 
+           c.getCheckModel().check(0); 
+           c.getCheckModel().check("Any");
+     }
+     public void setContext(CheckComboBox<String> c) {
+        if (!contextEnabled)
+            return;
+        contextEnabled = false;
+        IndexedCheckModel<String> genderModel = c.getCheckModel();
+        if (genderModel.getCheckedIndices().isEmpty()) {
+            genderModel.check(0); 
+        }
+        else if (genderModel.isChecked(0)) {
+            if (context.contains("Any")) { // already checked 
+                if (genderModel.getCheckedIndices().size() == genderModel.getItemCount()) // they are all ticked so 
+                    setAnyContext(c);
+                else if (genderModel.getCheckedIndices().size() > 1)
+                    genderModel.clearCheck(0);
+            }
+            else 
+                setAnyContext(c);
+        }
+        else if (genderModel.getCheckedIndices().size() == genderModel.getItemCount()-1) { // they are all ticked so 
+            setAnyContext(c);
+        }
+        setContext(genderModel.getCheckedItems());
+        contextEnabled = true;
+    }
+    
+
+    public List<String> getContext() {
         return context;
     }
     
@@ -285,12 +369,7 @@ public class Filter {
     	 
     }
 
-    public void setContext(ObservableList<String> context) {
-        this.context = context;
-        setContextSQL();
-        
-    }
-
+     
     public LocalDate getDateTo() {
         return dateTo;
     }
@@ -341,9 +420,12 @@ public class Filter {
          gender.add("Any");
          age = new ArrayList();
          age.add("Any");
-    	 
-        setIncome(FXCollections.observableArrayList("Any"));
-        setContext(FXCollections.observableArrayList("Any"));
+    	 income = new ArrayList();
+         income.add("Any");
+         context = new ArrayList();
+         context.add("Any");
+          
+        
         setDateSQL();
                  
                 

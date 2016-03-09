@@ -3,19 +3,22 @@ package dashboard.model;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 import java.sql.*;
-import java.util.Optional;
+ 
+import javafx.concurrent.Task;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.TextInputDialog;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
+ 
 
 /**
  * Read a CSV file and load it into the database
  */
 public class CSVReader {
+    
+     long currentBytes = 0;
+     long totBytes = 0;
 	/**
 	 * Check if file exists
 	 * @param file The file
@@ -30,6 +33,8 @@ public class CSVReader {
 			alert.showAndWait();
 			return false;
 		}
+                else
+                    totBytes += file.length();
 		return true;
 	}
 
@@ -39,31 +44,21 @@ public class CSVReader {
 	 * @return If the CSVs exist
 	 */
 	public boolean checkFilesExist(String folder) {
-		return verifyFile(new File(folder + "/impression_log.csv"))
+            totBytes = 0;
+            return verifyFile(new File(folder + "/impression_log.csv"))
 			&& verifyFile(new File(folder + "/click_log.csv"))
 			&& verifyFile(new File(folder + "/server_log.csv"));
 	}
 
-	/**
-	 * Read the CSVs to the database
-	 * @param folder The folder
-	 * @return If they are read
-	 */
-	public boolean readCSVs(String folder) {
+	        
+	public Task readImpressions(File fname) {
+             return new Task() {
+            @Override
+            protected Object call() throws Exception {
+                 
 		try {
-			Connection conn = DatabaseConnection.getConnection();
-			readImpressions(new File(folder + "/impression_log.csv"), conn);
-			readClicks(new File(folder + "/click_log.csv"), conn);
-			readServer(new File(folder + "/server_log.csv"), conn);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return true;
-	}
-
-	protected void readImpressions(File fname, Connection conn) {
-		try {
-			Statement stmt = conn.createStatement();
+			Connection conn = DatabaseConnection.getConnection(); 
+                        Statement stmt = conn.createStatement();
 			stmt.executeUpdate("drop table if exists IMPRESSIONS;");
 			// sqlite RECOGNISES text, integer, real does not have boolean or
 			// datetime
@@ -93,14 +88,22 @@ public class CSVReader {
 			// set autocommit to false so it updated the records in one go
 			// instead of individually - much quicker
 			conn.setAutoCommit(false);
+                        
 			BufferedReader br = new BufferedReader(new FileReader(fname));
 			long i = 0;
 			long j = 0; // commit count
+                        
 			String line = br.readLine(); // ignore first line - todo check file
-										// is not empty
+			currentBytes += line.length();							// is not empty
 			while ((line = br.readLine()) != null) {
-				String[] values = line.split(",");
-
+                            currentBytes += line.length();
+                            
+                            String[] values = line.split(",");
+                                
+                            updateProgress(currentBytes, totBytes);
+                                    
+                                 
+                                
 				prep.setString(1, values[0]);
 				prep.setLong(2, Long.parseLong(values[1]));
 				prep.setBoolean(3, values[2].toUpperCase().equals("FEMALE"));
@@ -151,16 +154,23 @@ public class CSVReader {
 			stmt = conn.createStatement();
 			stmt.executeUpdate("CREATE INDEX IMRESSION_ID ON IMPRESSIONS(ID)");
 			stmt.close();
-		} catch (Exception e) {
+		} catch (SQLException | IOException | NumberFormatException e) {
 			e.printStackTrace();
 		}
-
+                updateMessage("Done Impression");
 		System.out.println("Impression Table created successfully");
+                return true;
 	}
-
-	protected void readClicks(File fname, Connection conn) {
+             };
+        }
+         public Task readClicks(File fname) {
+             return new Task() {
+            @Override
+            protected Object call() throws Exception {
+                  
 		try {
-			Statement stmt = conn.createStatement();
+			Connection conn = DatabaseConnection.getConnection(); 
+                        Statement stmt = conn.createStatement();
 			stmt.executeUpdate("drop table if exists CLICKS;");
 			String sql = "CREATE TABLE CLICKS " + "(DATE      TEXT NOT NULL," + " ID 		INTEGER NOT NULL,"
 					+ " COST      REAL NOT NULL)";
@@ -174,10 +184,11 @@ public class CSVReader {
 			conn.setAutoCommit(false);
 			String line = br.readLine();
 			long i = 0, j = 0; // commit count
-
+                        currentBytes += line.length();
 			while ((line = br.readLine()) != null) {
 				String[] values = line.split(",");
-
+                                currentBytes += line.length();
+                                updateProgress(currentBytes, totBytes);
 				prep.setString(1, values[0]);
 				prep.setLong(2, Long.parseLong(values[1]));
 				prep.setDouble(3, Double.parseDouble(values[2]));
@@ -198,12 +209,20 @@ public class CSVReader {
 			e.printStackTrace();
 		}
 
-		System.out.println("Click Table created successfully");
-	}
+		updateMessage("Done Clicks");
+		System.out.println("Clicks Table created successfully");
+                return true;
+            }
+            };
+        }
 
-	protected void readServer(File fname, Connection conn) {
+	 public Task readServer(File fname) {
+             return new Task() {
+            @Override
+            protected Object call() throws Exception {
 		try {
-			Statement stmt = conn.createStatement();
+			Connection conn = DatabaseConnection.getConnection(); 
+                        Statement stmt = conn.createStatement();
 			stmt.executeUpdate("drop table if exists SERVER;");
 			String sql = "CREATE TABLE SERVER " + "(ENTRYDATE TEXT  NOT NULL," + " ID 		INTEGER NOT NULL,"
 					+ " EXITDATE  TEXT NOT NULL," + " PAGES		INTEGER	NOT NULL," + " CONVERSION  INTEGER NOT NULL)";
@@ -217,10 +236,11 @@ public class CSVReader {
 
 			String line = br.readLine();
 			long i = 0, j = 0; // commit count
-
+                        currentBytes += line.length();
 			while ((line = br.readLine()) != null) {
 				String[] values = line.split(",");
-
+                                currentBytes += line.length();
+                                updateProgress(currentBytes, totBytes);
 				prep.setString(1, values[0]);
 				prep.setLong(2, Long.parseLong(values[1]));
 				prep.setString(3, values[2]);
@@ -245,32 +265,13 @@ public class CSVReader {
 			e.printStackTrace();
 		}
 
-		System.out.println("Server Table created successfully");
-	}
-        public boolean importCampaign(Stage stage, String dbName)
-        {
-        	FileChooser fChooser = new FileChooser();
-		fChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
-		fChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Campaign files (*.csv)", "*.csv"));
-		fChooser.setTitle("Select campaign to import" );
-		File fl = fChooser.showOpenDialog(stage);
-
-		if (fl != null) {
-
-			
-			if (checkFilesExist(fl.getParent())) {
-                        	DatabaseConnection.closeConnection();
-                                DatabaseConnection.setDbfile(dbName.trim() + ".db");    // should check name has is alpha numeric only here as it forms part of the database filename
-				if (readCSVs(fl.getParent())) {
-        				Alert alert = new Alert(Alert.AlertType.INFORMATION);
-					alert.setTitle("Campaign imported successfully");
-					alert.setHeaderText(null);
-					alert.setContentText("The files were imported successfully");
-					alert.showAndWait();
-					return true;   
-				}
-			}
-		}
-                return false;
+		
+		updateMessage("Done Server");
+		 
+                return true;
+            }
+            };
         }
+      
+	 
 }
