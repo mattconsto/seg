@@ -3,6 +3,8 @@ package dashboard.controller;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.util.Date;
 
 import javafx.scene.chart.XYChart;
 import javafx.scene.chart.XYChart.Series;
@@ -15,8 +17,8 @@ public class CPAGraphConstructor extends GraphConstructor{
 	}
 
 	@Override
-	protected Series<String, Number> generateGraph(Connection conn)
-			throws SQLException {
+	protected Series<Date, Number> generateGraph(Connection conn)
+			throws SQLException, ParseException {
 		ResultSet results = conn.createStatement().executeQuery("SELECT ENTRYDATE, CLICKCOST, IMPCOST, Frequency FROM "
 				+ "(SELECT SUBSTR(ENTRYDATE, 0, 14) AS ENTRYDATE,COUNT(*) AS Frequency "
 				+ "FROM (SELECT IMPRESSIONS.*, SERVER.* FROM "
@@ -40,13 +42,13 @@ public class CPAGraphConstructor extends GraphConstructor{
 				+ "ON CLICKDATE=ENTRYDATE;");
 				//+ "WHERE " + filter.getSql().replace("DATE", "CLICKDATE")+ " GROUP BY SUBSTR(CLICKDATE, 0, 14);");
 
-		XYChart.Series<String, Number> series = new XYChart.Series<String, Number>();
+		XYChart.Series<Date, Number> series = new XYChart.Series<Date, Number>();
 		series.setName("Cost Per Acquisition(CPA) by date");
 		
 		
 		while (results.next()){
 			float calculation = ((results.getInt(2) + results.getInt(3)) / (float)results.getInt(4));
-			series.getData().add(new XYChart.Data<String, Number>(results.getString(1) + ":00", calculation));
+			series.getData().add(new XYChart.Data<Date, Number>(format.parse(results.getString(1)), calculation));
 		}
 
 		results.close();
