@@ -27,7 +27,7 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		// Setup our stage
-		primaryStage.setResizable(false);
+		 
 		stage = primaryStage;
 		stage.setTitle(Preferences.productName);
 		
@@ -51,8 +51,10 @@ public class Main extends Application {
 			} catch (IOException ex) {
 				ex.printStackTrace();
 			}
-
-			stage.centerOnScreen();
+                        stage.setResizable(false);
+                        stage.setWidth(607 );
+                        stage.setHeight(660 );
+                       	stage.centerOnScreen();
 			stage.show();
 			stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 				public void handle(WindowEvent we) {
@@ -65,7 +67,7 @@ public class Main extends Application {
 		public void gotoMainForm() {
 				// Get the window display scaling, so we can set the correct res.
 			stage.hide();
-				stage.setResizable(true);
+		        stage.setResizable(true);
 			AuctionController auctionTool;
 		try {
 			auctionTool = (AuctionController) replaceSceneContent("/dashboard/view/fxml/AuctionTool.fxml", stage);

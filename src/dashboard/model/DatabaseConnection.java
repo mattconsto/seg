@@ -11,8 +11,6 @@ public class DatabaseConnection {
 	private static Connection connection = null;
 	private static String     dbfile     = "auction";
 
-
-
 	/**
 	 * Disallow initialisation
 	 */
