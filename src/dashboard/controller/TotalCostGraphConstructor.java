@@ -39,9 +39,15 @@ public class TotalCostGraphConstructor extends GraphConstructor{
 		series.setName(" by date");
 
 		DateFormat format = new SimpleDateFormat(filter.timeFormatJava, Locale.ENGLISH);
-		while (results.next())
-			series.getData().add(new XYChart.Data<Date, Number>(format.parse(results.getString(1)), results.getInt(2)+results.getInt(3)));
-
+		int i = -1;
+		while (results.next()){
+			if(i >= 0)
+				series.getData().add(new XYChart.Data<Date, Number>(format.parse(results.getString(1)), (int)series.getData().get(i).getYValue() + results.getInt(2)+results.getInt(3)));
+			else
+				series.getData().add(new XYChart.Data<Date, Number>(format.parse(results.getString(1)), results.getInt(2)+results.getInt(3)));
+			i++;
+		}
+			
 		results.close();
 		return series;
 	}
