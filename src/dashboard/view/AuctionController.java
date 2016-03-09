@@ -355,7 +355,26 @@ public class AuctionController extends AnchorPane {
 	private void generateData(ActionEvent event) {
 		filter.setDateFrom(filterDateFrom.getValue());
 		filter.setDateTo(filterDateTo.getValue());
-				
+			
+		if(grBounce.getSelectedToggle().getUserData().toString().equalsIgnoreCase("timeBounce")){
+			try{
+				int time = Integer.parseInt(txtBounceTime.getText().trim());
+				bounceFilter.setTimeLimit(time);
+				bounceFilter.setPageLimit(0);
+			}catch(NumberFormatException nfe){
+				System.err.println("Bad input:" + txtBounceTime.getText() + " not a number");
+			}
+		}
+		else{
+			try{
+				int pages = Integer.parseInt(txtBouncePages.getText().trim());
+				bounceFilter.setTimeLimit(0);
+				bounceFilter.setPageLimit(pages);
+			}catch(NumberFormatException nfe){
+				System.err.println("Bad input:" + txtBounceTime.getText() + " not a number");
+			}
+		}
+		
 		lineChart.getData().clear();
 		lineChart.getXAxis().setLabel(filterTime.getValue());  
 		lineChart.getYAxis().setLabel(filterMetrics.getValue());
