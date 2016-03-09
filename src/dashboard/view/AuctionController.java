@@ -8,6 +8,8 @@ import java.time.LocalDate;
 
 import org.controlsfx.control.CheckComboBox;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -19,7 +21,6 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
-
 import dashboard.controller.*;
 import dashboard.model.*;
 /**
@@ -53,6 +54,7 @@ public class AuctionController extends AnchorPane {
 
 	final ObservableList<ObservableMetrics> tableContent = FXCollections.observableArrayList();
 	private Filter filter;
+	private BounceFilter bounceFilter;
 	
 	@FXML private MenuItem deleteCampaign;
 	@FXML private MenuItem exportCampaign;
@@ -77,7 +79,8 @@ public class AuctionController extends AnchorPane {
 
 	public void init() {
 		filter = new Filter();
-
+		bounceFilter = new BounceFilter();
+		
 		filterDateFrom.setValue((LocalDate.of(2015,01,01)));
 		filterDateTo.setValue((LocalDate.of(2015,01,14)));
 		filterGender.getItems().addAll("Any","Female","Male");
@@ -96,6 +99,15 @@ public class AuctionController extends AnchorPane {
 		campaignName.setText(DatabaseConnection.getDbfile().replace(".db", ""));
 		generateGraph.setDisable(false);
 		//generateData(null);
+		
+		rbByBounceTime.setUserData("timeBounce");
+		rbByBouncePages.setUserData("pageBounce");
+		grBounce.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+			@Override
+			public void changed(ObservableValue<? extends Toggle> observableValue, Toggle t, Toggle arg2) {
+				System.out.println(grBounce.getSelectedToggle().getUserData().toString());
+			}
+		});
 	}
 	
 	private void configureFilters() {
