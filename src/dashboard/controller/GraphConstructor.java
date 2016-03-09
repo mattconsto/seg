@@ -15,9 +15,8 @@ public abstract class GraphConstructor {
 	
 	protected Filter filter;
 
-
 	public GraphConstructor(Filter filter) {
-            this.filter = filter;
+		this.filter = filter;
 	}
 
 	/**

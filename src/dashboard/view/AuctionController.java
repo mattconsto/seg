@@ -46,7 +46,7 @@ import dashboard.model.ObservableMetrics;
 /**
  * Auction Controller.
  */
-public class AuctionController extends AnchorPane {        
+public class AuctionController extends AnchorPane {		
 	private Main application;
 	@FXML
 	private MenuBar menu;
@@ -55,8 +55,8 @@ public class AuctionController extends AnchorPane {
 	@FXML
 	private MenuItem close;
 	/* The controlsFX checkComboBox is not supported in scenebuilder. To be able 
-       to open the view in scenebuilder replace org.controlsfx.control.CheckComboBox with ComboBox
-       The .fxml file also needs to be edited to remove the org.controlsfx.control.CheckComboBox
+	   to open the view in scenebuilder replace org.controlsfx.control.CheckComboBox with ComboBox
+	   The .fxml file also needs to be edited to remove the org.controlsfx.control.CheckComboBox
 	 */
 	@FXML
 	private org.controlsfx.control.CheckComboBox<String> filterGender;
@@ -76,7 +76,7 @@ public class AuctionController extends AnchorPane {
 	private Button generateGraph;
 	@FXML
 	private LineChart<String,Number> lineChart;
-	//    private TableView<Series<String, Number>> metricTable;
+	//	private TableView<Series<String, Number>> metricTable;
 	@FXML
 	private ComboBox<String> filterTime;
 	@FXML
@@ -145,40 +145,40 @@ public class AuctionController extends AnchorPane {
 		metricCol.setCellValueFactory(cellData -> cellData.getValue().descriptionProperty());
 		resultCol.setCellValueFactory(cellData -> cellData.getValue().resultProperty());
 		configureTable();  
-                configureFilters();
+		configureFilters();
 
 		campaignName.setText(DatabaseConnection.getDbfile().replace(".db", ""));
 		generateGraph.setDisable(false);
 		//generateData(null);
 
 	}
-        private void configureFilters() {
-            filterGender.getCheckModel().getCheckedItems().addListener(new ListChangeListener<String>() {
-                @Override
-                public void onChanged(ListChangeListener.Change<? extends String> c) {
-                    filter.setGender(filterGender);
-                }
-            });
-            filterAge.getCheckModel().getCheckedItems().addListener(new ListChangeListener<String>() {
-                @Override
-                public void onChanged(ListChangeListener.Change<? extends String> c) {
-                    filter.setAge(filterAge);
-		}
-            });
-            filterIncome.getCheckModel().getCheckedItems().addListener(new ListChangeListener<String>() {
-                @Override
-                public void onChanged(ListChangeListener.Change<? extends String> c) {
-                    filter.setIncome(filterIncome);
-		}
-            });
-            filterContext.getCheckModel().getCheckedItems().addListener(new ListChangeListener<String>() {
-                @Override
-                public void onChanged(ListChangeListener.Change<? extends String> c) {
-                    filter.setContext(filterContext);
-		}
-            });
-                    
-        }
+	private void configureFilters() {
+		filterGender.getCheckModel().getCheckedItems().addListener(new ListChangeListener<String>() {
+			@Override
+			public void onChanged(ListChangeListener.Change<? extends String> c) {
+				filter.setGender(filterGender);
+			}
+		});
+		filterAge.getCheckModel().getCheckedItems().addListener(new ListChangeListener<String>() {
+			@Override
+			public void onChanged(ListChangeListener.Change<? extends String> c) {
+				filter.setAge(filterAge);
+	}
+		});
+		filterIncome.getCheckModel().getCheckedItems().addListener(new ListChangeListener<String>() {
+			@Override
+			public void onChanged(ListChangeListener.Change<? extends String> c) {
+				filter.setIncome(filterIncome);
+	}
+		});
+		filterContext.getCheckModel().getCheckedItems().addListener(new ListChangeListener<String>() {
+			@Override
+			public void onChanged(ListChangeListener.Change<? extends String> c) {
+				filter.setContext(filterContext);
+	}
+		});
+				
+	}
 
 	private final ListChangeListener<ObservableMetrics> tableSelectionChanged =
 			new ListChangeListener<ObservableMetrics>() {
@@ -189,11 +189,8 @@ public class AuctionController extends AnchorPane {
 			ObservableMetrics s1 =  tableResults.getSelectionModel().getSelectedItem();
 			if(s1 != null)
 				drawGraph(s1.getDescription());
-
 		}
 	};
-
-
 
 	// Configure the table widget: set up its column, and register the
 	// selection changed listener.
@@ -211,7 +208,6 @@ public class AuctionController extends AnchorPane {
 	}
 	@FXML
 	private void importCampaignAction(ActionEvent event) {
-
 		
 	}
 
@@ -227,8 +223,8 @@ public class AuctionController extends AnchorPane {
 		try {
 			Series<String, Number> data = graphConstructor.fetchGraph();
 			data.setName(yLabel);
-                        lineChart.getData().add(data);
-                        
+						lineChart.getData().add(data);
+						
 		} catch (SQLException e) {
 			System.err.println("Unable to fetch data from database: " + e.getMessage());
 		}
@@ -377,8 +373,7 @@ public class AuctionController extends AnchorPane {
 		results.close();
 
 	}
-	private void drawGraph(String metric)
-	{
+	private void drawGraph(String metric) {
 		//lineChart.getData().clear();
 		//lineChart.getXAxis().setLabel(filterTime.getValue());  
 		lineChart.getYAxis().setLabel("Number");
@@ -434,11 +429,11 @@ public class AuctionController extends AnchorPane {
 		
 		filter.setDateFrom(filterDateFrom.getValue());
 		filter.setDateTo(filterDateTo.getValue());
-                
-        lineChart.getData().clear();
+				
+				lineChart.getData().clear();
 		lineChart.getXAxis().setLabel(filterTime.getValue());  
 		lineChart.getYAxis().setLabel(filterMetrics.getValue());
-                
+				
 		drawGraph(filterMetrics.getValue());
 		try {
 			updateMetricsTable();
