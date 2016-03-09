@@ -31,7 +31,7 @@ Filter filter;
 			CTRGraphConstructor ctrConstructor = new CTRGraphConstructor(filter);
 			
 			ObservableList<XYChart.Data<String, Number>> data = ctrConstructor.fetchGraph().getData();
-			assertEquals(0.5, data.get(0).getYValue());
+			assertEquals(0.5f, data.get(0).getYValue());
 		}
 		catch(SQLException sqle)
 		{
@@ -49,7 +49,7 @@ Filter filter;
 			CTRGraphConstructor ctrConstructor = new CTRGraphConstructor(filter);
 			
 			ObservableList<XYChart.Data<String, Number>> data = ctrConstructor.fetchGraph().getData();
-			assertEquals(0.5, data.get(0).getYValue());
+			assertEquals(0.5f, data.get(0).getYValue());
 		}
 		catch(SQLException sqle)
 		{
@@ -66,7 +66,7 @@ Filter filter;
 			CTRGraphConstructor ctrConstructor = new CTRGraphConstructor(filter);
 			
 			ObservableList<XYChart.Data<String, Number>> data = ctrConstructor.fetchGraph().getData();
-			assertEquals(0.5, data.get(0).getYValue());
+			assertEquals(0.5f, data.get(0).getYValue());
 		}
 		catch(SQLException sqle)
 		{
@@ -83,7 +83,7 @@ Filter filter;
 			CTRGraphConstructor ctrConstructor = new CTRGraphConstructor(filter);
 			
 			ObservableList<XYChart.Data<String, Number>> data = ctrConstructor.fetchGraph().getData();
-			assertEquals(0.5, data.get(0).getYValue());
+			assertEquals(0.5f, data.get(0).getYValue());
 		}
 		catch(SQLException sqle)
 		{
@@ -101,13 +101,13 @@ Filter filter;
 			CTRGraphConstructor ctrConstructor = new CTRGraphConstructor(filter);
 			
 			ObservableList<XYChart.Data<String, Number>> data = ctrConstructor.fetchGraph().getData();
-			assertEquals(0.5, data.get(0).getYValue());
+			assertEquals(0.5f, data.get(0).getYValue());
 			
 			filter.setGender(FXCollections.observableArrayList("Male"));
 			ctrConstructor = new CTRGraphConstructor(filter);
 			
 			data = ctrConstructor.fetchGraph().getData();
-			assertEquals(0.5, data.get(0).getYValue());
+			assertEquals(0.5f, data.get(0).getYValue());
 		}
 		catch(SQLException sqle)
 		{
@@ -125,31 +125,31 @@ Filter filter;
 			CTRGraphConstructor ctrConstructor = new CTRGraphConstructor(filter);
 			
 			ObservableList<XYChart.Data<String, Number>> data = ctrConstructor.fetchGraph().getData();
-			assertEquals(0.5, data.get(0).getYValue());
+			assertEquals(0.5f, data.get(0).getYValue());
 			
 			filter.setAge(FXCollections.observableArrayList("25 to 34"));
 			ctrConstructor = new CTRGraphConstructor(filter);
 			
 			data = ctrConstructor.fetchGraph().getData();
-			assertEquals(0.5, data.get(0).getYValue());
+			assertEquals(0.5f, data.get(0).getYValue());
 			
 			filter.setAge(FXCollections.observableArrayList("35 to 44"));
 			ctrConstructor = new CTRGraphConstructor(filter);
 			
 			data = ctrConstructor.fetchGraph().getData();
-			assertEquals(0.5, data.get(0).getYValue());
+			assertEquals(0.5f, data.get(0).getYValue());
 			
 			filter.setAge(FXCollections.observableArrayList("45 to 54"));
 			ctrConstructor = new CTRGraphConstructor(filter);
 			
 			data = ctrConstructor.fetchGraph().getData();
-			assertEquals(0.5, data.get(0).getYValue());
+			assertEquals(0.5f, data.get(0).getYValue());
 			
 			filter.setAge(FXCollections.observableArrayList("Greater than 55"));
 			ctrConstructor = new CTRGraphConstructor(filter);
 			
 			data = ctrConstructor.fetchGraph().getData();
-			assertEquals(0.5, data.get(0).getYValue());
+			assertEquals(0.5f, data.get(0).getYValue());
 		}
 		catch(SQLException sqle)
 		{
@@ -167,19 +167,19 @@ Filter filter;
 			CTRGraphConstructor ctrConstructor = new CTRGraphConstructor(filter);
 			
 			ObservableList<XYChart.Data<String, Number>> data = ctrConstructor.fetchGraph().getData();
-			assertEquals(0.5, data.get(0).getYValue());
+			assertEquals(0.5f, data.get(0).getYValue());
 			
 			filter.setIncome(FXCollections.observableArrayList("Medium"));
 			ctrConstructor = new CTRGraphConstructor(filter);
 			
 			data = ctrConstructor.fetchGraph().getData();
-			assertEquals(0.5, data.get(0).getYValue());
+			assertEquals(0.5f, data.get(0).getYValue());
 			
 			filter.setIncome(FXCollections.observableArrayList("High"));
 			ctrConstructor = new CTRGraphConstructor(filter);
 			
 			data = ctrConstructor.fetchGraph().getData();
-			assertEquals(0.5, data.get(0).getYValue());
+			assertEquals(0.5f, data.get(0).getYValue());
 		}
 		catch(SQLException sqle)
 		{
@@ -197,37 +197,37 @@ Filter filter;
 			CTRGraphConstructor ctrConstructor = new CTRGraphConstructor(filter);
 			
 			ObservableList<XYChart.Data<String, Number>> data = ctrConstructor.fetchGraph().getData();
-			assertEquals(0.5, data.get(0).getYValue());
+			assertEquals(0.5f, data.get(0).getYValue());
 			
 			filter.setContext(FXCollections.observableArrayList("Shopping"));
 			ctrConstructor = new CTRGraphConstructor(filter);
 			
 			data = ctrConstructor.fetchGraph().getData();
-			assertEquals(0.5, data.get(0).getYValue());
+			assertEquals(0.5f, data.get(0).getYValue());
 			
 			filter.setContext(FXCollections.observableArrayList("Social Media"));
 			ctrConstructor = new CTRGraphConstructor(filter);
 			
 			data = ctrConstructor.fetchGraph().getData();
-			assertEquals(0.5, data.get(0).getYValue());
+			assertEquals(0.5f, data.get(0).getYValue());
 			
 			filter.setContext(FXCollections.observableArrayList("Blog"));
 			ctrConstructor = new CTRGraphConstructor(filter);
 			
 			data = ctrConstructor.fetchGraph().getData();
-			assertEquals(0.5, data.get(0).getYValue());
+			assertEquals(0.5f, data.get(0).getYValue());
 			
 			filter.setContext(FXCollections.observableArrayList("Hobbies"));
 			ctrConstructor = new CTRGraphConstructor(filter);
 			
 			data = ctrConstructor.fetchGraph().getData();
-			assertEquals(0.5, data.get(0).getYValue());
+			assertEquals(0.5f, data.get(0).getYValue());
 			
 			filter.setContext(FXCollections.observableArrayList("Travel"));
 			ctrConstructor = new CTRGraphConstructor(filter);
 			
 			data = ctrConstructor.fetchGraph().getData();
-			assertEquals(0.5, data.get(0).getYValue());
+			assertEquals(0.5f, data.get(0).getYValue());
 		}
 		catch(SQLException sqle)
 		{
