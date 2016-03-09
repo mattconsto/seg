@@ -1,6 +1,8 @@
 package dashboard.controller;
 
+import dashboard.model.BounceFilter;
 import dashboard.model.Filter;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,9 +16,11 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.chart.XYChart.Series;
 
 public class BounceGraphConstructor extends GraphConstructor{
+	private final BounceFilter bounceFilter;
 	
-	public BounceGraphConstructor(Filter filter) {
+	public BounceGraphConstructor(Filter filter, BounceFilter myBounceFilter) {
 		super(filter);
+		bounceFilter = myBounceFilter;
 	}
 	
 	@Override
@@ -25,7 +29,7 @@ public class BounceGraphConstructor extends GraphConstructor{
 				+ "(SELECT IMPRESSIONS.*, SERVER.* FROM IMPRESSIONS "
 				+ "INNER JOIN SERVER ON IMPRESSIONS.ID=SERVER.ID "
 				+ "GROUP BY SERVER.ENTRYDATE, SERVER.ID) AS SUBQUERY "
-				+ "WHERE PAGES = 1 AND " + filter.getSql().replace("DATE", "ENTRYDATE")+ " GROUP BY strftime('" + filter.timeFormatSQL +"', ENTRYDATE);");
+				+ "WHERE " + bounceFilter.getSQL() + " AND " + filter.getSql().replace("DATE", "ENTRYDATE")+ " GROUP BY strftime('" + filter.timeFormatSQL +"', ENTRYDATE);");
 
 		XYChart.Series<Date, Number> series = new XYChart.Series<Date, Number>();
 		series.setName("Bounces (Pages visited = 1) by date");

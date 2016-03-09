@@ -7,6 +7,8 @@ import java.util.Date;
 
 import org.controlsfx.control.CheckComboBox;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -18,9 +20,9 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
-
 import dashboard.controller.*;
 import dashboard.model.*;
+import java.util.List;
 /**
  * Auction Controller.
  */
@@ -51,6 +53,8 @@ public class AuctionController extends AnchorPane {
 	@FXML private TableColumn<ObservableMetrics, String> resultCol;
 	
 	private ObservableList<ObservableMetrics> tableMetrics = FXCollections.observableArrayList();
+	private Filter filter;
+	private BounceFilter bounceFilter;
 	
 	@FXML private MenuItem deleteCampaign;
 	@FXML private MenuItem exportCampaign;
@@ -69,15 +73,14 @@ public class AuctionController extends AnchorPane {
 	@FXML private ToggleGroup grBounce;
 	@FXML private RadioButton rbByBouncePages;
 
-	private Filter filter;
-
 	public void setApp(Main application){
 		this.application = application;
 	}
 
 	public void init() {
 		filter = new Filter();
-
+		bounceFilter = new BounceFilter();
+		
 		filterDateFrom.setValue((LocalDate.of(2015,01,01)));
 		filterDateTo.setValue((LocalDate.of(2015,01,14)));
 		filterGender.getItems().addAll("Any","Female","Male");
@@ -95,7 +98,15 @@ public class AuctionController extends AnchorPane {
 
 		campaignName.setText(DatabaseConnection.getDbfile().replace(".db", ""));
 		generateGraph.setDisable(false);
-		//generateData(null);
+		
+		rbByBounceTime.setUserData("timeBounce");
+		rbByBouncePages.setUserData("pageBounce");
+		grBounce.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+			@Override
+			public void changed(ObservableValue<? extends Toggle> observableValue, Toggle t, Toggle arg2) {
+				System.out.println(grBounce.getSelectedToggle().getUserData().toString());
+			}
+		});
 	}
 	
 	private void configureFilters() {
@@ -109,11 +120,21 @@ public class AuctionController extends AnchorPane {
 			(ListChangeListener.Change<? extends String> c) -> filter.setContext(filterContext));
 		filterTime.valueProperty().addListener(c -> filter.setTime(filterTime.getValue()));
 	}
+                private final ListChangeListener<ObservableMetrics> tableSelectionChanged =
+			new ListChangeListener<ObservableMetrics>() {
 
-	private final ListChangeListener<ObservableMetrics> tableSelectionChanged = (ListChangeListener.Change<? extends ObservableMetrics> c) -> {
-		ObservableMetrics item = tableResults.getSelectionModel().getSelectedItem();
-		if(item != null)
-			updateGraph(item.getDescription());
+		@Override
+		public void onChanged(ListChangeListener.Change<? extends ObservableMetrics> c) {
+			//do something here
+			
+                        List <ObservableMetrics> s1 =  tableResults.getSelectionModel().getSelectedItems();
+			if(s1 != null)
+                        {
+                            lineChart.getData().clear();
+                            for (ObservableMetrics metric : s1)
+                              updateGraph(metric.getDescription());
+                        }
+		}
 	};
 
 	// Configure the table widget: set up its column, and register the
@@ -122,7 +143,7 @@ public class AuctionController extends AnchorPane {
 		metricCol.setCellValueFactory(new PropertyValueFactory<>("description"));
 		resultCol.setCellValueFactory(new PropertyValueFactory<>("result"));
 		tableResults.setItems(tableMetrics);
-
+                tableResults.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 		tableResults.getSelectionModel().getSelectedItems().addListener(tableSelectionChanged);
 	}
 	
@@ -139,7 +160,7 @@ public class AuctionController extends AnchorPane {
 		filter.setDateFrom(filterDateFrom.getValue());
 		filter.setDateTo(filterDateTo.getValue());
 				
-		lineChart.getData().clear();
+		 
 		lineChart.getXAxis().setLabel(filterTime.getValue());  
 		lineChart.getYAxis().setLabel(filterMetrics.getValue());
 
@@ -156,7 +177,7 @@ public class AuctionController extends AnchorPane {
 
 		switch(metric) {
 			default:
-			case "Bounces":            constructor = new BounceGraphConstructor(filter);            break;
+			case "Bounces":            constructor = new BounceGraphConstructor(filter, bounceFilter);            break;
 			case "Impressions":        constructor = new ImpressionsGraphConstructor(filter);       break;
 			case "Clicks":             constructor = new ClicksGraphConstructor(filter);            break;
 			case "Unique Impressions": constructor = new UniqueImpressionsGraphConstructor(filter); break;
@@ -167,7 +188,7 @@ public class AuctionController extends AnchorPane {
 			case "CPM":                constructor = new CPMGraphConstructor(filter);               break;
 			case "CTR":                constructor = new CTRGraphConstructor(filter);               break;
 			case "Total Cost":         constructor = new TotalCostGraphConstructor(filter);         break;
-			case "Bounce Rate":        constructor = new BounceRateGraphConstructor(filter);        break;
+			case "Bounce Rate":        constructor = new BounceRateGraphConstructor(filter, bounceFilter);        break;
 		}
 
 		lineChart.setCreateSymbols(false);
