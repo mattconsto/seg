@@ -18,9 +18,10 @@ public class CTRGraphConstructor extends GraphConstructor {
 	@Override
 	protected Series<String, Number> generateGraph(Connection conn)
 			throws SQLException {
-		ResultSet results = conn.createStatement().executeQuery("SELECT DATE, NUMCLICKS, NUMIMP FROM "
-				+ "(SELECT SUBSTR(DATE, 0, 14) as CLICKDATE, COUNT(*) AS NUMCLICKS FROM CLICKS "
-				+ "WHERE " + filter.getSql().replace("DATE", "CLICKDATE")+ " GROUP BY SUBSTR(DATE, 0, 14)) "
+		ResultSet results = conn.createStatement().executeQuery("SELECT CLICKDATE, NUMCLICKS, NUMIMP FROM "
+				+ "(SELECT SUBSTR(CLICKDATE, 0, 14) as CLICKDATE, COUNT(*) AS NUMCLICKS FROM"
+				+ "(SELECT CLICKS.DATE AS CLICKDATE, IMPRESSIONS.* FROM CLICKS INNER JOIN IMPRESSIONS ON CLICKS.ID=IMPRESSIONS.ID GROUP BY CLICKS.ID, CLICKDATE) "
+				+ "WHERE " + filter.getSql().replace("DATE", "CLICKDATE")+ " GROUP BY SUBSTR(CLICKDATE, 0, 14)) "
 				+ "INNER JOIN "
 				+ "(SELECT SUBSTR(DATE, 0, 14) AS DATE, COUNT(*) AS NUMIMP FROM IMPRESSIONS "
 				+ "WHERE " + filter.getSql()+ " GROUP BY SUBSTR(DATE, 0, 14)) "
