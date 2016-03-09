@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.Date;
 
 import org.controlsfx.control.CheckComboBox;
 
@@ -43,7 +44,7 @@ public class AuctionController extends AnchorPane {
 	@FXML private DatePicker filterDateFrom;
 	@FXML private DatePicker filterDateTo;
 	@FXML private Button generateGraph;
-	@FXML private LineChart<String,Number> lineChart;
+	@FXML private LineChart<Date,Number> lineChart;
 	@FXML private ComboBox<String> filterTime;
 	@FXML private Label campaignName;
 	@FXML private MenuItem openCampaign;
@@ -134,9 +135,9 @@ public class AuctionController extends AnchorPane {
 		application.getStage().close();
 	}
 
-	public void updateGraph(GraphConstructor graphConstructor, String yLabel, LineChart<String, Number> lineChart){
+	public void updateGraph(GraphConstructor graphConstructor, String yLabel, LineChart<Date, Number> lineChart){
 		try {
-			Series<String, Number> data = graphConstructor.fetchGraph();
+			Series<Date, Number> data = graphConstructor.fetchGraph();
 			data.setName(yLabel);
 			lineChart.getData().add(data);			
 		} catch (SQLException e) {
@@ -187,7 +188,7 @@ public class AuctionController extends AnchorPane {
 
 		if (results.next())
 			tableContent.add(new dashboard.model.ObservableMetrics("Unique Clicks",results.getString(1)));
-
+		
 		results = conn.createStatement().executeQuery("SELECT COUNT(DISTINCT ID) AS Frequency, * FROM IMPRESSIONS WHERE " +  filter.getSql() +";");
 
 		if (results.next())

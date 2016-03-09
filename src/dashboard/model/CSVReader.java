@@ -11,10 +11,12 @@ import javafx.concurrent.Task;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
  
+
 /**
  * Read a CSV file and load it into the database
  */
 public class CSVReader {
+	
 	 long currentBytes = 0;
 	 long totBytes = 0;
 	/**

@@ -121,7 +121,7 @@ public class OpenCampaignController extends AnchorPane {
 	
 	@FXML
 	private void openAction(ActionEvent event) {
-		 if (!selectCampaign.getSelectionModel().getSelectedItem().equals("")) {
+		 if (selectCampaign.getSelectionModel().getSelectedItem() != null && !selectCampaign.getSelectionModel().getSelectedItem().equals("")) {
 			 DatabaseConnection.closeConnection();
 			 DatabaseConnection.setDbfile(selectCampaign.getSelectionModel().getSelectedItem().toString());
 			 application.gotoMainForm();
