@@ -416,18 +416,16 @@ public class Filter {
     /* Default constructor sets all fields to 'any', and leaves date range unrestricted */
     public Filter()
     {
-         gender = new ArrayList();
-         gender.add("Any");
-         age = new ArrayList();
-         age.add("Any");
-    	 income = new ArrayList();
-         income.add("Any");
-         context = new ArrayList();
-         context.add("Any");
-          
+    	gender = new ArrayList<String>();
+    	age = new ArrayList<String>();
+    	income = new ArrayList<String>();
+    	context = new ArrayList<String>();
+    	
+    	setGender(FXCollections.observableArrayList("Any"));
+        setAge(FXCollections.observableArrayList("Any"));
+        setIncome(FXCollections.observableArrayList("Any"));
+        setContext(FXCollections.observableArrayList("Any"));
         
-        setDateSQL();
-                 
-                
+        setDateSQL();      
     }
 }
