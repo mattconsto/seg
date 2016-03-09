@@ -21,6 +21,7 @@ import javafx.stage.FileChooser;
 
 import dashboard.controller.*;
 import dashboard.model.*;
+import java.util.List;
 /**
  * Auction Controller.
  */
@@ -108,11 +109,21 @@ public class AuctionController extends AnchorPane {
 		filterContext.getCheckModel().getCheckedItems().addListener(
 			(ListChangeListener.Change<? extends String> c) -> filter.setContext(filterContext));
 	}
+                private final ListChangeListener<ObservableMetrics> tableSelectionChanged =
+			new ListChangeListener<ObservableMetrics>() {
 
-	private final ListChangeListener<ObservableMetrics> tableSelectionChanged = (ListChangeListener.Change<? extends ObservableMetrics> c) -> {
-		ObservableMetrics item = tableResults.getSelectionModel().getSelectedItem();
-		if(item != null)
-			updateGraph(item.getDescription());
+		@Override
+		public void onChanged(ListChangeListener.Change<? extends ObservableMetrics> c) {
+			//do something here
+			
+                        List <ObservableMetrics> s1 =  tableResults.getSelectionModel().getSelectedItems();
+			if(s1 != null)
+                        {
+                            lineChart.getData().clear();
+                            for (ObservableMetrics metric : s1)
+                              updateGraph(metric.getDescription());
+                        }
+		}
 	};
 
 	// Configure the table widget: set up its column, and register the
@@ -121,7 +132,7 @@ public class AuctionController extends AnchorPane {
 		metricCol.setCellValueFactory(new PropertyValueFactory<>("description"));
 		resultCol.setCellValueFactory(new PropertyValueFactory<>("result"));
 		tableResults.setItems(tableMetrics);
-
+                tableResults.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 		tableResults.getSelectionModel().getSelectedItems().addListener(tableSelectionChanged);
 	}
 	
@@ -138,7 +149,7 @@ public class AuctionController extends AnchorPane {
 		filter.setDateFrom(filterDateFrom.getValue());
 		filter.setDateTo(filterDateTo.getValue());
 				
-		lineChart.getData().clear();
+		 
 		lineChart.getXAxis().setLabel(filterTime.getValue());  
 		lineChart.getYAxis().setLabel(filterMetrics.getValue());
 
