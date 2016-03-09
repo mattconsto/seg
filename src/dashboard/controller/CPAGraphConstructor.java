@@ -9,6 +9,9 @@ import java.util.Date;
 import javafx.scene.chart.XYChart;
 import javafx.scene.chart.XYChart.Series;
 import dashboard.model.Filter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 public class CPAGraphConstructor extends GraphConstructor{
 
@@ -46,6 +49,7 @@ public class CPAGraphConstructor extends GraphConstructor{
 		series.setName("Cost Per Acquisition(CPA) by date");
 		
 		
+		DateFormat format = new SimpleDateFormat(filter.timeFormatJava, Locale.ENGLISH);
 		while (results.next()){
 			float calculation = ((results.getInt(2) + results.getInt(3)) / (float)results.getInt(4));
 			series.getData().add(new XYChart.Data<Date, Number>(format.parse(results.getString(1)), calculation));

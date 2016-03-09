@@ -9,6 +9,9 @@ import java.util.Date;
 import javafx.scene.chart.XYChart;
 import javafx.scene.chart.XYChart.Series;
 import dashboard.model.Filter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 public class CPMGraphConstructor extends GraphConstructor{
 
@@ -25,6 +28,7 @@ public class CPMGraphConstructor extends GraphConstructor{
 		XYChart.Series<Date, Number> series = new XYChart.Series<Date, Number>();
 		series.setName(" by date");
 
+		DateFormat format = new SimpleDateFormat(filter.timeFormatJava, Locale.ENGLISH);
 		while (results.next())
 			series.getData().add(new XYChart.Data<Date, Number>(format.parse(results.getString(1)), results.getFloat(2)*1000));
 

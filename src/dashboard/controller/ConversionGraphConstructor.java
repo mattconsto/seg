@@ -4,8 +4,11 @@ import dashboard.model.Filter;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 import javafx.scene.chart.XYChart;
 import javafx.scene.chart.XYChart.Series;
@@ -28,6 +31,7 @@ public class ConversionGraphConstructor extends GraphConstructor {
 		XYChart.Series<Date, Number> series = new XYChart.Series<Date, Number>();
 		series.setName("Conversions by date");
 
+		DateFormat format = new SimpleDateFormat(filter.timeFormatJava, Locale.ENGLISH);
 		while (results.next())
 			series.getData().add(new XYChart.Data<Date, Number>(format.parse(results.getString(1)), results.getInt(2)));
 

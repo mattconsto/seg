@@ -1,5 +1,6 @@
 package dashboard.controller;
 
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -10,6 +11,10 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.chart.XYChart.Series;
 import dashboard.model.BounceFilter;
 import dashboard.model.Filter;
+
+ import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 public class BounceRateGraphConstructor extends GraphConstructor{
 	private final BounceFilter bounceFilter;
@@ -38,6 +43,7 @@ public class BounceRateGraphConstructor extends GraphConstructor{
 		XYChart.Series<Date, Number> series = new XYChart.Series<Date, Number>();
 		series.setName(" by date");
 
+		DateFormat format = new SimpleDateFormat(filter.timeFormatJava, Locale.ENGLISH);
 		while (results.next())
 			series.getData().add(new XYChart.Data<Date, Number>(format.parse(results.getString(1)), results.getInt(3)/results.getFloat(2)));
 
