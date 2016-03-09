@@ -16,21 +16,18 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import dashboard.Preferences;
 import dashboard.model.DatabaseConnection;
-import javafx.stage.Modality;
 
 /**
  * Main Application. This class handles navigation and user session.
  */
 public class Main extends Application {
 	private Stage stage;
-        private Stage openForm;
 
 	@Override
 	public void start(Stage primaryStage) {
 		// Setup our stage
-		
-                primaryStage.setResizable(false);
-                stage = primaryStage;
+		primaryStage.setResizable(false);
+		stage = primaryStage;
 		stage.setTitle(Preferences.productName);
 /*		for (int size : new int[] {512, 256, 128, 64, 48, 32, 16})
 			stage.getIcons().add(
@@ -38,40 +35,35 @@ public class Main extends Application {
 					String.format("/icon%d.png", size))));
 */
 		gotoOpenForm();
-     
-              
-      
 	}
-        private void gotoOpenForm() {
-        try {
-            OpenCampaignController openCampaign;
-            try {
-                openCampaign = (OpenCampaignController) replaceSceneContent("/dashboard/view/fxml/OpenCampaign.fxml",stage);
-             
-                openCampaign.setApp(this);
-                openCampaign.init();
+	private void gotoOpenForm() {
+		try {
+			OpenCampaignController openCampaign;
+			try {
+				openCampaign = (OpenCampaignController) replaceSceneContent("/dashboard/view/fxml/OpenCampaign.fxml",stage);
+			 
+				openCampaign.setApp(this);
+				openCampaign.init();
   
-            } catch (IOException ex) {
-			ex.printStackTrace();
-	    }
-
-            stage.centerOnScreen();
-            stage.show();
-            stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-			public void handle(WindowEvent we) {
-				DatabaseConnection.closeConnection();
+			} catch (IOException ex) {
+				ex.printStackTrace();
 			}
-		});
-        } catch (Exception ex) {
-             
-        }
-        }
-        
-        public void gotoMainForm() {
-                // Get the window display scaling, so we can set the correct res.
-	        stage.hide();
-                stage.setResizable(true);
-        	AuctionController auctionTool;
+
+			stage.centerOnScreen();
+			stage.show();
+			stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+				public void handle(WindowEvent we) {
+					DatabaseConnection.closeConnection();
+				}
+			});
+		} catch (Exception ex) {}
+	}
+		
+		public void gotoMainForm() {
+				// Get the window display scaling, so we can set the correct res.
+			stage.hide();
+				stage.setResizable(true);
+			AuctionController auctionTool;
 		try {
 			auctionTool = (AuctionController) replaceSceneContent("/dashboard/view/fxml/AuctionTool.fxml", stage);
 			auctionTool.setApp(this);
@@ -79,8 +71,7 @@ public class Main extends Application {
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
-                double deviceScaling = Toolkit.getDefaultToolkit()
-				.getScreenResolution() / 96.0;
+		double deviceScaling = Toolkit.getDefaultToolkit().getScreenResolution() / 96.0;
 
 		Rectangle bounds = GraphicsEnvironment
 				.getLocalGraphicsEnvironment()
@@ -95,12 +86,12 @@ public class Main extends Application {
 				DatabaseConnection.closeConnection();
 			}
 		});  
-        }
-        
+		}
+		
 	public Stage getStage() {
 		return stage;
 	}
-        
+		
 
 	private Node replaceSceneContent(String fxml, Stage stage) throws IOException {
 		FXMLLoader loader = new FXMLLoader();
