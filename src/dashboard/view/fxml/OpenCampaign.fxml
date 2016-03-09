@@ -7,7 +7,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" maxHeight="628.0" maxWidth="607.0" minHeight="628.0" minWidth="607.0" prefHeight="628.0" prefWidth="607.0" scaleShape="false" styleClass="background" stylesheets="@AuctionTool.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dashboard.view.OpenCampaignController">
+<AnchorPane id="AnchorPane" prefHeight="628.0" prefWidth="607.0" scaleShape="false" styleClass="background" stylesheets="@AuctionTool.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dashboard.view.OpenCampaignController">
    <children>
       <AnchorPane layoutY="559.0" prefHeight="58.0" prefWidth="607.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="559.0">
          <children>
@@ -27,7 +27,7 @@
             <Label layoutX="295.0" layoutY="201.0" text="OR" />
          </children>
       </AnchorPane>
-      <ImageView fitHeight="342.0" fitWidth="623.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <ImageView fitHeight="349.0" fitWidth="628.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-21.0" AnchorPane.topAnchor="0.0">
          <image>
             <Image url="@../../../images/dashboardpic.jpg" />
          </image>
