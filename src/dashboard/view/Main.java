@@ -1,4 +1,4 @@
- package dashboard.view;
+package dashboard.view;
 
 import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
@@ -89,12 +89,11 @@ public class Main extends Application {
 				DatabaseConnection.closeConnection();
 			}
 		});  
-		}
+	}
 		
 	public Stage getStage() {
 		return stage;
 	}
-		
 
 	private Node replaceSceneContent(String fxml, Stage stage) throws IOException {
 		FXMLLoader loader = new FXMLLoader();
