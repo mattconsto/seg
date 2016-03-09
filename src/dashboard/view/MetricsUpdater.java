@@ -89,7 +89,7 @@ public class MetricsUpdater implements Runnable {
 				+ "WHERE " +  filter.getSql() + ")");
 		
 		if (results.next())
-			table.add(new ObservableMetrics("Total Cost",Integer.toString(results.getInt(1)+results.getInt(2))));
+			table.add(new ObservableMetrics("Total Cost",Float.toString(results.getFloat(1)+results.getFloat(2))));
 		
 		results = conn.createStatement().executeQuery("SELECT NUMCLICKS, NUMIMP FROM "
 				+ "(SELECT SUBSTR(DATE, 0, 14) as CLICKDATE, COUNT(*) AS NUMCLICKS FROM "
@@ -98,9 +98,9 @@ public class MetricsUpdater implements Runnable {
 				+ "INNER JOIN "
 				+ "(SELECT SUBSTR(DATE, 0, 14) AS DATE, COUNT(*) AS NUMIMP FROM IMPRESSIONS WHERE " +  filter.getSql() + ") "
 				+ "ON DATE=CLICKDATE");
-		
+
 		if (results.next()) 
-			table.add(new ObservableMetrics("CTR",Float.toString(results.getInt(1)/(float)results.getInt(2))));
+			table.add(new ObservableMetrics("CTR",Float.toString(results.getInt(1)/results.getFloat(2)*100)+"%"));
 		
 		results = conn.createStatement().executeQuery("SELECT SUM(CLICKCOST), SUM(IMPCOST), SUM(Frequency) FROM "
 				+ "(SELECT SUBSTR(ENTRYDATE, 0, 14) AS ENTRYDATE,COUNT(*) AS Frequency "
@@ -125,7 +125,7 @@ public class MetricsUpdater implements Runnable {
 				+ "ON CLICKDATE=ENTRYDATE;");
 		
 		if (results.next())
-			table.add(new ObservableMetrics("CPA",Float.toString((results.getInt(1) + results.getInt(2)) / (float)results.getInt(3))));
+			table.add(new ObservableMetrics("CPA",Float.toString((results.getFloat(1) + results.getFloat(2)) / results.getInt(3))));
 		
 		results = conn.createStatement().executeQuery("SELECT SUM(CLICKCOST), SUM(IMPCOST), SUM(NUMCLICKS) FROM "
 				+ "(SELECT SUBSTR(CLICKDATE, 0, 14) AS CLICKDATE, SUM(CLICKCOST) AS CLICKCOST, COUNT(ID) AS NUMCLICKS FROM "
@@ -141,13 +141,24 @@ public class MetricsUpdater implements Runnable {
 				+ "ON IMPDATE=CLICKDATE");
 		
 		if (results.next())
-			table.add(new ObservableMetrics("CPC",Float.toString((results.getInt(1) + results.getInt(2)) / (float)results.getInt(3))));
+			table.add(new ObservableMetrics("CPC",Float.toString((results.getFloat(1) + results.getFloat(2)) / results.getInt(3))));
 		
-		results = conn.createStatement().executeQuery("SELECT AVG(COST) AS IMPCOST FROM IMPRESSIONS "
-				+ "WHERE " + filter.getSql());
+		results = conn.createStatement().executeQuery("SELECT SUM(CLICKCOST), SUM(IMPCOST), SUM(NUMIMPS) FROM"
+				+ "(SELECT IMPDATE, CLICKCOST, IMPCOST, NUMIMPS FROM "
+				+ "(SELECT SUBSTR(CLICKDATE, 0, 14) AS CLICKDATE, SUM(CLICKCOST) AS CLICKCOST FROM "
+				+ "(SELECT IMPRESSIONS.*, CLICKS.ID, CLICKS.DATE AS CLICKDATE, CLICKS.COST AS CLICKCOST "
+				+ "FROM IMPRESSIONS "
+				+ "INNER JOIN CLICKS "
+				+ "ON IMPRESSIONS.ID=CLICKS.ID "
+				+ "GROUP BY CLICKS.DATE, CLICKS.ID) "
+				+ "WHERE " + filter.getSql().replace("DATE", "CLICKDATE")+ " GROUP BY SUBSTR(CLICKDATE, 0, 14)) "
+				+ "INNER JOIN "
+				+ "(SELECT SUBSTR(DATE,0,14) AS IMPDATE, SUM(COST) AS IMPCOST, COUNT(ID) AS NUMIMPS FROM IMPRESSIONS "
+				+ "WHERE " + filter.getSql()+ " GROUP BY SUBSTR(DATE, 0, 14)) "
+				+ "ON IMPDATE=CLICKDATE)");
 		
 		if (results.next())
-			table.add(new ObservableMetrics("CPM",Float.toString(results.getFloat(1)*1000)));
+			table.add(new ObservableMetrics("CPM",Float.toString(((results.getFloat(1)+results.getFloat(2))/results.getFloat(3))*1000)));
 		
 		results = conn.createStatement().executeQuery("SELECT SUM(NUMCLICKS), SUM(NUMBOUNCES) FROM "
 				+ "(SELECT SUBSTR(CLICKDATE, 0, 14) as CLICKDATE, COUNT(ID) AS NUMCLICKS FROM "
