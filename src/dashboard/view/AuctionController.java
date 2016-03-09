@@ -243,7 +243,8 @@ public class AuctionController extends AnchorPane {
 				+ "GROUP BY SERVER.ENTRYDATE, SERVER.ID) AS SUBQUERY "
 				+ "WHERE PAGES = 1 AND " + filter.getSql() + ";");
 
-		tableContent.add(new dashboard.model.ObservableMetrics("Bounces",Integer.toString(results.getInt(1))));
+		if (results.next())
+			tableContent.add(new dashboard.model.ObservableMetrics("Bounces",results.getString(1)));
 
 		results = conn.createStatement().executeQuery("SELECT COUNT(*) AS Frequency, * FROM"
 				+ "(SELECT IMPRESSIONS.*, CLICKS.* FROM IMPRESSIONS"
@@ -251,7 +252,8 @@ public class AuctionController extends AnchorPane {
 				+ " GROUP BY CLICKS.DATE, CLICKS.ID) AS SUBQUERY"
 				+ " WHERE " + filter.getSql() + ";");
 
-		tableContent.add(new dashboard.model.ObservableMetrics("Clicks",Integer.toString(results.getInt(1))));
+		if (results.next())
+			tableContent.add(new dashboard.model.ObservableMetrics("Clicks",results.getString(1)));
 
 		results = conn.createStatement().executeQuery("SELECT COUNT(*) AS Frequency, * "
 				+ "FROM (SELECT IMPRESSIONS.*, SERVER.* FROM "
@@ -259,11 +261,13 @@ public class AuctionController extends AnchorPane {
 				+ "GROUP BY SERVER.ENTRYDATE, SERVER.ID) AS SUBQUERY "
 				+ "WHERE CONVERSION = 1 AND " + filter.getSql() + ";");
 
-		tableContent.add(new dashboard.model.ObservableMetrics("Conversions",Integer.toString(results.getInt(1))));
+		if (results.next())
+			tableContent.add(new dashboard.model.ObservableMetrics("Conversions",results.getString(1)));
 
 		results = conn.createStatement().executeQuery("SELECT COUNT(*) AS Frequency, * FROM IMPRESSIONS WHERE " +  filter.getSql() +";");
 
-		tableContent.add(new dashboard.model.ObservableMetrics("Impressions",Integer.toString(results.getInt(1))));
+		if (results.next())
+			tableContent.add(new dashboard.model.ObservableMetrics("Impressions",results.getString(1)));
 
 		results = conn.createStatement().executeQuery("SELECT COUNT(DISTINCT ID) AS Frequency, * FROM"
 				+ "(SELECT IMPRESSIONS.*, CLICKS.* FROM IMPRESSIONS"
@@ -271,25 +275,113 @@ public class AuctionController extends AnchorPane {
 				+ " GROUP BY CLICKS.DATE, CLICKS.ID) AS SUBQUERY"
 				+ " WHERE " +  filter.getSql() + ";");
 
-		tableContent.add(new dashboard.model.ObservableMetrics("Unique Clicks",Integer.toString(results.getInt(1))));
+		if (results.next())
+			tableContent.add(new dashboard.model.ObservableMetrics("Unique Clicks",results.getString(1)));
 
 		results = conn.createStatement().executeQuery("SELECT COUNT(DISTINCT ID) AS Frequency, * FROM IMPRESSIONS WHERE " +  filter.getSql() +";");
 
-		tableContent.add(new dashboard.model.ObservableMetrics("Unique Impressions",Integer.toString(results.getInt(1))));
+		if (results.next())
+			tableContent.add(new dashboard.model.ObservableMetrics("Unique Impressions",results.getString(1)));
 
-		tableContent.add(new dashboard.model.ObservableMetrics("Total Cost","0.00"));
-		tableContent.add(new dashboard.model.ObservableMetrics("CTR","...."));
-		tableContent.add(new dashboard.model.ObservableMetrics("CPA","...."));
-		tableContent.add(new dashboard.model.ObservableMetrics("CPC","...."));
-		tableContent.add(new dashboard.model.ObservableMetrics("CPM","...."));
-		tableContent.add(new dashboard.model.ObservableMetrics("Bounce Rate","...."));
+		results = conn.createStatement().executeQuery("SELECT CLICKCOST, IMPCOST FROM "
+				+ "(SELECT CLICKDATE, SUM(CLICKCOST) AS CLICKCOST FROM "
+				+ "(SELECT IMPRESSIONS.*, CLICKS.DATE AS CLICKDATE, CLICKS.ID, CLICKS.COST AS CLICKCOST "
+				+ "FROM IMPRESSIONS "
+				+ "INNER JOIN CLICKS "
+				+ "ON IMPRESSIONS.ID=CLICKS.ID "
+				+ "GROUP BY CLICKS.DATE, CLICKS.ID)"
+				+ "WHERE " +  filter.getSql().replace("DATE","CLICKDATE") + ") "
+				+ "INNER JOIN "
+				+ "(SELECT  SUM(COST) AS IMPCOST FROM IMPRESSIONS "
+				+ "WHERE " +  filter.getSql() + ")");
+		
+
+		if (results.next())
+			tableContent.add(new dashboard.model.ObservableMetrics("Total Cost",Integer.toString(results.getInt(1)+results.getInt(2))));
+		
+		results = conn.createStatement().executeQuery("SELECT NUMCLICKS, NUMIMP FROM "
+				+ "(SELECT SUBSTR(DATE, 0, 14) as CLICKDATE, COUNT(*) AS NUMCLICKS FROM "
+				+ "(SELECT CLICKS.DATE AS CLICKDATE, IMPRESSIONS.* FROM CLICKS INNER JOIN IMPRESSIONS ON CLICKS.ID=IMPRESSIONS.ID GROUP BY CLICKS.ID, CLICKDATE) "
+				+ "WHERE " +  filter.getSql().replace("DATE","CLICKDATE") + ") "
+				+ "INNER JOIN "
+				+ "(SELECT SUBSTR(DATE, 0, 14) AS DATE, COUNT(*) AS NUMIMP FROM IMPRESSIONS WHERE " +  filter.getSql() + ") "
+				+ "ON DATE=CLICKDATE");
+		
+		if (results.next()) 
+			tableContent.add(new dashboard.model.ObservableMetrics("CTR",Float.toString(results.getInt(1)/(float)results.getInt(2))));
+		
+		
+		results = conn.createStatement().executeQuery("SELECT SUM(CLICKCOST), SUM(IMPCOST), SUM(Frequency) FROM "
+				+ "(SELECT SUBSTR(ENTRYDATE, 0, 14) AS ENTRYDATE,COUNT(*) AS Frequency "
+				+ "FROM (SELECT IMPRESSIONS.*, SERVER.* FROM "
+				+ "IMPRESSIONS INNER JOIN SERVER ON IMPRESSIONS.ID=SERVER.ID "
+				+ "GROUP BY SERVER.ENTRYDATE, SERVER.ID) AS SUBQUERY "
+				+ "WHERE CONVERSION = 1 "
+				+ "GROUP BY SUBSTR(ENTRYDATE, 0, 14))"
+				+ "INNER JOIN "
+				+ "(SELECT CLICKDATE, CLICKCOST, IMPCOST FROM "
+				+ "(SELECT SUBSTR(CLICKDATE, 0, 14) AS CLICKDATE, SUM(CLICKCOST) AS CLICKCOST FROM "
+				+ "(SELECT IMPRESSIONS.*, CLICKS.ID, CLICKS.DATE AS CLICKDATE, CLICKS.COST AS CLICKCOST "
+				+ "FROM IMPRESSIONS "
+				+ "INNER JOIN CLICKS "
+				+ "ON IMPRESSIONS.ID=CLICKS.ID "
+				+ "GROUP BY CLICKS.DATE, CLICKS.ID) "
+				+ "GROUP BY SUBSTR(CLICKDATE, 0, 14)) "
+				+ "INNER JOIN "
+				+ "(SELECT SUBSTR(DATE,0,14) AS IMPDATE, SUM(COST) AS IMPCOST FROM IMPRESSIONS "
+				+ "GROUP BY SUBSTR(DATE, 0, 14)) "
+				+ "ON IMPDATE=CLICKDATE) "
+				+ "ON CLICKDATE=ENTRYDATE;");
+		
+		if (results.next())
+			tableContent.add(new dashboard.model.ObservableMetrics("CPA",Float.toString((results.getInt(1) + results.getInt(2)) / (float)results.getInt(3))));
+		
+		results = conn.createStatement().executeQuery("SELECT SUM(CLICKCOST), SUM(IMPCOST), SUM(NUMCLICKS) FROM "
+				+ "(SELECT SUBSTR(CLICKDATE, 0, 14) AS CLICKDATE, SUM(CLICKCOST) AS CLICKCOST, COUNT(ID) AS NUMCLICKS FROM "
+				+ "(SELECT IMPRESSIONS.*, CLICKS.ID, CLICKS.DATE AS CLICKDATE, CLICKS.COST AS CLICKCOST "
+				+ "FROM IMPRESSIONS "
+				+ "INNER JOIN CLICKS "
+				+ "ON IMPRESSIONS.ID=CLICKS.ID "
+				+ "GROUP BY CLICKS.DATE, CLICKS.ID) "
+				+ "WHERE " + filter.getSql().replace("DATE", "CLICKDATE")+ " GROUP BY SUBSTR(CLICKDATE, 0, 14)) "
+				+ "INNER JOIN "
+				+ "(SELECT SUBSTR(DATE,0,14) AS IMPDATE, SUM(COST) AS IMPCOST FROM IMPRESSIONS "
+				+ "WHERE " + filter.getSql()+ " GROUP BY SUBSTR(DATE, 0, 14)) "
+				+ "ON IMPDATE=CLICKDATE");
+		
+		if (results.next())
+			tableContent.add(new dashboard.model.ObservableMetrics("CPC",Float.toString((results.getInt(1) + results.getInt(2)) / (float)results.getInt(3))));
+		
+		results = conn.createStatement().executeQuery("SELECT AVG(COST) AS IMPCOST FROM IMPRESSIONS "
+				+ "WHERE " + filter.getSql());
+		
+		if (results.next())
+			tableContent.add(new dashboard.model.ObservableMetrics("CPM",Float.toString(results.getFloat(1)*1000)));
+		
+		results = conn.createStatement().executeQuery("SELECT SUM(NUMCLICKS), SUM(NUMBOUNCES) FROM "
+				+ "(SELECT SUBSTR(CLICKDATE, 0, 14) as CLICKDATE, COUNT(ID) AS NUMCLICKS FROM "
+				+ "(SELECT CLICKS.DATE AS CLICKDATE, IMPRESSIONS.* FROM CLICKS INNER JOIN IMPRESSIONS ON CLICKS.ID=IMPRESSIONS.ID GROUP BY CLICKS.ID, CLICKDATE) "
+				+ "WHERE " + filter.getSql().replace("DATE", "CLICKDATE")+ " GROUP BY SUBSTR(CLICKDATE, 0, 14)) "
+				+ "INNER JOIN "
+				+ "(SELECT SUBSTR(ENTRYDATE, 0, 14) AS DATE, COUNT(*) AS NUMBOUNCES FROM "
+				+ "(SELECT IMPRESSIONS.*, SERVER.* FROM IMPRESSIONS "
+				+ "INNER JOIN SERVER ON IMPRESSIONS.ID=SERVER.ID "
+				+ "GROUP BY SERVER.ENTRYDATE, SERVER.ID) AS SUBQUERY "
+				+ "WHERE PAGES=1 AND "+ filter.getSql().replace("DATE", "ENTRYDATE")
+				+ " GROUP BY SUBSTR(ENTRYDATE, 0, 14)) "
+				+ "ON DATE=CLICKDATE GROUP BY DATE");
+		
+		if (results.next())
+			tableContent.add(new dashboard.model.ObservableMetrics("Bounce Rate",Float.toString(results.getInt(2)/results.getFloat(1))));
+		
+		results.close();
 
 	}
 	private void drawGraph(String metric)
 	{
 		//lineChart.getData().clear();
 		//lineChart.getXAxis().setLabel(filterTime.getValue());  
-		//lineChart.getYAxis().setLabel(metric);
+		lineChart.getYAxis().setLabel("Number");
 		GraphConstructor constructor;
 
 		switch(metric) {
@@ -343,9 +435,9 @@ public class AuctionController extends AnchorPane {
 		filter.setDateFrom(filterDateFrom.getValue());
 		filter.setDateTo(filterDateTo.getValue());
                 
-                lineChart.getData().clear();
+        lineChart.getData().clear();
 		lineChart.getXAxis().setLabel(filterTime.getValue());  
-		lineChart.getYAxis().setLabel("Number");
+		lineChart.getYAxis().setLabel(filterMetrics.getValue());
                 
 		drawGraph(filterMetrics.getValue());
 		try {
