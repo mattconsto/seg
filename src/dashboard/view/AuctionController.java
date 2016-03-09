@@ -97,6 +97,12 @@ public class AuctionController extends AnchorPane {
 		campaignName.setText(DatabaseConnection.getDbfile().replace(".db", ""));
 		generateGraph.setDisable(false);
 		//generateData(null);
+
+		try {
+			updateMetricsTable();
+		} catch (SQLException e) {
+			System.err.println(e.getMessage());
+		}
 	}
 	
 	private void configureFilters() {
@@ -349,11 +355,6 @@ public class AuctionController extends AnchorPane {
 		lineChart.getYAxis().setLabel(filterMetrics.getValue());
 				
 		drawGraph(filterMetrics.getValue());
-		try {
-			updateMetricsTable();
-		} catch (SQLException e) {
-			System.err.println(e.getMessage());
-		}
 	}
 
 	@FXML
