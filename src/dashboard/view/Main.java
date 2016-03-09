@@ -11,6 +11,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.JavaFXBuilderFactory;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -29,13 +30,15 @@ public class Main extends Application {
 		primaryStage.setResizable(false);
 		stage = primaryStage;
 		stage.setTitle(Preferences.productName);
-/*		for (int size : new int[] {512, 256, 128, 64, 48, 32, 16})
+		
+		for (int size : new int[] {512, 256, 128, 64, 48, 32, 16})
 			stage.getIcons().add(
 				new Image(getClass().getResourceAsStream(
 					String.format("/icon%d.png", size))));
-*/
+		
 		gotoOpenForm();
 	}
+	
 	private void gotoOpenForm() {
 		try {
 			OpenCampaignController openCampaign;
