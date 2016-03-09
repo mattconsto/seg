@@ -91,6 +91,7 @@
 											<String fx:value="CPA" />
 											<String fx:value="CPC" />
 											<String fx:value="CPM" />
+											<String fx:value="Bounce Rate" />
 										</FXCollections>
 									</items>
 									<value>
