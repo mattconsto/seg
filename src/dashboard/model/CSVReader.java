@@ -49,10 +49,10 @@ public class CSVReader {
 	}
 
 			
-	public Task readImpressions(File fname) {
-		return new Task() {
+	public Task<?> readImpressions(File fname) {
+		return new Task<Object>() {
 			@Override
-			protected Object call() throws Exception { 
+			protected Object call() throws Exception {
 				try {
 					Connection conn = DatabaseConnection.getConnection(); 
 					Statement stmt = conn.createStatement();
@@ -159,8 +159,8 @@ public class CSVReader {
 		};
 	}
 	
-	public Task readClicks(File fname) {
-		return new Task() {
+	public Task<?> readClicks(File fname) {
+		return new Task<Object>() {
 			@Override
 			protected Object call() throws Exception {
 				try {
@@ -211,8 +211,8 @@ public class CSVReader {
 			};
 		}
 
-	 public Task readServer(File fname) {
-		return new Task() {
+	 public Task<?> readServer(File fname) {
+		return new Task<Object>() {
 			@Override
 			protected Object call() throws Exception {
 				try {

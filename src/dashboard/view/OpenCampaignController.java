@@ -13,8 +13,6 @@ import java.util.List;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -28,18 +26,17 @@ import javafx.scene.layout.AnchorPane;
 
 import javafx.stage.FileChooser;
 
-
 /**
  * FXML Controller class
  */
 public class OpenCampaignController extends AnchorPane {
-	private Task readImpressionFile;
-	private Task readClickFile;
-	private Task readServerFile;
+	private Task<?> readImpressionFile;
+	private Task<?> readClickFile;
+	private Task<?> readServerFile;
 	
 	@FXML private ProgressBar p;
 	@FXML private Button openButton;
-	@FXML private ComboBox<?> selectCampaign;
+	@FXML private ComboBox<String> selectCampaign;
 	@FXML private AnchorPane createPane;
 	@FXML private TextField enterName;
 	@FXML private Button browseButton;
@@ -57,15 +54,10 @@ public class OpenCampaignController extends AnchorPane {
 	}
 
 	public void init() {
-		ObservableList data = FXCollections.observableArrayList();
-		//ToDo - tidy up folder to store databases
-		File fld = new File(System.getProperty("user.dir"));
-		File[] dbFiles = fld.listFiles();
-		for (File file : dbFiles) {
-			if (file.isFile() && file.getName().toLowerCase().endsWith(".db")) 
-			   data.add(file.getName());
-		}  
-		selectCampaign.setItems(data);
+		for(File file : new File(System.getProperty("user.dir")).listFiles()) {
+			if(file.isFile() && file.getName().toLowerCase().endsWith(".db"))
+				selectCampaign.getItems().add(file.getName());
+		}
 	}
 
 	@FXML
