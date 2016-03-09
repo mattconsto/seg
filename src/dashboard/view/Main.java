@@ -1,4 +1,4 @@
-package dashboard.view;
+ package dashboard.view;
 
 import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
@@ -28,7 +28,9 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		// Setup our stage
-		stage = primaryStage;
+		
+                primaryStage.setResizable(false);
+                stage = primaryStage;
 		stage.setTitle(Preferences.productName);
 /*		for (int size : new int[] {512, 256, 128, 64, 48, 32, 16})
 			stage.getIcons().add(
@@ -66,8 +68,9 @@ public class Main extends Application {
         }
         
         public void gotoMainForm() {
-        // Get the window display scaling, so we can set the correct res.
+                // Get the window display scaling, so we can set the correct res.
 	        stage.hide();
+                stage.setResizable(true);
         	AuctionController auctionTool;
 		try {
 			auctionTool = (AuctionController) replaceSceneContent("/dashboard/view/fxml/AuctionTool.fxml", stage);

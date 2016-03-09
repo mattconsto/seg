@@ -100,8 +100,9 @@ public class OpenCampaignController extends AnchorPane {
              if (folder.getText() != null) {
         	if (importCsv.checkFilesExist(folder.getText())) {
 
-                	importButton.setVisible(false);
-                	p.setVisible(true);
+                    importButton.setVisible(false);
+                    p.setVisible(true);
+                    openButton.setDisable(true);
                     DatabaseConnection.closeConnection();
                     DatabaseConnection.setDbfile(enterName.getText() + ".db");    // should check name has is alpha numeric only here as it forms part of the database filename
                    
@@ -147,10 +148,7 @@ public class OpenCampaignController extends AnchorPane {
                 
                     }
              }
-            ///if (importCsv.importCampaign(application.getStage(), enterName.getText()))
-           // {   
-           //     application.gotoMainForm();
-           // }
+          
         }
     }
     @FXML

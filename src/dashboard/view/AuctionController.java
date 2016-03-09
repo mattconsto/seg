@@ -222,11 +222,13 @@ public class AuctionController extends AnchorPane {
 	}
 
 	public void updateGraph(GraphConstructor graphConstructor, String yLabel, LineChart<String, Number> lineChart){
-		lineChart.getYAxis().setLabel(yLabel);
+		//lineChart.getYAxis().setLabel(yLabel);
 
 		try {
 			Series<String, Number> data = graphConstructor.fetchGraph();
-			lineChart.getData().add(data);
+			data.setName(yLabel);
+                        lineChart.getData().add(data);
+                        
 		} catch (SQLException e) {
 			System.err.println("Unable to fetch data from database: " + e.getMessage());
 		}
@@ -285,9 +287,9 @@ public class AuctionController extends AnchorPane {
 	}
 	private void drawGraph(String metric)
 	{
-		lineChart.getData().clear();
-		lineChart.getXAxis().setLabel(filterTime.getValue());  
-		lineChart.getYAxis().setLabel(metric);
+		//lineChart.getData().clear();
+		//lineChart.getXAxis().setLabel(filterTime.getValue());  
+		//lineChart.getYAxis().setLabel(metric);
 		GraphConstructor constructor;
 
 		switch(metric) {
@@ -331,7 +333,7 @@ public class AuctionController extends AnchorPane {
 		}
 
 		lineChart.setCreateSymbols(false);
-		lineChart.setLegendVisible(false);
+		//lineChart.setLegendVisible(false);
 		updateGraph(constructor, metric, lineChart);
 
 	}
@@ -340,7 +342,11 @@ public class AuctionController extends AnchorPane {
 		
 		filter.setDateFrom(filterDateFrom.getValue());
 		filter.setDateTo(filterDateTo.getValue());
-              
+                
+                lineChart.getData().clear();
+		lineChart.getXAxis().setLabel(filterTime.getValue());  
+		lineChart.getYAxis().setLabel("Number");
+                
 		drawGraph(filterMetrics.getValue());
 		try {
 			updateMetricsTable();

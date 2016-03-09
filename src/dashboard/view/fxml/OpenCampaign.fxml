@@ -7,7 +7,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="628.0" prefWidth="607.0" styleClass="background" stylesheets="@AuctionTool.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dashboard.view.OpenCampaignController">
+<AnchorPane id="AnchorPane" maxHeight="628.0" maxWidth="607.0" minHeight="628.0" minWidth="607.0" prefHeight="628.0" prefWidth="607.0" scaleShape="false" styleClass="background" stylesheets="@AuctionTool.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dashboard.view.OpenCampaignController">
    <children>
       <AnchorPane layoutY="559.0" prefHeight="58.0" prefWidth="607.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="559.0">
          <children>
@@ -32,6 +32,6 @@
             <Image url="@../../../images/dashboardpic.jpg" />
          </image>
       </ImageView>
-      <Separator layoutY="363.0" prefHeight="25.0" prefWidth="607.0" />
+      <Separator layoutY="363.0" prefHeight="25.0" prefWidth="607.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
    </children>
 </AnchorPane>
