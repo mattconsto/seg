@@ -116,7 +116,8 @@ public class OpenCampaignController extends AnchorPane {
                      @Override
                      public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                          if (newValue.equals("Done Impression")) {
-                             
+                              p.progressProperty().unbind();
+                              p.progressProperty().bind(readClickFile.progressProperty());
                               new Thread(readClickFile).start();
                          }
                      }});
@@ -124,8 +125,9 @@ public class OpenCampaignController extends AnchorPane {
                         @Override
                         public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                             if (newValue.equals("Done Clicks")) {
-
-                                 new Thread(readServerFile).start();
+                                p.progressProperty().unbind();
+                                p.progressProperty().bind(readServerFile.progressProperty());
+                                new Thread(readServerFile).start();
                                  
                             }
                         }
