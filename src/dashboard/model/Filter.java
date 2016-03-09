@@ -337,11 +337,11 @@ public class Filter {
     /* Default constructor sets all fields to 'any', and leaves date range unrestricted */
     public Filter()
     {
-         gender = new ArrayList();
-         gender.add("Any");
-         age = new ArrayList();
-         age.add("Any");
-    	 
+    	gender = new ArrayList<String>();
+    	age = new ArrayList<String>();
+    	setGender(FXCollections.observableArrayList("Any"));
+        setAge(FXCollections.observableArrayList("Any"));
+
         setIncome(FXCollections.observableArrayList("Any"));
         setContext(FXCollections.observableArrayList("Any"));
         setDateSQL();
