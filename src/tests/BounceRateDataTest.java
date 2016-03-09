@@ -31,7 +31,7 @@ Filter filter;
 			BounceRateGraphConstructor bounceConstructor = new BounceRateGraphConstructor(filter);
 			
 			ObservableList<XYChart.Data<String, Number>> data = bounceConstructor.fetchGraph().getData();
-			assertEquals(0.5, data.get(0).getYValue());
+			assertEquals(0.5f, data.get(0).getYValue());
 		}
 		catch(SQLException sqle)
 		{
@@ -49,7 +49,7 @@ Filter filter;
 			BounceRateGraphConstructor bounceConstructor = new BounceRateGraphConstructor(filter);
 			
 			ObservableList<XYChart.Data<String, Number>> data = bounceConstructor.fetchGraph().getData();
-			assertEquals(0.5, data.get(0).getYValue());
+			assertEquals(0.5f, data.get(0).getYValue());
 		}
 		catch(SQLException sqle)
 		{
@@ -66,7 +66,7 @@ Filter filter;
 			BounceRateGraphConstructor bounceConstructor = new BounceRateGraphConstructor(filter);
 			
 			ObservableList<XYChart.Data<String, Number>> data = bounceConstructor.fetchGraph().getData();
-			assertEquals(0.5, data.get(0).getYValue());
+			assertEquals(0.5f, data.get(0).getYValue());
 		}
 		catch(SQLException sqle)
 		{
@@ -83,7 +83,7 @@ Filter filter;
 			BounceRateGraphConstructor bounceConstructor = new BounceRateGraphConstructor(filter);
 			
 			ObservableList<XYChart.Data<String, Number>> data = bounceConstructor.fetchGraph().getData();
-			assertEquals(0.5, data.get(0).getYValue());
+			assertEquals(0.5f, data.get(0).getYValue());
 		}
 		catch(SQLException sqle)
 		{
@@ -101,13 +101,13 @@ Filter filter;
 			BounceRateGraphConstructor bounceConstructor = new BounceRateGraphConstructor(filter);
 			
 			ObservableList<XYChart.Data<String, Number>> data = bounceConstructor.fetchGraph().getData();
-			assertEquals(0.5, data.get(0).getYValue());
+			assertEquals(0.5f, data.get(0).getYValue());
 			
 			filter.setGender(FXCollections.observableArrayList("Male"));
 			bounceConstructor = new BounceRateGraphConstructor(filter);
 			
 			data = bounceConstructor.fetchGraph().getData();
-			assertEquals(0.5, data.get(0).getYValue());
+			assertEquals(0.5f, data.get(0).getYValue());
 		}
 		catch(SQLException sqle)
 		{
@@ -125,31 +125,31 @@ Filter filter;
 			BounceRateGraphConstructor bounceConstructor = new BounceRateGraphConstructor(filter);
 			
 			ObservableList<XYChart.Data<String, Number>> data = bounceConstructor.fetchGraph().getData();
-			assertEquals(0.5, data.get(0).getYValue());
+			assertEquals(0.5f, data.get(0).getYValue());
 			
 			filter.setAge(FXCollections.observableArrayList("25 to 34"));
 			bounceConstructor = new BounceRateGraphConstructor(filter);
 			
 			data = bounceConstructor.fetchGraph().getData();
-			assertEquals(0.5, data.get(0).getYValue());
+			assertEquals(0.5f, data.get(0).getYValue());
 			
 			filter.setAge(FXCollections.observableArrayList("35 to 44"));
 			bounceConstructor = new BounceRateGraphConstructor(filter);
 			
 			data = bounceConstructor.fetchGraph().getData();
-			assertEquals(0.5, data.get(0).getYValue());
+			assertEquals(0.5f, data.get(0).getYValue());
 			
 			filter.setAge(FXCollections.observableArrayList("45 to 54"));
 			bounceConstructor = new BounceRateGraphConstructor(filter);
 			
 			data = bounceConstructor.fetchGraph().getData();
-			assertEquals(0.5, data.get(0).getYValue());
+			assertEquals(0.5f, data.get(0).getYValue());
 			
 			filter.setAge(FXCollections.observableArrayList("Greater than 55"));
 			bounceConstructor = new BounceRateGraphConstructor(filter);
 			
 			data = bounceConstructor.fetchGraph().getData();
-			assertEquals(0.5, data.get(0).getYValue());
+			assertEquals(0.5f, data.get(0).getYValue());
 		}
 		catch(SQLException sqle)
 		{
@@ -167,19 +167,19 @@ Filter filter;
 			BounceRateGraphConstructor bounceConstructor = new BounceRateGraphConstructor(filter);
 			
 			ObservableList<XYChart.Data<String, Number>> data = bounceConstructor.fetchGraph().getData();
-			assertEquals(0.5, data.get(0).getYValue());
+			assertEquals(0.5f, data.get(0).getYValue());
 			
 			filter.setIncome(FXCollections.observableArrayList("Medium"));
 			bounceConstructor = new BounceRateGraphConstructor(filter);
 			
 			data = bounceConstructor.fetchGraph().getData();
-			assertEquals(0.5, data.get(0).getYValue());
+			assertEquals(0.5f, data.get(0).getYValue());
 			
 			filter.setIncome(FXCollections.observableArrayList("High"));
 			bounceConstructor = new BounceRateGraphConstructor(filter);
 			
 			data = bounceConstructor.fetchGraph().getData();
-			assertEquals(0.5, data.get(0).getYValue());
+			assertEquals(0.5f, data.get(0).getYValue());
 		}
 		catch(SQLException sqle)
 		{
@@ -197,37 +197,37 @@ Filter filter;
 			BounceRateGraphConstructor bounceConstructor = new BounceRateGraphConstructor(filter);
 			
 			ObservableList<XYChart.Data<String, Number>> data = bounceConstructor.fetchGraph().getData();
-			assertEquals(0.5, data.get(0).getYValue());
+			assertEquals(0.5f, data.get(0).getYValue());
 			
 			filter.setContext(FXCollections.observableArrayList("Shopping"));
 			bounceConstructor = new BounceRateGraphConstructor(filter);
 			
 			data = bounceConstructor.fetchGraph().getData();
-			assertEquals(0.5, data.get(0).getYValue());
+			assertEquals(0.5f, data.get(0).getYValue());
 			
 			filter.setContext(FXCollections.observableArrayList("Social Media"));
 			bounceConstructor = new BounceRateGraphConstructor(filter);
 			
 			data = bounceConstructor.fetchGraph().getData();
-			assertEquals(0.5, data.get(0).getYValue());
+			assertEquals(0.5f, data.get(0).getYValue());
 			
 			filter.setContext(FXCollections.observableArrayList("Blog"));
 			bounceConstructor = new BounceRateGraphConstructor(filter);
 			
 			data = bounceConstructor.fetchGraph().getData();
-			assertEquals(0.5, data.get(0).getYValue());
+			assertEquals(0.5f, data.get(0).getYValue());
 			
 			filter.setContext(FXCollections.observableArrayList("Hobbies"));
 			bounceConstructor = new BounceRateGraphConstructor(filter);
 			
 			data = bounceConstructor.fetchGraph().getData();
-			assertEquals(0.5, data.get(0).getYValue());
+			assertEquals(0.5f, data.get(0).getYValue());
 			
 			filter.setContext(FXCollections.observableArrayList("Travel"));
 			bounceConstructor = new BounceRateGraphConstructor(filter);
 			
 			data = bounceConstructor.fetchGraph().getData();
-			assertEquals(0.5, data.get(0).getYValue());
+			assertEquals(0.5f, data.get(0).getYValue());
 		}
 		catch(SQLException sqle)
 		{
