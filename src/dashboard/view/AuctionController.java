@@ -107,6 +107,7 @@ public class AuctionController extends AnchorPane {
 			(ListChangeListener.Change<? extends String> c) -> filter.setIncome(filterIncome));
 		filterContext.getCheckModel().getCheckedItems().addListener(
 			(ListChangeListener.Change<? extends String> c) -> filter.setContext(filterContext));
+		filterTime.valueProperty().addListener(c -> filter.setTime(filterTime.getValue()));
 	}
 
 	private final ListChangeListener<ObservableMetrics> tableSelectionChanged = (ListChangeListener.Change<? extends ObservableMetrics> c) -> {

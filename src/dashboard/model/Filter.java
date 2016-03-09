@@ -9,6 +9,7 @@ import java.util.List;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+
 import org.controlsfx.control.CheckComboBox;
 import org.controlsfx.control.IndexedCheckModel;
 
@@ -29,7 +30,35 @@ public class Filter {
 	public String incomeSQL = "1";
 	public String genderSQL = "1";
 	public String dateSQL;
+	public String timeFormatSQL = "%Y-%m-%d %H";
+	public String timeFormatJava = "yyyy-MM-dd HH";
 
+	public void setTime(String time) {
+		this.timeFormatSQL = time;
+		
+		switch (time) {
+			case "Minutes": timeFormatSQL  = "%Y-%m-%d %H:%M"; 
+							timeFormatJava = "yyyy-MM-dd HH:mm";
+			break;
+			default:
+			case "Hours":   timeFormatSQL = "%Y-%m-%d %H";
+							timeFormatJava = "yyyy-MM-dd HH";
+			break;
+			case "Days":    timeFormatSQL = "%Y-%m-%d";
+							timeFormatJava = "yyyy-MM-dd";
+			break;
+			case "Weeks":   timeFormatSQL = "%Y-%W";
+							timeFormatJava = "yyyy-ww";
+			break;
+			case "Months":  timeFormatSQL = "%Y-%m";
+							timeFormatJava = "yyyy-MM";
+			break;
+			case "Years":   timeFormatSQL = "%Y";
+							timeFormatJava = "yyyy";
+			break;
+		}
+	}
+	
 	public String getDateSQL() {
 		return dateSQL;
 	}
@@ -38,14 +67,6 @@ public class Filter {
 		this.dateSQL = dateSQL;
 	}
 
-	public List<String> getGender() {
-		return gender;
-	}
-
-	 /**
-	 *
-	 * @param gender
-	 */
 	public void setGender(ObservableList<String> gender) {
 		
 		this.gender.clear();
@@ -85,11 +106,7 @@ public class Filter {
 		setGender(genderModel.getCheckedItems());
 		genderEnabled = true;
 	}
-   /**
-	 *
-	 * @param age
-	 * 
-	 */
+
 	public void setAge(ObservableList<String> age) {
 		this.age.clear();
 		for (String s : age)
@@ -129,14 +146,7 @@ public class Filter {
 		setAge(genderModel.getCheckedItems());
 		ageEnabled = true;
 	}
-	public List<String> getAge() {
-		return age;
-	}
- 
-	 /**
-	 *
-	 * @param income
-	 */
+	
 	public void setIncome(ObservableList<String> income) {
 		this.income.clear();
 		for (String s : income)
@@ -177,14 +187,6 @@ public class Filter {
 		incomeEnabled = true;
 	}
 	
-
-	public List<String> getIncome() {
-		return income;
-	}
-	/**
-	 *
-	 * @param context
-	 */
 	public void setContext(ObservableList<String> ct) {
 		this.context.clear();
 		for (String s : ct)
@@ -225,9 +227,6 @@ public class Filter {
 		contextEnabled = true;
 	}
 
-	public List<String> getContext() {
-		return context;
-	}
 	
 	private void setGenderSQL() {
 		genderSQL = "";
@@ -304,7 +303,6 @@ public class Filter {
 	 
 	public String getSql() {
 		return "(" + contextSQL + ") and (" + ageSQL + ") and (" + incomeSQL + ") and (" + genderSQL + ") and " + dateSQL;
-		
 	}
 	public String getIncomeSQL() {
 		return "(" + incomeSQL +")";
@@ -352,13 +350,7 @@ public class Filter {
 							break;
 					}
 				}
-			}
-		   
-		 
-	}
-
-	public LocalDate getDateTo() {
-		return dateTo;
+			}	 
 	}
 
 	public void setDateTo(LocalDate dateTo) {
@@ -386,9 +378,6 @@ public class Filter {
 		dateSQL = dateQuery.toString();
 	}
 
-	public LocalDate getDateFrom() {
-		return dateFrom;
-	}
 
 	public void setDateFrom(LocalDate dateFrom) {
 		this.dateFrom = dateFrom;

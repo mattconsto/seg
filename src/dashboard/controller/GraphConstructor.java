@@ -2,11 +2,8 @@ package dashboard.controller;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 
 import javafx.scene.chart.XYChart;
 
@@ -18,7 +15,6 @@ import dashboard.model.Filter;
  */
 public abstract class GraphConstructor {
 	protected Filter filter;
-	protected DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH", Locale.ENGLISH);
 	
 	public GraphConstructor(Filter filter) {
 		this.filter = filter;
@@ -31,7 +27,10 @@ public abstract class GraphConstructor {
 	 */
 	public XYChart.Series<Date, Number> fetchGraph() throws SQLException {
 		try {
-			return generateGraph(DatabaseConnection.getConnection());
+			System.out.println("Constructing Graph");
+			XYChart.Series<Date, Number> result = generateGraph(DatabaseConnection.getConnection());
+			System.out.println("Finished Executing Query");
+			return result; 
 		} catch (ParseException e) {
 			e.printStackTrace();
 			return null;
