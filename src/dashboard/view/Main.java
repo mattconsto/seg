@@ -51,7 +51,7 @@ public class Main extends Application {
   
             } catch (IOException ex) {
 			ex.printStackTrace();
-	     }
+	    }
 
             stage.centerOnScreen();
             stage.show();
@@ -67,7 +67,15 @@ public class Main extends Application {
         
         public void gotoMainForm() {
         // Get the window display scaling, so we can set the correct res.
-		double deviceScaling = Toolkit.getDefaultToolkit()
+	        AuctionController auctionTool;
+		try {
+			auctionTool = (AuctionController) replaceSceneContent("/dashboard/view/fxml/AuctionTool.fxml", stage);
+			auctionTool.setApp(this);
+			auctionTool.init();
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+                double deviceScaling = Toolkit.getDefaultToolkit()
 				.getScreenResolution() / 96.0;
 
 		Rectangle bounds = GraphicsEnvironment
@@ -77,16 +85,6 @@ public class Main extends Application {
 		stage.setWidth(Preferences.windowScaling * bounds.getWidth() / deviceScaling);
 		stage.setHeight(Preferences.windowScaling * bounds.getHeight() / deviceScaling);
 		stage.centerOnScreen();
-
-            AuctionController auctionTool;
-		try {
-			auctionTool = (AuctionController) replaceSceneContent("/dashboard/view/fxml/AuctionTool.fxml", stage);
-			auctionTool.setApp(this);
-			auctionTool.init();
-		} catch (IOException ex) {
-			ex.printStackTrace();
-		}
-
 		stage.show();
 		stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 			public void handle(WindowEvent we) {

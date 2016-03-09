@@ -31,7 +31,7 @@ Filter filter;
 			CPAGraphConstructor cpaConstructor = new CPAGraphConstructor(filter);
 			
 			ObservableList<XYChart.Data<String, Number>> data = cpaConstructor.fetchGraph().getData();
-			assertEquals(48, data.get(0).getYValue());
+			assertEquals(48f, data.get(0).getYValue());
 		}
 		catch(SQLException sqle)
 		{
@@ -49,7 +49,7 @@ Filter filter;
 			CPAGraphConstructor cpaConstructor = new CPAGraphConstructor(filter);
 			
 			ObservableList<XYChart.Data<String, Number>> data = cpaConstructor.fetchGraph().getData();
-			assertEquals(48, data.get(0).getYValue());
+			assertEquals(48f, data.get(0).getYValue());
 		}
 		catch(SQLException sqle)
 		{
@@ -66,7 +66,7 @@ Filter filter;
 			CPAGraphConstructor cpaConstructor = new CPAGraphConstructor(filter);
 			
 			ObservableList<XYChart.Data<String, Number>> data = cpaConstructor.fetchGraph().getData();
-			assertEquals(48, data.get(0).getYValue());
+			assertEquals(48f, data.get(0).getYValue());
 		}
 		catch(SQLException sqle)
 		{
@@ -83,7 +83,7 @@ Filter filter;
 			CPAGraphConstructor cpaConstructor = new CPAGraphConstructor(filter);
 			
 			ObservableList<XYChart.Data<String, Number>> data = cpaConstructor.fetchGraph().getData();
-			assertEquals(48, data.get(0).getYValue());
+			assertEquals(48f, data.get(0).getYValue());
 		}
 		catch(SQLException sqle)
 		{
@@ -101,13 +101,13 @@ Filter filter;
 			CPAGraphConstructor cpaConstructor = new CPAGraphConstructor(filter);
 			
 			ObservableList<XYChart.Data<String, Number>> data = cpaConstructor.fetchGraph().getData();
-			assertEquals(48, data.get(0).getYValue());
+			assertEquals(48f, data.get(0).getYValue());
 			
 			filter.setGender(FXCollections.observableArrayList("Male"));
 			cpaConstructor = new CPAGraphConstructor(filter);
 			
 			data = cpaConstructor.fetchGraph().getData();
-			assertEquals(48, data.get(0).getYValue());
+			assertEquals(48f, data.get(0).getYValue());
 		}
 		catch(SQLException sqle)
 		{
@@ -125,31 +125,31 @@ Filter filter;
 			CPAGraphConstructor cpaConstructor = new CPAGraphConstructor(filter);
 			
 			ObservableList<XYChart.Data<String, Number>> data = cpaConstructor.fetchGraph().getData();
-			assertEquals(48, data.get(0).getYValue());
+			assertEquals(48f, data.get(0).getYValue());
 			
 			filter.setAge(FXCollections.observableArrayList("25 to 34"));
 			cpaConstructor = new CPAGraphConstructor(filter);
 			
 			data = cpaConstructor.fetchGraph().getData();
-			assertEquals(48, data.get(0).getYValue());
+			assertEquals(48f, data.get(0).getYValue());
 			
 			filter.setAge(FXCollections.observableArrayList("35 to 44"));
 			cpaConstructor = new CPAGraphConstructor(filter);
 			
 			data = cpaConstructor.fetchGraph().getData();
-			assertEquals(48, data.get(0).getYValue());
+			assertEquals(48f, data.get(0).getYValue());
 			
 			filter.setAge(FXCollections.observableArrayList("45 to 54"));
 			cpaConstructor = new CPAGraphConstructor(filter);
 			
 			data = cpaConstructor.fetchGraph().getData();
-			assertEquals(48, data.get(0).getYValue());
+			assertEquals(48f, data.get(0).getYValue());
 			
 			filter.setAge(FXCollections.observableArrayList("Greater than 55"));
 			cpaConstructor = new CPAGraphConstructor(filter);
 			
 			data = cpaConstructor.fetchGraph().getData();
-			assertEquals(48, data.get(0).getYValue());
+			assertEquals(48f, data.get(0).getYValue());
 		}
 		catch(SQLException sqle)
 		{
@@ -167,19 +167,19 @@ Filter filter;
 			CPAGraphConstructor cpaConstructor = new CPAGraphConstructor(filter);
 			
 			ObservableList<XYChart.Data<String, Number>> data = cpaConstructor.fetchGraph().getData();
-			assertEquals(48, data.get(0).getYValue());
+			assertEquals(48f, data.get(0).getYValue());
 			
 			filter.setIncome(FXCollections.observableArrayList("Medium"));
 			cpaConstructor = new CPAGraphConstructor(filter);
 			
 			data = cpaConstructor.fetchGraph().getData();
-			assertEquals(48, data.get(0).getYValue());
+			assertEquals(48f, data.get(0).getYValue());
 			
 			filter.setIncome(FXCollections.observableArrayList("High"));
 			cpaConstructor = new CPAGraphConstructor(filter);
 			
 			data = cpaConstructor.fetchGraph().getData();
-			assertEquals(48, data.get(0).getYValue());
+			assertEquals(48f, data.get(0).getYValue());
 		}
 		catch(SQLException sqle)
 		{
@@ -197,37 +197,37 @@ Filter filter;
 			CPAGraphConstructor cpaConstructor = new CPAGraphConstructor(filter);
 			
 			ObservableList<XYChart.Data<String, Number>> data = cpaConstructor.fetchGraph().getData();
-			assertEquals(48, data.get(0).getYValue());
+			assertEquals(48f, data.get(0).getYValue());
 			
 			filter.setContext(FXCollections.observableArrayList("Shopping"));
 			cpaConstructor = new CPAGraphConstructor(filter);
 			
 			data = cpaConstructor.fetchGraph().getData();
-			assertEquals(48, data.get(0).getYValue());
+			assertEquals(48f, data.get(0).getYValue());
 			
 			filter.setContext(FXCollections.observableArrayList("Social Media"));
 			cpaConstructor = new CPAGraphConstructor(filter);
 			
 			data = cpaConstructor.fetchGraph().getData();
-			assertEquals(48, data.get(0).getYValue());
+			assertEquals(48f, data.get(0).getYValue());
 			
 			filter.setContext(FXCollections.observableArrayList("Blog"));
 			cpaConstructor = new CPAGraphConstructor(filter);
 			
 			data = cpaConstructor.fetchGraph().getData();
-			assertEquals(48, data.get(0).getYValue());
+			assertEquals(48f, data.get(0).getYValue());
 			
 			filter.setContext(FXCollections.observableArrayList("Hobbies"));
 			cpaConstructor = new CPAGraphConstructor(filter);
 			
 			data = cpaConstructor.fetchGraph().getData();
-			assertEquals(48, data.get(0).getYValue());
+			assertEquals(48f, data.get(0).getYValue());
 			
 			filter.setContext(FXCollections.observableArrayList("Travel"));
 			cpaConstructor = new CPAGraphConstructor(filter);
 			
 			data = cpaConstructor.fetchGraph().getData();
-			assertEquals(48, data.get(0).getYValue());
+			assertEquals(48f, data.get(0).getYValue());
 		}
 		catch(SQLException sqle)
 		{

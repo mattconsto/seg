@@ -5,7 +5,6 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.Optional;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -14,34 +13,36 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart.Series;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import dashboard.controller.BounceGraphConstructor;
+import dashboard.controller.BounceRateGraphConstructor;
+import dashboard.controller.CPAGraphConstructor;
 import dashboard.controller.CPCGraphConstructor;
+import dashboard.controller.CPMGraphConstructor;
+import dashboard.controller.CTRGraphConstructor;
 import dashboard.controller.ClicksGraphConstructor;
 import dashboard.controller.ConversionGraphConstructor;
 import dashboard.controller.GraphConstructor;
 import dashboard.controller.ImpressionsGraphConstructor;
+import dashboard.controller.TotalCostGraphConstructor;
 import dashboard.controller.UniqueClicksGraphConstructor;
 import dashboard.controller.UniqueImpressionsGraphConstructor;
-import dashboard.model.CSVReader;
 import dashboard.model.DatabaseConnection;
 import dashboard.model.Filter;
 import dashboard.model.ObservableMetrics;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleGroup;
 /**
  * Auction Controller.
  */
@@ -91,90 +92,94 @@ public class AuctionController extends AnchorPane {
 
 	final ObservableList<ObservableMetrics> tableContent = FXCollections.observableArrayList();
 	private Filter filter;
-    @FXML
-    private MenuItem deleteCampaign;
-    @FXML
-    private MenuItem exportCampaign;
-    @FXML
-    private MenuItem printCampaign;
-    @FXML
-    private MenuItem mnuColour;
-    @FXML
-    private MenuItem mnuFont;
-    @FXML
-    private MenuItem mnuPaths;
-    @FXML
-    private MenuItem mnuUnits;
-    @FXML
-    private MenuItem mnuDefinitions;
-    @FXML
-    private MenuItem mnuSearch;
-    @FXML
-    private MenuItem mnuList;
-    @FXML
-    private MenuItem mnuAbout;
-    @FXML
-    private TextField txtBounceTime;
-    @FXML
-    private TextField txtBouncePages;
-    @FXML
-    private RadioButton rbByBounceTime;
-    @FXML
-    private ToggleGroup grBounce;
-    @FXML
-    private RadioButton rbByBouncePages;
+	@FXML
+	private MenuItem deleteCampaign;
+	@FXML
+	private MenuItem exportCampaign;
+	@FXML
+	private MenuItem printCampaign;
+	@FXML
+	private MenuItem mnuColour;
+	@FXML
+	private MenuItem mnuFont;
+	@FXML
+	private MenuItem mnuPaths;
+	@FXML
+	private MenuItem mnuUnits;
+	@FXML
+	private MenuItem mnuDefinitions;
+	@FXML
+	private MenuItem mnuSearch;
+	@FXML
+	private MenuItem mnuList;
+	@FXML
+	private MenuItem mnuAbout;
+	@FXML
+	private TextField txtBounceTime;
+	@FXML
+	private TextField txtBouncePages;
+	@FXML
+	private RadioButton rbByBounceTime;
+	@FXML
+	private ToggleGroup grBounce;
+	@FXML
+	private RadioButton rbByBouncePages;
 
 	public void setApp(Main application){
 		this.application = application;
 	}
 
 	public void init() {
-            filter = new Filter();
+		filter = new Filter();
 
-            filterDateFrom.setValue((LocalDate.of(2015,01,01)));
-            filterDateTo.setValue((LocalDate.of(2015,01,14)));
-            filterGender.getItems().addAll("Any","Female","Male");
-            filterAge.getItems().addAll("Any","Less than 25","25 to 34","35 to 44","45 to 54","Greater than 55");
+		filterDateFrom.setValue((LocalDate.of(2015,01,01)));
+		filterDateTo.setValue((LocalDate.of(2015,01,14)));
+		filterGender.getItems().addAll("Any","Female","Male");
+		filterAge.getItems().addAll("Any","Less than 25","25 to 34","35 to 44","45 to 54","Greater than 55");
+		filterIncome.getItems().addAll("Any","Low","Medium","High");
+		filterContext.getItems().addAll("Any","News","Shopping","Social Media","Blog","Hobbies","Travel");
+		filterGender.getCheckModel().check(0);
+		filterAge.getCheckModel().check(0);
+		filterContext.getCheckModel().check(0);
+		filterIncome.getCheckModel().check(0);
+		metricCol.setCellValueFactory(cellData -> cellData.getValue().descriptionProperty());
+		resultCol.setCellValueFactory(cellData -> cellData.getValue().resultProperty());
+		configureTable();  
+                configureFilters();
 
-            filterIncome.getItems().addAll("Any","Low","Medium","High");
-            filterContext.getItems().addAll("Any","News","Shopping","Social Media","Blog","Hobbies","Travel");
+		campaignName.setText(DatabaseConnection.getDbfile().replace(".db", ""));
+		generateGraph.setDisable(false);
+		//generateData(null);
 
-
-            filterGender.getCheckModel().check(0);
-            filterAge.getCheckModel().check(0);
-            filterContext.getCheckModel().check(0);
-            filterIncome.getCheckModel().check(0);
-
-            metricCol.setCellValueFactory(cellData -> cellData.getValue().descriptionProperty());
-            resultCol.setCellValueFactory(cellData -> cellData.getValue().resultProperty());
-            configureTable();  
-
-           
-        filterGender.getCheckModel().getCheckedItems().addListener(new ListChangeListener<String>() {
-            public void onChanged(ListChangeListener.Change<? extends String> c) {
+	}
+        private void configureFilters() {
+            filterGender.getCheckModel().getCheckedItems().addListener(new ListChangeListener<String>() {
+                @Override
+                public void onChanged(ListChangeListener.Change<? extends String> c) {
                     filter.setGender(filterGender);
-                    
-       
-                  
-        }
-        });
-        
-       filterAge.getCheckModel().getCheckedItems().addListener(new ListChangeListener<String>() {
-            public void onChanged(ListChangeListener.Change<? extends String> c) {
+                }
+            });
+            filterAge.getCheckModel().getCheckedItems().addListener(new ListChangeListener<String>() {
+                @Override
+                public void onChanged(ListChangeListener.Change<? extends String> c) {
                     filter.setAge(filterAge);
+		}
+            });
+            filterIncome.getCheckModel().getCheckedItems().addListener(new ListChangeListener<String>() {
+                @Override
+                public void onChanged(ListChangeListener.Change<? extends String> c) {
+                    filter.setIncome(filterIncome);
+		}
+            });
+            filterContext.getCheckModel().getCheckedItems().addListener(new ListChangeListener<String>() {
+                @Override
+                public void onChanged(ListChangeListener.Change<? extends String> c) {
+                    filter.setContext(filterContext);
+		}
+            });
                     
-       
-                  
         }
-        });
-            
-            campaignName.setText(DatabaseConnection.getDbfile().replace(".db", ""));
-            generateGraph.setDisable(false);
-            //generateData(null);
 
-        }
-         
-       
 	private final ListChangeListener<ObservableMetrics> tableSelectionChanged =
 			new ListChangeListener<ObservableMetrics>() {
 
@@ -187,8 +192,8 @@ public class AuctionController extends AnchorPane {
 
 		}
 	};
-      
-       
+
+
 
 	// Configure the table widget: set up its column, and register the
 	// selection changed listener.
@@ -207,15 +212,8 @@ public class AuctionController extends AnchorPane {
 	@FXML
 	private void importCampaignAction(ActionEvent event) {
 
-		/* CSVReader importCsv = new CSVReader();
-                if (importCsv.importCampaign(application.getStage()))
-                {   
-                        campaignName.setText(DatabaseConnection.getDbfile().replace(".db", ""));
-                        generateGraph.setDisable(false);
-                        generateData(null);
-                }*/
-             
-        }
+		
+	}
 
 	@FXML
 	private void closeAction(ActionEvent event) {
@@ -282,6 +280,7 @@ public class AuctionController extends AnchorPane {
 		tableContent.add(new dashboard.model.ObservableMetrics("CPA","...."));
 		tableContent.add(new dashboard.model.ObservableMetrics("CPC","...."));
 		tableContent.add(new dashboard.model.ObservableMetrics("CPM","...."));
+		tableContent.add(new dashboard.model.ObservableMetrics("Bounce Rate","...."));
 
 	}
 	private void drawGraph(String metric)
@@ -313,6 +312,22 @@ public class AuctionController extends AnchorPane {
 			break;
 		case "CPC":
 			constructor = new CPCGraphConstructor(filter);
+			break;
+		case "CPA":
+			constructor = new CPAGraphConstructor(filter);
+			break;
+		case "CPM":
+			constructor = new CPMGraphConstructor(filter);
+			break;
+		case "CTR":
+			constructor = new CTRGraphConstructor(filter);
+			break;
+		case "Total Cost":
+			constructor = new TotalCostGraphConstructor(filter);
+			break;
+		case "Bounce Rate":
+			constructor = new BounceRateGraphConstructor(filter);
+			break;
 		}
 
 		lineChart.setCreateSymbols(false);
@@ -322,13 +337,10 @@ public class AuctionController extends AnchorPane {
 	}
 	@FXML
 	private void generateData(ActionEvent event) {
-		filter.setGender(filterGender.getCheckModel().getCheckedItems());
-		filter.setAge(filterAge.getCheckModel().getCheckedItems());
-		filter.setIncome(filterIncome.getCheckModel().getCheckedItems()); 
-		filter.setContext(filterContext.getCheckModel().getCheckedItems());
+		
 		filter.setDateFrom(filterDateFrom.getValue());
 		filter.setDateTo(filterDateTo.getValue());
-		
+              
 		drawGraph(filterMetrics.getValue());
 		try {
 			updateMetricsTable();
