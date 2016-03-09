@@ -8,12 +8,15 @@ import java.util.Date;
 
 import javafx.scene.chart.XYChart;
 import javafx.scene.chart.XYChart.Series;
+import dashboard.model.BounceFilter;
 import dashboard.model.Filter;
 
 public class BounceRateGraphConstructor extends GraphConstructor{
-
-	public BounceRateGraphConstructor(Filter filter) {
+	private final BounceFilter bounceFilter;
+	
+	public BounceRateGraphConstructor(Filter filter, BounceFilter myBounceFilter) {
 		super(filter);
+		bounceFilter = myBounceFilter;
 	}
 
 	@Override
@@ -28,7 +31,7 @@ public class BounceRateGraphConstructor extends GraphConstructor{
 				+ "(SELECT IMPRESSIONS.*, SERVER.* FROM IMPRESSIONS "
 				+ "INNER JOIN SERVER ON IMPRESSIONS.ID=SERVER.ID "
 				+ "GROUP BY SERVER.ENTRYDATE, SERVER.ID) AS SUBQUERY "
-				+ "WHERE PAGES=1 AND "+ filter.getSql().replace("DATE", "ENTRYDATE")
+				+ "WHERE " + bounceFilter.getSQL() + " AND "+ filter.getSql().replace("DATE", "ENTRYDATE")
 				+ " GROUP BY SUBSTR(ENTRYDATE, 0, 14)) "
 				+ "ON DATE=CLICKDATE GROUP BY DATE");
 

@@ -109,6 +109,12 @@ public class AuctionController extends AnchorPane {
 				System.out.println(grBounce.getSelectedToggle().getUserData().toString());
 			}
 		});
+
+		try {
+			updateMetricsTable();
+		} catch (SQLException e) {
+			System.err.println(e.getMessage());
+		}
 	}
 	
 	private void configureFilters() {
@@ -308,7 +314,7 @@ public class AuctionController extends AnchorPane {
 		switch(metric) {
 			default:
 			case "Bounces":
-				constructor = new BounceGraphConstructor(filter);
+				constructor = new BounceGraphConstructor(filter, bounceFilter);
 				break;
 			case "Impressions":
 				constructor = new ImpressionsGraphConstructor(filter);
@@ -341,7 +347,7 @@ public class AuctionController extends AnchorPane {
 				constructor = new TotalCostGraphConstructor(filter);
 				break;
 			case "Bounce Rate":
-				constructor = new BounceRateGraphConstructor(filter);
+				constructor = new BounceRateGraphConstructor(filter, bounceFilter);
 				break;
 		}
 
@@ -380,11 +386,6 @@ public class AuctionController extends AnchorPane {
 		lineChart.getYAxis().setLabel(filterMetrics.getValue());
 				
 		drawGraph(filterMetrics.getValue());
-		try {
-			updateMetricsTable();
-		} catch (SQLException e) {
-			System.err.println(e.getMessage());
-		}
 	}
 
 	@FXML
