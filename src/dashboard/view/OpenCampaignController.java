@@ -85,7 +85,8 @@ public class OpenCampaignController extends AnchorPane {
 
     @FXML
     private void importAction(ActionEvent event) {
-        if (enterName.getText().isEmpty() || enterName.getText().equalsIgnoreCase("Enter name for new campaign and select import"))
+    	CSVReader importCsv = new CSVReader();
+    	if (enterName.getText().isEmpty() || enterName.getText().equalsIgnoreCase("Enter name for new campaign and select import"))
         {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
 						alert.setTitle("Please enter a campaign name");
@@ -95,13 +96,12 @@ public class OpenCampaignController extends AnchorPane {
         }
         else
         { 
-            importButton.setVisible(false);
-            p.setVisible(true);
-            
-            CSVReader importCsv = new CSVReader();
             
              if (folder.getText() != null) {
         	if (importCsv.checkFilesExist(folder.getText())) {
+
+                	importButton.setVisible(false);
+                	p.setVisible(true);
                     DatabaseConnection.closeConnection();
                     DatabaseConnection.setDbfile(enterName.getText() + ".db");    // should check name has is alpha numeric only here as it forms part of the database filename
                    
@@ -156,7 +156,7 @@ public class OpenCampaignController extends AnchorPane {
          if (!selectCampaign.getSelectionModel().getSelectedItem().equals(""))
          {
              DatabaseConnection.closeConnection();
-	     DatabaseConnection.setDbfile(selectCampaign.getSelectionModel().getSelectedItem().toString());
+             DatabaseConnection.setDbfile(selectCampaign.getSelectionModel().getSelectedItem().toString());
              application.gotoMainForm();
          }
     }
@@ -174,7 +174,7 @@ public class OpenCampaignController extends AnchorPane {
         String files = "#impression_log.csv#click_log.csv#server_log.csv#";
         // make sure 3 files are selected and they are the expected files
         boolean result = true;
-        if (fl.size()== 3) {
+        if (fl != null && fl.size()== 3) {
             for (File f : fl) {
                 if (!files.contains("#" + f.getName().toLowerCase()+ "#")) {
                    

@@ -67,7 +67,8 @@ public class Main extends Application {
         
         public void gotoMainForm() {
         // Get the window display scaling, so we can set the correct res.
-	        AuctionController auctionTool;
+	        stage.hide();
+        	AuctionController auctionTool;
 		try {
 			auctionTool = (AuctionController) replaceSceneContent("/dashboard/view/fxml/AuctionTool.fxml", stage);
 			auctionTool.setApp(this);
