@@ -26,6 +26,8 @@ public class TotalCostDataTest extends TestCase {
 	@Test
 	public void testFirstMinuteTotal() {
 		try {
+			filter.setTime("Minutes");
+			
 			TotalCostGraphConstructor totalCostConstructor = new TotalCostGraphConstructor(filter);
 
 			ObservableList<XYChart.Data<Date, Number>> data = totalCostConstructor.fetchGraph().getData();
@@ -39,6 +41,8 @@ public class TotalCostDataTest extends TestCase {
 	@Test
 	public void testFirstHourTotal() {
 		try {
+			filter.setTime("Hours");
+			
 			TotalCostGraphConstructor totalCostConstructor = new TotalCostGraphConstructor(filter);
 
 			ObservableList<XYChart.Data<Date, Number>> data = totalCostConstructor.fetchGraph().getData();
@@ -52,6 +56,8 @@ public class TotalCostDataTest extends TestCase {
 	@Test
 	public void testFirstDayTotal() {
 		try {
+			filter.setTime("Days");
+			
 			TotalCostGraphConstructor totalCostConstructor = new TotalCostGraphConstructor(filter);
 
 			ObservableList<XYChart.Data<Date, Number>> data = totalCostConstructor.fetchGraph().getData();
@@ -65,6 +71,8 @@ public class TotalCostDataTest extends TestCase {
 	@Test
 	public void testFirstWeekTotal() {
 		try {
+			filter.setTime("Weeks");
+			
 			TotalCostGraphConstructor totalCostConstructor = new TotalCostGraphConstructor(filter);
 
 			ObservableList<XYChart.Data<Date, Number>> data = totalCostConstructor.fetchGraph().getData();

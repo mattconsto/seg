@@ -30,6 +30,8 @@ public class BounceDataTest extends TestCase {
 	@Test
 	public void testFirstMinuteTotal() {
 		try {
+			filter.setTime("Minutes");
+			
 			BounceGraphConstructor bounceConstructor = new BounceGraphConstructor(filter, bounceFilter);
 
 			ObservableList<XYChart.Data<Date, Number>> data = bounceConstructor.fetchGraph().getData();
@@ -43,6 +45,8 @@ public class BounceDataTest extends TestCase {
 	@Test
 	public void testFirstHourTotal() {
 		try {
+			filter.setTime("Hours");
+			
 			BounceGraphConstructor bounceConstructor = new BounceGraphConstructor(filter, bounceFilter);
 
 			ObservableList<XYChart.Data<Date, Number>> data = bounceConstructor.fetchGraph().getData();
@@ -56,6 +60,8 @@ public class BounceDataTest extends TestCase {
 	@Test
 	public void testFirstDayTotal() {
 		try {
+			filter.setTime("Days");
+			
 			BounceGraphConstructor bounceConstructor = new BounceGraphConstructor(filter, bounceFilter);
 
 			ObservableList<XYChart.Data<Date, Number>> data = bounceConstructor.fetchGraph().getData();
@@ -69,6 +75,8 @@ public class BounceDataTest extends TestCase {
 	@Test
 	public void testFirstWeekTotal() {
 		try {
+			filter.setTime("Weeks");
+			
 			BounceGraphConstructor bounceConstructor = new BounceGraphConstructor(filter, bounceFilter);
 
 			ObservableList<XYChart.Data<Date, Number>> data = bounceConstructor.fetchGraph().getData();

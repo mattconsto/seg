@@ -26,6 +26,8 @@ public class CPMDataTest extends TestCase {
 	@Test
 	public void testFirstMinuteTotal() {
 		try {
+			filter.setTime("Minutes");
+			
 			CPMGraphConstructor cpmConstructor = new CPMGraphConstructor(filter);
 
 			ObservableList<XYChart.Data<Date, Number>> data = cpmConstructor.fetchGraph().getData();
@@ -39,6 +41,8 @@ public class CPMDataTest extends TestCase {
 	@Test
 	public void testFirstHourTotal() {
 		try {
+			filter.setTime("Hours");
+			
 			CPMGraphConstructor cpmConstructor = new CPMGraphConstructor(filter);
 
 			ObservableList<XYChart.Data<Date, Number>> data = cpmConstructor.fetchGraph().getData();
@@ -52,6 +56,8 @@ public class CPMDataTest extends TestCase {
 	@Test
 	public void testFirstDayTotal() {
 		try {
+			filter.setTime("Days");
+			
 			CPMGraphConstructor cpmConstructor = new CPMGraphConstructor(filter);
 
 			ObservableList<XYChart.Data<Date, Number>> data = cpmConstructor.fetchGraph().getData();
@@ -65,6 +71,8 @@ public class CPMDataTest extends TestCase {
 	@Test
 	public void testFirstWeekTotal() {
 		try {
+			filter.setTime("Weeks");
+			
 			CPMGraphConstructor cpmConstructor = new CPMGraphConstructor(filter);
 
 			ObservableList<XYChart.Data<Date, Number>> data = cpmConstructor.fetchGraph().getData();

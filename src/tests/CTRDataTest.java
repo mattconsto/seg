@@ -26,6 +26,8 @@ public class CTRDataTest extends TestCase {
 	@Test
 	public void testFirstMinuteTotal() {
 		try {
+			filter.setTime("Minutes");
+			
 			CTRGraphConstructor ctrConstructor = new CTRGraphConstructor(filter);
 
 			ObservableList<XYChart.Data<Date, Number>> data = ctrConstructor.fetchGraph().getData();
@@ -39,6 +41,8 @@ public class CTRDataTest extends TestCase {
 	@Test
 	public void testFirstHourTotal() {
 		try {
+			filter.setTime("Hours");
+			
 			CTRGraphConstructor ctrConstructor = new CTRGraphConstructor(filter);
 
 			ObservableList<XYChart.Data<Date, Number>> data = ctrConstructor.fetchGraph().getData();
@@ -52,6 +56,8 @@ public class CTRDataTest extends TestCase {
 	@Test
 	public void testFirstDayTotal() {
 		try {
+			filter.setTime("Days");
+			
 			CTRGraphConstructor ctrConstructor = new CTRGraphConstructor(filter);
 
 			ObservableList<XYChart.Data<Date, Number>> data = ctrConstructor.fetchGraph().getData();
@@ -65,6 +71,8 @@ public class CTRDataTest extends TestCase {
 	@Test
 	public void testFirstWeekTotal() {
 		try {
+			filter.setTime("Weeks");
+			
 			CTRGraphConstructor ctrConstructor = new CTRGraphConstructor(filter);
 
 			ObservableList<XYChart.Data<Date, Number>> data = ctrConstructor.fetchGraph().getData();

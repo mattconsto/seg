@@ -26,6 +26,8 @@ public class CPCDataTest extends TestCase {
 	@Test
 	public void testFirstMinuteTotal() {
 		try {
+			filter.setTime("Minutes");
+			
 			CPCGraphConstructor cpcConstructor = new CPCGraphConstructor(filter);
 
 			ObservableList<XYChart.Data<Date, Number>> data = cpcConstructor.fetchGraph().getData();
@@ -39,6 +41,8 @@ public class CPCDataTest extends TestCase {
 	@Test
 	public void testFirstHourTotal() {
 		try {
+			filter.setTime("Hours");
+			
 			CPCGraphConstructor cpcConstructor = new CPCGraphConstructor(filter);
 
 			ObservableList<XYChart.Data<Date, Number>> data = cpcConstructor.fetchGraph().getData();
@@ -52,6 +56,8 @@ public class CPCDataTest extends TestCase {
 	@Test
 	public void testFirstDayTotal() {
 		try {
+			filter.setTime("Days");
+			
 			CPCGraphConstructor cpcConstructor = new CPCGraphConstructor(filter);
 
 			ObservableList<XYChart.Data<Date, Number>> data = cpcConstructor.fetchGraph().getData();
@@ -65,6 +71,8 @@ public class CPCDataTest extends TestCase {
 	@Test
 	public void testFirstWeekTotal() {
 		try {
+			filter.setTime("Weeks");
+			
 			CPCGraphConstructor cpcConstructor = new CPCGraphConstructor(filter);
 
 			ObservableList<XYChart.Data<Date, Number>> data = cpcConstructor.fetchGraph().getData();

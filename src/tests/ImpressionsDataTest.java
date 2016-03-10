@@ -29,6 +29,8 @@ public class ImpressionsDataTest extends TestCase {
 	@Test
 	public void testFirstMinuteTotal() {
 		try {
+			filter.setTime("Minutes");
+			
 			ImpressionsGraphConstructor impressionsConstructor = new ImpressionsGraphConstructor(filter);
 
 			ObservableList<XYChart.Data<Date, Number>> data = impressionsConstructor.fetchGraph().getData();
@@ -42,6 +44,8 @@ public class ImpressionsDataTest extends TestCase {
 	@Test
 	public void testFirstHourTotal() {
 		try {
+			filter.setTime("Hours");
+			
 			ImpressionsGraphConstructor impressionsConstructor = new ImpressionsGraphConstructor(filter);
 
 			ObservableList<XYChart.Data<Date, Number>> data = impressionsConstructor.fetchGraph().getData();
@@ -55,6 +59,8 @@ public class ImpressionsDataTest extends TestCase {
 	@Test
 	public void testFirstDayTotal() {
 		try {
+			filter.setTime("Days");
+			
 			ImpressionsGraphConstructor impressionsConstructor = new ImpressionsGraphConstructor(filter);
 
 			ObservableList<XYChart.Data<Date, Number>> data = impressionsConstructor.fetchGraph().getData();
@@ -68,6 +74,8 @@ public class ImpressionsDataTest extends TestCase {
 	@Test
 	public void testFirstWeekTotal() {
 		try {
+			filter.setTime("Weeks");
+			
 			ImpressionsGraphConstructor impressionsConstructor = new ImpressionsGraphConstructor(filter);
 
 			ObservableList<XYChart.Data<Date, Number>> data = impressionsConstructor.fetchGraph().getData();

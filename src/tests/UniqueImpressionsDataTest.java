@@ -26,6 +26,8 @@ public class UniqueImpressionsDataTest extends TestCase {
 	@Test
 	public void testFirstMinuteTotal() {
 		try {
+			filter.setTime("Minutes");
+			
 			UniqueImpressionsGraphConstructor impressionsConstructor = new UniqueImpressionsGraphConstructor(filter);
 
 			ObservableList<XYChart.Data<Date, Number>> data = impressionsConstructor.fetchGraph().getData();
@@ -39,6 +41,8 @@ public class UniqueImpressionsDataTest extends TestCase {
 	@Test
 	public void testFirstHourTotal() {
 		try {
+			filter.setTime("Hours");
+			
 			UniqueImpressionsGraphConstructor impressionsConstructor = new UniqueImpressionsGraphConstructor(filter);
 
 			ObservableList<XYChart.Data<Date, Number>> data = impressionsConstructor.fetchGraph().getData();
@@ -52,6 +56,8 @@ public class UniqueImpressionsDataTest extends TestCase {
 	@Test
 	public void testFirstDayTotal() {
 		try {
+			filter.setTime("Days");
+			
 			UniqueImpressionsGraphConstructor impressionsConstructor = new UniqueImpressionsGraphConstructor(filter);
 
 			ObservableList<XYChart.Data<Date, Number>> data = impressionsConstructor.fetchGraph().getData();
@@ -65,6 +71,8 @@ public class UniqueImpressionsDataTest extends TestCase {
 	@Test
 	public void testFirstWeekTotal() {
 		try {
+			filter.setTime("Weeks");
+			
 			UniqueImpressionsGraphConstructor impressionsConstructor = new UniqueImpressionsGraphConstructor(filter);
 
 			ObservableList<XYChart.Data<Date, Number>> data = impressionsConstructor.fetchGraph().getData();

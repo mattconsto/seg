@@ -26,6 +26,8 @@ public class CPADataTest extends TestCase {
 	@Test
 	public void testFirstMinuteTotal() {
 		try {
+			filter.setTime("Minutes");
+			
 			CPAGraphConstructor cpaConstructor = new CPAGraphConstructor(filter);
 
 			ObservableList<XYChart.Data<Date, Number>> data = cpaConstructor.fetchGraph().getData();
@@ -39,6 +41,8 @@ public class CPADataTest extends TestCase {
 	@Test
 	public void testFirstHourTotal() {
 		try {
+			filter.setTime("Hours");
+			
 			CPAGraphConstructor cpaConstructor = new CPAGraphConstructor(filter);
 
 			ObservableList<XYChart.Data<Date, Number>> data = cpaConstructor.fetchGraph().getData();
@@ -52,6 +56,8 @@ public class CPADataTest extends TestCase {
 	@Test
 	public void testFirstDayTotal() {
 		try {
+			filter.setTime("Days");
+			
 			CPAGraphConstructor cpaConstructor = new CPAGraphConstructor(filter);
 
 			ObservableList<XYChart.Data<Date, Number>> data = cpaConstructor.fetchGraph().getData();
@@ -65,6 +71,8 @@ public class CPADataTest extends TestCase {
 	@Test
 	public void testFirstWeekTotal() {
 		try {
+			filter.setTime("Weeks");
+			
 			CPAGraphConstructor cpaConstructor = new CPAGraphConstructor(filter);
 
 			ObservableList<XYChart.Data<Date, Number>> data = cpaConstructor.fetchGraph().getData();
