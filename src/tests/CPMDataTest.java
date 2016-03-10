@@ -29,7 +29,7 @@ public class CPMDataTest extends TestCase {
 			CPMGraphConstructor cpmConstructor = new CPMGraphConstructor(filter);
 
 			ObservableList<XYChart.Data<Date, Number>> data = cpmConstructor.fetchGraph().getData();
-			assertEquals(6000, data.get(0).getYValue());
+			assertEquals(6000f, data.get(0).getYValue());
 		} catch (SQLException sqle) {
 			System.err.println(sqle.getMessage());
 			fail("SQL error");
@@ -42,7 +42,7 @@ public class CPMDataTest extends TestCase {
 			CPMGraphConstructor cpmConstructor = new CPMGraphConstructor(filter);
 
 			ObservableList<XYChart.Data<Date, Number>> data = cpmConstructor.fetchGraph().getData();
-			assertEquals(6000, data.get(0).getYValue());
+			assertEquals(6000f, data.get(0).getYValue());
 		} catch (SQLException sqle) {
 			System.err.println(sqle.getMessage());
 			fail("SQL error");
@@ -55,7 +55,7 @@ public class CPMDataTest extends TestCase {
 			CPMGraphConstructor cpmConstructor = new CPMGraphConstructor(filter);
 
 			ObservableList<XYChart.Data<Date, Number>> data = cpmConstructor.fetchGraph().getData();
-			assertEquals(6000, data.get(0).getYValue());
+			assertEquals(6000f, data.get(0).getYValue());
 		} catch (SQLException sqle) {
 			System.err.println(sqle.getMessage());
 			fail("SQL error");
@@ -68,7 +68,7 @@ public class CPMDataTest extends TestCase {
 			CPMGraphConstructor cpmConstructor = new CPMGraphConstructor(filter);
 
 			ObservableList<XYChart.Data<Date, Number>> data = cpmConstructor.fetchGraph().getData();
-			assertEquals(6000, data.get(0).getYValue());
+			assertEquals(6000f, data.get(0).getYValue());
 		} catch (SQLException sqle) {
 			System.err.println(sqle.getMessage());
 			fail("SQL error");
@@ -82,13 +82,13 @@ public class CPMDataTest extends TestCase {
 			CPMGraphConstructor cpmConstructor = new CPMGraphConstructor(filter);
 
 			ObservableList<XYChart.Data<Date, Number>> data = cpmConstructor.fetchGraph().getData();
-			assertEquals(6000, data.get(0).getYValue());
+			assertEquals(6000f, data.get(0).getYValue());
 
 			filter.setGender(FXCollections.observableArrayList("Male"));
 			cpmConstructor = new CPMGraphConstructor(filter);
 
 			data = cpmConstructor.fetchGraph().getData();
-			assertEquals(6000, data.get(0).getYValue());
+			assertEquals(6000f, data.get(0).getYValue());
 		} catch (SQLException sqle) {
 			System.err.println(sqle.getMessage());
 			fail("SQL error");
@@ -102,31 +102,31 @@ public class CPMDataTest extends TestCase {
 			CPMGraphConstructor cpmConstructor = new CPMGraphConstructor(filter);
 
 			ObservableList<XYChart.Data<Date, Number>> data = cpmConstructor.fetchGraph().getData();
-			assertEquals(6000, data.get(0).getYValue());
+			assertEquals(6000f, data.get(0).getYValue());
 
 			filter.setAge(FXCollections.observableArrayList("25 to 34"));
 			cpmConstructor = new CPMGraphConstructor(filter);
 
 			data = cpmConstructor.fetchGraph().getData();
-			assertEquals(6000, data.get(0).getYValue());
+			assertEquals(6000f, data.get(0).getYValue());
 
 			filter.setAge(FXCollections.observableArrayList("35 to 44"));
 			cpmConstructor = new CPMGraphConstructor(filter);
 
 			data = cpmConstructor.fetchGraph().getData();
-			assertEquals(6000, data.get(0).getYValue());
+			assertEquals(6000f, data.get(0).getYValue());
 
 			filter.setAge(FXCollections.observableArrayList("45 to 54"));
 			cpmConstructor = new CPMGraphConstructor(filter);
 
 			data = cpmConstructor.fetchGraph().getData();
-			assertEquals(6000, data.get(0).getYValue());
+			assertEquals(6000f, data.get(0).getYValue());
 
 			filter.setAge(FXCollections.observableArrayList("Greater than 55"));
 			cpmConstructor = new CPMGraphConstructor(filter);
 
 			data = cpmConstructor.fetchGraph().getData();
-			assertEquals(6000, data.get(0).getYValue());
+			assertEquals(6000f, data.get(0).getYValue());
 		} catch (SQLException sqle) {
 			System.err.println(sqle.getMessage());
 			fail("SQL error");
@@ -140,19 +140,19 @@ public class CPMDataTest extends TestCase {
 			CPMGraphConstructor cpmConstructor = new CPMGraphConstructor(filter);
 
 			ObservableList<XYChart.Data<Date, Number>> data = cpmConstructor.fetchGraph().getData();
-			assertEquals(6000, data.get(0).getYValue());
+			assertEquals(6000f, data.get(0).getYValue());
 
 			filter.setIncome(FXCollections.observableArrayList("Medium"));
 			cpmConstructor = new CPMGraphConstructor(filter);
 
 			data = cpmConstructor.fetchGraph().getData();
-			assertEquals(6000, data.get(0).getYValue());
+			assertEquals(6000f, data.get(0).getYValue());
 
 			filter.setIncome(FXCollections.observableArrayList("High"));
 			cpmConstructor = new CPMGraphConstructor(filter);
 
 			data = cpmConstructor.fetchGraph().getData();
-			assertEquals(6000, data.get(0).getYValue());
+			assertEquals(6000f, data.get(0).getYValue());
 		} catch (SQLException sqle) {
 			System.err.println(sqle.getMessage());
 			fail("SQL error");
@@ -166,37 +166,37 @@ public class CPMDataTest extends TestCase {
 			CPMGraphConstructor cpmConstructor = new CPMGraphConstructor(filter);
 
 			ObservableList<XYChart.Data<Date, Number>> data = cpmConstructor.fetchGraph().getData();
-			assertEquals(6000, data.get(0).getYValue());
+			assertEquals(6000f, data.get(0).getYValue());
 
 			filter.setContext(FXCollections.observableArrayList("Shopping"));
 			cpmConstructor = new CPMGraphConstructor(filter);
 
 			data = cpmConstructor.fetchGraph().getData();
-			assertEquals(6000, data.get(0).getYValue());
+			assertEquals(6000f, data.get(0).getYValue());
 
 			filter.setContext(FXCollections.observableArrayList("Social Media"));
 			cpmConstructor = new CPMGraphConstructor(filter);
 
 			data = cpmConstructor.fetchGraph().getData();
-			assertEquals(6000, data.get(0).getYValue());
+			assertEquals(6000f, data.get(0).getYValue());
 
 			filter.setContext(FXCollections.observableArrayList("Blog"));
 			cpmConstructor = new CPMGraphConstructor(filter);
 
 			data = cpmConstructor.fetchGraph().getData();
-			assertEquals(6000, data.get(0).getYValue());
+			assertEquals(6000f, data.get(0).getYValue());
 
 			filter.setContext(FXCollections.observableArrayList("Hobbies"));
 			cpmConstructor = new CPMGraphConstructor(filter);
 
 			data = cpmConstructor.fetchGraph().getData();
-			assertEquals(6000, data.get(0).getYValue());
+			assertEquals(6000f, data.get(0).getYValue());
 
 			filter.setContext(FXCollections.observableArrayList("Travel"));
 			cpmConstructor = new CPMGraphConstructor(filter);
 
 			data = cpmConstructor.fetchGraph().getData();
-			assertEquals(6000, data.get(0).getYValue());
+			assertEquals(6000f, data.get(0).getYValue());
 		} catch (SQLException sqle) {
 			System.err.println(sqle.getMessage());
 			fail("SQL error");
