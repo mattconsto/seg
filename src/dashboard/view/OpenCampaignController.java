@@ -56,6 +56,13 @@ public class OpenCampaignController extends AnchorPane {
 			if(file.isFile() && file.getName().toLowerCase().endsWith(".db"))
 				selectCampaign.getItems().add(file.getName().replace(".db", ""));
 		}
+		
+		if(selectCampaign.getItems().size() > 0) {
+			selectCampaign.setValue(selectCampaign.getItems().get(0));
+		} else {
+			selectCampaign.setDisable(true);
+			openButton.setDisable(true);
+		}
 	}
 
 	@FXML

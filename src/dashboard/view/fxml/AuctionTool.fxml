@@ -19,24 +19,24 @@
 <AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" id="AnchorPane" styleClass="background" stylesheets="@AuctionTool.css" fx:controller="dashboard.view.AuctionController">
 	<MenuBar fx:id="menu" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
 		<Menu text="File">
-			<MenuItem fx:id="importCampaign" onAction="#importCampaignAction" text="Import Campaign" />
+			<MenuItem fx:id="importCampaign" onAction="#importCampaignAction" text="Import Campaign" disable="true" />
 			<MenuItem fx:id="openCampaign" onAction="#openCampaignAction" text="Open Campaign" />
-			<MenuItem fx:id="deleteCampaign" text="Delete Campaign" />
-			<MenuItem fx:id="exportCampaign" text="Export Campaign" />
-			<MenuItem fx:id="printCampaign" text="Print" />
+			<MenuItem fx:id="deleteCampaign" text="Delete Campaign" disable="true" />
+			<MenuItem fx:id="exportCampaign" text="Export Campaign" disable="true" />
+			<MenuItem fx:id="printCampaign" text="Print" disable="true" />
 			<MenuItem fx:id="close" onAction="#closeAction" text="Close" />
 		</Menu>
 		<Menu text="Preferences">
-			<MenuItem fx:id="mnuColour" text="Colour Scheme" />
-			<MenuItem fx:id="mnuFont" text="Font Size" />
-			<MenuItem fx:id="mnuPaths" text="Paths" />
-			<MenuItem fx:id="mnuUnits" text="Units" />
+			<MenuItem fx:id="mnuColour" text="Colour Scheme" disable="true" />
+			<MenuItem fx:id="mnuFont" text="Font Size" disable="true" />
+			<MenuItem fx:id="mnuPaths" text="Paths" disable="true" />
+			<MenuItem fx:id="mnuUnits" text="Units" disable="true" />
 		</Menu>
 		<Menu text="Help">
-			<MenuItem fx:id="mnuDefinitions" text="Definitions" />
-			<MenuItem fx:id="mnuSearch" text="Search" />
-			<MenuItem fx:id="mnuList" text="List" />
-			<MenuItem fx:id="mnuAbout" text="About" />
+			<MenuItem fx:id="mnuDefinitions" text="Definitions" disable="true" />
+			<MenuItem fx:id="mnuSearch" text="Search" disable="true" />
+			<MenuItem fx:id="mnuList" text="List" disable="true" />
+			<MenuItem fx:id="mnuAbout" text="About" disable="true" />
 		</Menu>
 	</MenuBar>
 	<SplitPane dividerPositions="0.17" layoutX="2.5" layoutY="5.5" prefHeight="879.0" prefWidth="1278.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="32.0">
@@ -97,7 +97,7 @@
 			<TextField fx:id="txtBouncePages" layoutX="130.0" layoutY="389.0" prefHeight="25.0" prefWidth="78.0" AnchorPane.leftAnchor="130.0" AnchorPane.rightAnchor="10.0" Text="1" />
 			<Separator layoutY="323.0" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
 			<Label layoutX="10.0" layoutY="334.0" text="Bounce criteria:" AnchorPane.leftAnchor="10.0" />
-			<RadioButton fx:id="rbByBounceTime" layoutX="10.0" layoutY="358.0" selected="true" text="Time /s:" AnchorPane.leftAnchor="10.0">
+			<RadioButton fx:id="rbByBounceTime" layoutX="10.0" layoutY="358.0" selected="true" text="Time / s:" AnchorPane.leftAnchor="10.0">
 				<toggleGroup>
 					<ToggleGroup fx:id="grBounce" />
 				</toggleGroup>

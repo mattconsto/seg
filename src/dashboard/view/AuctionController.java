@@ -22,6 +22,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import dashboard.controller.*;
 import dashboard.model.*;
+
 import java.util.List;
 import java.util.prefs.Preferences;
 /**
@@ -165,9 +166,6 @@ public class AuctionController extends AnchorPane {
 				bounceFilter.setPageLimit(Integer.parseInt(txtBouncePages.getText()));
 			}catch(NumberFormatException nfe){}
 		}
-		 
-		lineChart.getXAxis().setLabel(filterTime.getValue());  
-		lineChart.getYAxis().setLabel(filterMetrics.getValue());
 
 		updateGraph(filterMetrics.getValue());
 		
@@ -178,13 +176,13 @@ public class AuctionController extends AnchorPane {
 	
 	@FXML
 	private void clearData(ActionEvent event) {
+		updaterRunnable.stop();
 		lineChart.getData().clear();
 		tableMetrics.clear();
 		lineChart.getXAxis().setTickLabelsVisible(false);
 	}
 
 	private void updateGraph(String metric) {
-		lineChart.getYAxis().setLabel("Number");
 		GraphConstructor constructor;
 
 		switch(metric) {
@@ -208,7 +206,7 @@ public class AuctionController extends AnchorPane {
 		
 		try {
 			Series<Date, Number> data = constructor.fetchGraph();
-			data.setName(metric + " " + filter);
+			data.setName((metric + " " + filter + " / " + filterTime.getValue().replaceFirst("s$", "")).replaceAll("  ", " "));
 			lineChart.getData().add(data);
 			lineChart.getXAxis().setTickLabelsVisible(true);
 		} catch (SQLException e) {
