@@ -23,7 +23,6 @@ import javafx.stage.FileChooser;
 import dashboard.controller.*;
 import dashboard.model.*;
 
-import java.util.List;
 import java.util.prefs.Preferences;
 /**
  * Auction Controller.
@@ -132,19 +131,16 @@ public class AuctionController extends AnchorPane {
 		resultCol.setCellValueFactory(new PropertyValueFactory<>("result"));
 		tableResults.setItems(tableMetrics);
 		tableResults.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-		tableResults.getSelectionModel().getSelectedItems().addListener(
-			(ListChangeListener.Change<? extends ObservableMetrics> c) -> {
-				List <ObservableMetrics> s1 =  tableResults.getSelectionModel().getSelectedItems();
-				if(s1 != null) for(ObservableMetrics metric : s1) updateGraph(metric.getDescription());
-		});
 	}
 	
 	@FXML private void importCampaignAction(ActionEvent event) {
+		updaterRunnable.stop();
 		application.start(application.getStage());
 	}
 
 	@FXML
 	private void closeAction(ActionEvent event) {
+		updaterRunnable.stop();
 		DatabaseConnection.closeConnection();
 		application.getStage().close();
 	}
