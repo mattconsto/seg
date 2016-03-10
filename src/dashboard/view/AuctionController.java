@@ -4,6 +4,7 @@ import java.io.File;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 
 import org.controlsfx.control.CheckComboBox;
 
@@ -131,16 +132,21 @@ public class AuctionController extends AnchorPane {
 		resultCol.setCellValueFactory(new PropertyValueFactory<>("result"));
 		tableResults.setItems(tableMetrics);
 		tableResults.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+		tableResults.getSelectionModel().getSelectedItems().addListener(
+			(ListChangeListener.Change<? extends ObservableMetrics> c) -> {
+				List <ObservableMetrics> s1 =  tableResults.getSelectionModel().getSelectedItems();
+				if(s1 != null) for(ObservableMetrics metric : s1) updateGraph(metric.getDescription());
+		});
 	}
 	
 	@FXML private void importCampaignAction(ActionEvent event) {
-		updaterRunnable.stop();
+		if(updaterRunnable != null) updaterRunnable.stop();
 		application.start(application.getStage());
 	}
 
 	@FXML
 	private void closeAction(ActionEvent event) {
-		updaterRunnable.stop();
+		if(updaterRunnable != null) updaterRunnable.stop();
 		DatabaseConnection.closeConnection();
 		application.getStage().close();
 	}
