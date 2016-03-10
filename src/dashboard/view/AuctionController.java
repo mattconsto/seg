@@ -139,7 +139,9 @@ public class AuctionController extends AnchorPane {
 		});
 	}
 	
-	@FXML private void importCampaignAction(ActionEvent event) {}
+	@FXML private void importCampaignAction(ActionEvent event) {
+		application.start(application.getStage());
+	}
 
 	@FXML
 	private void closeAction(ActionEvent event) {

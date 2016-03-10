@@ -19,9 +19,7 @@
 <AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" id="AnchorPane" styleClass="background" stylesheets="@AuctionTool.css" fx:controller="dashboard.view.AuctionController">
 	<MenuBar fx:id="menu" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
 		<Menu text="File">
-			<MenuItem fx:id="importCampaign" onAction="#importCampaignAction" text="Import Campaign" disable="true" />
-			<MenuItem fx:id="openCampaign" onAction="#openCampaignAction" text="Open Campaign" />
-			<MenuItem fx:id="deleteCampaign" text="Delete Campaign" disable="true" />
+			<MenuItem fx:id="importCampaign" onAction="#importCampaignAction" text="Manage Campaign(s)" />
 			<MenuItem fx:id="exportCampaign" text="Export Campaign" disable="true" />
 			<MenuItem fx:id="printCampaign" text="Print" disable="true" />
 			<MenuItem fx:id="close" onAction="#closeAction" text="Close" />
