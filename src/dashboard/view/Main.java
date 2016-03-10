@@ -28,7 +28,7 @@ public class Main extends Application {
 		// Setup our stage
 		stage = primaryStage;
 		
-		stage.setTitle(preferences.get("ProductName", "Ad Auction Dashboard"));
+		stage.setTitle(preferences.get("ProductName", "Ad Auction Dashboard"));
 		
 		for (int size : new int[] {512, 256, 128, 64, 48, 32, 16})
 			stage.getIcons().add(
@@ -47,7 +47,7 @@ public class Main extends Application {
 			}
 			stage.setResizable(false);
 			stage.setWidth(600);
-			stage.setHeight(650);
+			stage.setHeight(600);
 			
 			if(preferences.getDouble("OpenCampaign_PositionX", -1) != -1) {
 				stage.setX(preferences.getDouble("OpenCampaign_PositionX", -1));

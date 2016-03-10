@@ -4,22 +4,24 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import javafx.collections.ObservableList;
+import dashboard.model.BounceFilter;
 import dashboard.model.DatabaseConnection;
 import dashboard.model.Filter;
 import dashboard.model.ObservableMetrics;
-import javafx.collections.ObservableList;
 import javafx.scene.control.TableView;
 
 public class MetricsUpdater implements Runnable {
 	private ObservableList<ObservableMetrics> table;
 	private Filter                            filter;
+	private BounceFilter bounceFilter;
 	private boolean                           running = false;
         private TableView<ObservableMetrics>      tableResults;
 	
-	public MetricsUpdater(ObservableList<ObservableMetrics> table, Filter filter, TableView<ObservableMetrics> tableResults) {
+	public MetricsUpdater(ObservableList<ObservableMetrics> table, Filter filter, BounceFilter bounceFilter) {
 		this.table  = table;
 		this.filter = filter;
-                this.tableResults = tableResults;
+		this.bounceFilter = bounceFilter;
 	}
 
 	@Override
@@ -45,7 +47,7 @@ public class MetricsUpdater implements Runnable {
 				+ "(SELECT IMPRESSIONS.*, SERVER.* FROM IMPRESSIONS "
 				+ "INNER JOIN SERVER ON IMPRESSIONS.ID=SERVER.ID "
 				+ "GROUP BY SERVER.ENTRYDATE, SERVER.ID) AS SUBQUERY "
-				+ "WHERE PAGES = 1 AND " + filter.getSql() + ";");
+				+ "WHERE "+ bounceFilter.getSQL() +" AND " + filter.getSql() + ";");
 
 		if (results.next()) table.add(new ObservableMetrics("Bounces",results.getString(1)));
 		
@@ -226,7 +228,7 @@ public class MetricsUpdater implements Runnable {
 				+ "(SELECT IMPRESSIONS.*, SERVER.* FROM IMPRESSIONS "
 				+ "INNER JOIN SERVER ON IMPRESSIONS.ID=SERVER.ID "
 				+ "GROUP BY SERVER.ENTRYDATE, SERVER.ID) AS SUBQUERY "
-				+ "WHERE PAGES=1 AND "+ filter.getSql().replace("DATE", "ENTRYDATE")
+				+ "WHERE "+bounceFilter.getSQL()+" AND "+ filter.getSql().replace("DATE", "ENTRYDATE")
 				+ " GROUP BY strftime('" + filter.timeFormatSQL +"', ENTRYDATE)) "
 				+ "ON DATE=CLICKDATE GROUP BY DATE");
 		

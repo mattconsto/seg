@@ -100,7 +100,7 @@ public class AuctionController extends AnchorPane {
 		configureTable();  
 		configureFilters();
 
-		application.getStage().setTitle(preferences.get("ProductName", "Ad Auction Dashboard") + " - " + DatabaseConnection.getDbfile().replace(".db", ""));
+		application.getStage().setTitle(preferences.get("ProductName", "Ad Auction Dashboard") + " - " + DatabaseConnection.getDbfile().replace(".db", ""));
 		generateGraph.setDisable(false);
 		
 		rbByBounceTime.setUserData("timeBounce");
@@ -139,7 +139,9 @@ public class AuctionController extends AnchorPane {
 		});
 	}
 	
-	@FXML private void importCampaignAction(ActionEvent event) {}
+	@FXML private void importCampaignAction(ActionEvent event) {
+		application.start(application.getStage());
+	}
 
 	@FXML
 	private void closeAction(ActionEvent event) {
@@ -170,7 +172,7 @@ public class AuctionController extends AnchorPane {
 		updateGraph(filterMetrics.getValue());
 		
 		// Cheap and nasty threading
-		updaterRunnable = new MetricsUpdater(tableMetrics, filter, tableResults);
+		updaterRunnable = new MetricsUpdater(tableMetrics, filter, bounceFilter);
 		new Thread(updaterRunnable).start();
 	}
 	

@@ -8,22 +8,30 @@
 <?import javafx.scene.layout.*?>
 
 <AnchorPane styleClass="background" stylesheets="@AuctionTool.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dashboard.view.OpenCampaignController">
-	 <AnchorPane layoutY="341.0" prefHeight="58.0" prefWidth="607.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="559.0">
-		 <Button fx:id="openButton" layoutX="450.0" layoutY="14.0" mnemonicParsing="false" onAction="#openAction" prefHeight="37.0" prefWidth="147.0" text="Open" AnchorPane.leftAnchor="450.0" AnchorPane.rightAnchor="10.0" />
-		 <ComboBox fx:id="selectCampaign" layoutX="10.0" layoutY="14.0" onAction="#selectCampaignAction" prefHeight="37.0" prefWidth="427.0" promptText="Select Campaign" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="170.0" />
-	 </AnchorPane>
-	 <AnchorPane fx:id="createPane" layoutY="420.0" prefHeight="220.0" prefWidth="607.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="341.0">
-		 <Button fx:id="browseButton" layoutX="458.0" layoutY="54.0" mnemonicParsing="false" onAction="#browseAction" prefHeight="37.0" prefWidth="147.0" text="Browse" AnchorPane.leftAnchor="450.0" AnchorPane.rightAnchor="10.0" />
-		 <TextField fx:id="folder" disable="true" layoutX="31.0" layoutY="54.0" prefHeight="37.0" prefWidth="436.0" promptText="Folder to import" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="170.0" />
-		 <ProgressBar fx:id="p" layoutX="10.0" layoutY="157.0" prefHeight="15.0" prefWidth="580.0" progress="0.0" visible="false" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
-		 <TextField fx:id="enterName" layoutX="10.0" layoutY="101.0" prefHeight="37.0" prefWidth="587.0" promptText="Enter name for campaign" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
-		 <Separator layoutY="198.0" prefHeight="25.0" prefWidth="289.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="318.0" />
-		 <Button fx:id="importButton" layoutX="10.0" layoutY="147.0" mnemonicParsing="false" onAction="#importAction" prefHeight="37.0" prefWidth="587.0" text="Import" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
-		 <Separator layoutX="331.0" layoutY="198.0" prefHeight="25.0" prefWidth="289.0" AnchorPane.rightAnchor="0.0" />
-		 <Label layoutX="295.0" layoutY="201.0" text="OR" />
-	 </AnchorPane>
-	 <ImageView fitHeight="349.0" fitWidth="628.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-21.0" AnchorPane.topAnchor="0.0">
-		 <Image url="@../../../images/dashboardpic.jpg" />
-	 </ImageView>
-	 <Separator layoutY="363.0" prefHeight="25.0" prefWidth="607.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+	<children>
+		 <AnchorPane layoutY="507.0" prefHeight="64.0" prefWidth="607.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="507.0">
+   <children>
+   			 <Button fx:id="openButton" layoutX="450.0" layoutY="14.0" mnemonicParsing="false" onAction="#openAction" prefHeight="37.0" prefWidth="147.0" text="Open" AnchorPane.leftAnchor="450.0" AnchorPane.rightAnchor="10.0" />
+   			 <ComboBox fx:id="selectCampaign" layoutX="10.0" layoutY="14.0" onAction="#selectCampaignAction" prefHeight="37.0" prefWidth="427.0" promptText="Select Campaign" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="170.0" />
+   </children>
+		 </AnchorPane>
+		 <AnchorPane fx:id="createPane" layoutY="420.0" prefHeight="123.0" prefWidth="607.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="341.0">
+   <children>
+   			 <Button fx:id="browseButton" layoutX="458.0" layoutY="54.0" mnemonicParsing="false" onAction="#browseAction" prefHeight="37.0" prefWidth="147.0" text="Browse" AnchorPane.leftAnchor="450.0" AnchorPane.rightAnchor="10.0" />
+   			 <TextField fx:id="folder" disable="true" layoutX="31.0" layoutY="54.0" prefHeight="37.0" prefWidth="436.0" promptText="Folder to import" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="170.0" />
+   			 <ProgressBar fx:id="p" layoutX="10.0" layoutY="1.0" prefHeight="15.0" prefWidth="580.0" progress="0.0" visible="false" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+   			 <TextField fx:id="enterName" layoutX="10.0" layoutY="101.0" prefHeight="37.0" prefWidth="427.0" promptText="Enter name for campaign" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="170.0" />
+   			 <Separator layoutY="145.0" prefHeight="25.0" prefWidth="289.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="318.0" />
+   			 <Button fx:id="importButton" layoutX="450.0" layoutY="101.0" mnemonicParsing="false" onAction="#importAction" prefHeight="37.0" prefWidth="147.0" text="Import" AnchorPane.leftAnchor="450.0" AnchorPane.rightAnchor="10.0" />
+      			 <Separator layoutX="317.0" layoutY="145.0" prefHeight="25.0" prefWidth="289.0" AnchorPane.rightAnchor="1.0" />
+   			 <Label layoutX="280.0" layoutY="146.0" text="OR" />
+   </children>
+		 </AnchorPane>
+		 <ImageView fitHeight="342.0" fitWidth="619.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-12.0" AnchorPane.topAnchor="0.0">
+		<image>
+			<Image url="@../../../images/dashboardpic.jpg" />
+		</image>
+		 </ImageView>
+		 <Separator layoutY="363.0" prefHeight="25.0" prefWidth="607.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+	</children>
 </AnchorPane>
