@@ -100,16 +100,16 @@
 						<Label layoutX="10.0" layoutY="265.0" prefHeight="17.0" prefWidth="87.0" text="Date to:" AnchorPane.leftAnchor="10.0" />
 						<DatePicker fx:id="filterDateFrom" layoutX="100.0" layoutY="217.0" prefHeight="31.0" prefWidth="94.0" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="10.0" />
 						<DatePicker fx:id="filterDateTo" layoutX="100.0" layoutY="258.0" prefHeight="31.0" prefWidth="91.0" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="10.0" />
-						<TextField fx:id="txtBounceTime" Text="-" layoutX="130.0" layoutY="330.0" prefHeight="25.0" prefWidth="79.0" AnchorPane.leftAnchor="130.0" AnchorPane.rightAnchor="10.0" />
+						<TextField fx:id="txtBounceTime" Text="10" layoutX="130.0" layoutY="330.0" prefHeight="25.0" prefWidth="79.0" AnchorPane.leftAnchor="130.0" AnchorPane.rightAnchor="10.0" />
 						<TextField fx:id="txtBouncePages" Text="1" layoutX="130.0" layoutY="365.0" prefHeight="25.0" prefWidth="78.0" AnchorPane.leftAnchor="130.0" AnchorPane.rightAnchor="10.0" />
 						<Separator layoutY="299.0" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
 						<Label layoutX="10.0" layoutY="310.0" text="Bounce criteria:" AnchorPane.leftAnchor="10.0" />
-						<RadioButton fx:id="rbByBounceTime" layoutX="10.0" layoutY="334.0" selected="true" text="Time / s:" AnchorPane.leftAnchor="10.0">
+						<RadioButton fx:id="rbByBounceTime" layoutX="10.0" layoutY="334.0" text="Time / s:" AnchorPane.leftAnchor="10.0">
 							<toggleGroup>
 								<ToggleGroup fx:id="grBounce" />
 							</toggleGroup>
 						</RadioButton>
-						<RadioButton fx:id="rbByBouncePages" layoutX="10.0" layoutY="369.0" text="№ Pages:" toggleGroup="$grBounce" AnchorPane.leftAnchor="10.0" />
+						<RadioButton fx:id="rbByBouncePages" layoutX="10.0" layoutY="369.0" selected="true" text="№ Pages:" toggleGroup="$grBounce" AnchorPane.leftAnchor="10.0" />
 						<TableView fx:id="tableResults" layoutY="469.0" prefHeight="408.0" prefWidth="225.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="469.0">
 							<columns>
 								<TableColumn fx:id="metricCol" text="Metric" />
