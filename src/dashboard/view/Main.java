@@ -4,9 +4,9 @@ import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.io.IOException;
+import java.util.prefs.Preferences;
 
 import javafx.application.Application;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.JavaFXBuilderFactory;
 import javafx.scene.Node;
@@ -14,8 +14,7 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
-import dashboard.Preferences;
+import dashboard.Config;
 import dashboard.model.DatabaseConnection;
 
 /**
@@ -27,19 +26,14 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		// Setup our stage
-		 
 		stage = primaryStage;
-		stage.setTitle(Preferences.productName);
+		stage.setTitle(Config.productName);
 		
 		for (int size : new int[] {512, 256, 128, 64, 48, 32, 16})
 			stage.getIcons().add(
 				new Image(getClass().getResourceAsStream(
 					String.format("/icon%d.png", size))));
 		
-		gotoOpenForm();
-	}
-	
-	private void gotoOpenForm() {
 		try {
 			OpenCampaignController openCampaign;
 			try {
@@ -47,28 +41,40 @@ public class Main extends Application {
 			 
 				openCampaign.setApp(this);
 				openCampaign.init();
-  
 			} catch (IOException ex) {
 				ex.printStackTrace();
 			}
-                        stage.setResizable(false);
-                        stage.setWidth(607 );
-                        stage.setHeight(660 );
-                       	stage.centerOnScreen();
-			stage.show();
-			stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-				public void handle(WindowEvent we) {
-					DatabaseConnection.closeConnection();
-				}
+			stage.setResizable(false);
+			stage.setWidth(600);
+			stage.setHeight(650);
+			
+			Preferences preferences = Preferences.userNodeForPackage(getClass());
+			
+			if(preferences.getDouble("OpenCampaign_PositionX", -1) != -1) {
+				stage.setX(preferences.getDouble("OpenCampaign_PositionX", -1));
+				stage.setY(preferences.getDouble("OpenCampaign_PositionY", -1));
+			} else {
+				stage.centerOnScreen();
+			}
+			
+			stage.setOnCloseRequest(e -> {
+				preferences.putDouble("OpenCampaign_PositionX", stage.getX());
+				preferences.putDouble("OpenCampaign_PositionY", stage.getY());
 			});
+
+			preferences.putDouble("OpenCampaign_PositionX", stage.getX());
+			preferences.putDouble("OpenCampaign_PositionY", stage.getY());
+			
+			stage.show();
+			stage.setOnCloseRequest(e -> DatabaseConnection.closeConnection());
 		} catch (Exception ex) {}
 	}
 		
-		public void gotoMainForm() {
-				// Get the window display scaling, so we can set the correct res.
-			stage.hide();
-		        stage.setResizable(true);
-			AuctionController auctionTool;
+	public void gotoMainForm() {
+		stage.hide();
+		stage.setResizable(true);
+		AuctionController auctionTool;
+		
 		try {
 			auctionTool = (AuctionController) replaceSceneContent("/dashboard/view/fxml/AuctionTool.fxml", stage);
 			auctionTool.setApp(this);
@@ -76,21 +82,42 @@ public class Main extends Application {
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
-		double deviceScaling = Toolkit.getDefaultToolkit().getScreenResolution() / 96.0;
 
-		Rectangle bounds = GraphicsEnvironment
-				.getLocalGraphicsEnvironment()
-				.getMaximumWindowBounds();
-
-		stage.setWidth(Preferences.windowScaling * bounds.getWidth() / deviceScaling);
-		stage.setHeight(Preferences.windowScaling * bounds.getHeight() / deviceScaling);
-		stage.centerOnScreen();
+		Preferences preferences = Preferences.userNodeForPackage(getClass());
+		
+		if(preferences.getDouble("AuctionController_PositionX", -1) != -1) {
+			stage.setWidth(preferences.getDouble("AuctionController_SizeWidth", -1));
+			stage.setHeight(preferences.getDouble("AuctionController_SizeHeight", -1));
+			stage.setX(preferences.getDouble("AuctionController_PositionX", -1));
+			stage.setY(preferences.getDouble("AuctionController_PositionY", -1));
+		} else {
+			double deviceScaling = Toolkit.getDefaultToolkit().getScreenResolution() / 96.0;
+			Rectangle bounds = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
+			stage.setWidth(0.9 * bounds.getWidth() / deviceScaling);
+			stage.setHeight(0.9 * bounds.getHeight() / deviceScaling);
+			stage.centerOnScreen();
+		}
+		
 		stage.show();
-		stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-			public void handle(WindowEvent we) {
-				DatabaseConnection.closeConnection();
+		stage.setOnCloseRequest(e -> {
+			preferences.putDouble("AuctionController_PositionX",  stage.getX());
+			preferences.putDouble("AuctionController_PositionY",  stage.getY());
+			preferences.putDouble("AuctionController_SizeWidth",  stage.getWidth());
+			preferences.putDouble("AuctionController_SizeHeight", stage.getHeight());
+			
+			try {
+				preferences.flush();
+			} catch (Exception ex) {
+				System.err.println("Failed to write settings to file!");
 			}
-		});  
+			
+			DatabaseConnection.closeConnection(); 
+		});
+
+		preferences.putDouble("AuctionController_PositionX",  stage.getX());
+		preferences.putDouble("AuctionController_PositionY",  stage.getY());
+		preferences.putDouble("AuctionController_SizeWidth",  stage.getWidth());
+		preferences.putDouble("AuctionController_SizeHeight", stage.getHeight());
 	}
 		
 	public Stage getStage() {
@@ -101,8 +128,7 @@ public class Main extends Application {
 		FXMLLoader loader = new FXMLLoader();
 		loader.setBuilderFactory(new JavaFXBuilderFactory());
 		loader.setLocation(Main.class.getResource(fxml));
-		AnchorPane page = (AnchorPane) loader.load(Main.class.getResourceAsStream(fxml));
-		stage.setScene(new Scene(page));
+		stage.setScene(new Scene((AnchorPane) loader.load(Main.class.getResourceAsStream(fxml))));
 		return (Node) loader.getController();
 	}
 }

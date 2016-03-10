@@ -3,12 +3,11 @@ package dashboard;
 /**
  * Stores a list of Application Preferences
  */
-public class Preferences {
+public class Config {
 	/**
 	 * Disable instantiation
 	 */
-	private Preferences() {}
+	private Config() {}
 	
 	public static final String productName   = "Ad Auction Dashboard";
-	public static final double windowScaling = 0.9; // % of the screen taken
 }

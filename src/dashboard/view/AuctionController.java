@@ -20,7 +20,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
-import dashboard.Preferences;
+import dashboard.Config;
 import dashboard.controller.*;
 import dashboard.model.*;
 import java.util.List;
@@ -96,7 +96,7 @@ public class AuctionController extends AnchorPane {
 		configureTable();  
 		configureFilters();
 
-		application.getStage().setTitle(Preferences.productName + " - " + DatabaseConnection.getDbfile().replace(".db", ""));
+		application.getStage().setTitle(Config.productName + " - " + DatabaseConnection.getDbfile().replace(".db", ""));
 		generateGraph.setDisable(false);
 		
 		rbByBounceTime.setUserData("timeBounce");
@@ -185,6 +185,7 @@ public class AuctionController extends AnchorPane {
 
 	private void updateGraph(String metric) {
 		lineChart.getYAxis().setLabel("Number");
+		lineChart.getXAxis().setTickLabelsVisible(true);
 		GraphConstructor constructor;
 
 		switch(metric) {
@@ -226,7 +227,7 @@ public class AuctionController extends AnchorPane {
 			DatabaseConnection.closeConnection();
 			DatabaseConnection.setDbfile(s.getPath());
 
-			application.getStage().setTitle(Preferences.productName + " - " + DatabaseConnection.getDbfile().replace(".db", ""));
+			application.getStage().setTitle(Config.productName + " - " + DatabaseConnection.getDbfile().replace(".db", ""));
 			generateGraph.setDisable(false); 
 			generateData(null);
 		}

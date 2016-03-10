@@ -114,7 +114,7 @@
 		</AnchorPane>
 		<LineChart fx:id="lineChart" layoutX="7.0" layoutY="8.0" prefHeight="870.0" prefWidth="607.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
 			<xAxis>
-				<DateAxis side="BOTTOM" />
+				<DateAxis side="BOTTOM" tickLabelsVisible="false" />
 			</xAxis>
 			<yAxis>
 				<NumberAxis side="LEFT" />
