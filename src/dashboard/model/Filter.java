@@ -19,8 +19,8 @@ public class Filter {
 	public boolean ageEnabled = true;
 	public boolean incomeEnabled = true;
 	public boolean contextEnabled = true;
-	public List <String> gender ;
-	public List <String> age ;
+	public List <String> gender;
+	public List <String> age;
 	public List <String> income; 
 	public List <String> context;
 	public LocalDate dateTo;
@@ -32,6 +32,23 @@ public class Filter {
 	public String dateSQL;
 	public String timeFormatSQL = "%Y-%m-%d %H";
 	public String timeFormatJava = "yyyy-MM-dd HH";
+	
+	@Override
+	public String toString() {
+		return String.format(
+			"[%s, %s, %s, %s]", 
+			listToString(gender),
+			listToString(age),
+			listToString(income),
+			listToString(context)
+		);
+	}
+	
+	private String listToString(List<String> list) {
+		     if(list.size() == 0) return "";
+		else if(list.size() == 1) return list.get(0);
+		else                      return "(" + list.stream().skip(1).reduce(list.get(0), (a, b) -> a + "," + b) + ")";
+	}
 
 	public void setTime(String time) {
 		this.timeFormatSQL = time;

@@ -87,7 +87,8 @@
 				</value>
 			</ComboBox>
 			<Label layoutX="11.0" layoutY="211.0" text="Metrics:" AnchorPane.leftAnchor="10.0" />
-			<Button fx:id="generateGraph" disable="true" layoutX="10.0" layoutY="431.0" onAction="#generateData" prefHeight="52.0" prefWidth="196.0" text="Generate" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+			<Button fx:id="generateGraph" disable="true" layoutX="10.0" layoutY="431.0" onAction="#generateData" prefHeight="52.0" prefWidth="196.0" text="Add" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="130.0" />
+			<Button fx:id="clearGraph" layoutX="10.0" layoutY="431.0" onAction="#clearData" prefHeight="52.0" prefWidth="196.0" text="Clear" AnchorPane.leftAnchor="130.0" AnchorPane.rightAnchor="10.0" />
 			<Label layoutX="11.0" layoutY="248.0" prefHeight="17.0" prefWidth="87.0" text="Date from:" AnchorPane.leftAnchor="10.0" />
 			<Label layoutX="11.0" layoutY="289.0" prefHeight="17.0" prefWidth="87.0" text="Date to:" AnchorPane.leftAnchor="10.0" />
 			<DatePicker fx:id="filterDateFrom" layoutX="100.0" layoutY="241.0" prefHeight="31.0" prefWidth="94.0" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="10.0" />

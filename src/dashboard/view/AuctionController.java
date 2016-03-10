@@ -120,31 +120,19 @@ public class AuctionController extends AnchorPane {
 			(ListChangeListener.Change<? extends String> c) -> filter.setContext(filterContext));
 		filterTime.valueProperty().addListener(c -> filter.setTime(filterTime.getValue()));
 	}
-                private final ListChangeListener<ObservableMetrics> tableSelectionChanged =
-			new ListChangeListener<ObservableMetrics>() {
-
-		@Override
-		public void onChanged(ListChangeListener.Change<? extends ObservableMetrics> c) {
-			//do something here
-			
-                        List <ObservableMetrics> s1 =  tableResults.getSelectionModel().getSelectedItems();
-			if(s1 != null)
-                        {
-                            lineChart.getData().clear();
-                            for (ObservableMetrics metric : s1)
-                              updateGraph(metric.getDescription());
-                        }
-		}
-	};
-
+	
 	// Configure the table widget: set up its column, and register the
 	// selection changed listener.
 	private void configureTable() {
 		metricCol.setCellValueFactory(new PropertyValueFactory<>("description"));
 		resultCol.setCellValueFactory(new PropertyValueFactory<>("result"));
 		tableResults.setItems(tableMetrics);
-                tableResults.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-		tableResults.getSelectionModel().getSelectedItems().addListener(tableSelectionChanged);
+		tableResults.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+		tableResults.getSelectionModel().getSelectedItems().addListener(
+			(ListChangeListener.Change<? extends ObservableMetrics> c) -> {
+				List <ObservableMetrics> s1 =  tableResults.getSelectionModel().getSelectedItems();
+				if(s1 != null) for(ObservableMetrics metric : s1) updateGraph(metric.getDescription());
+		});
 	}
 	
 	@FXML private void importCampaignAction(ActionEvent event) {}
@@ -176,11 +164,17 @@ public class AuctionController extends AnchorPane {
 		lineChart.getXAxis().setLabel(filterTime.getValue());  
 		lineChart.getYAxis().setLabel(filterMetrics.getValue());
 
-		lineChart.getData().clear();
 		updateGraph(filterMetrics.getValue());
 		
 		// Cheap and nasty threading
 		new Thread(new MetricsUpdater(tableMetrics, filter)).start();;
+	}
+	
+	@FXML
+	private void clearData(ActionEvent event) {
+		lineChart.getData().clear();
+		tableMetrics.clear();
+		lineChart.getXAxis().setTickLabelsVisible(false);
 	}
 
 	private void updateGraph(String metric) {
@@ -190,18 +184,18 @@ public class AuctionController extends AnchorPane {
 
 		switch(metric) {
 			default:
-			case "Bounces":            constructor = new BounceGraphConstructor(filter, bounceFilter);            break;
-			case "Impressions":        constructor = new ImpressionsGraphConstructor(filter);       break;
-			case "Clicks":             constructor = new ClicksGraphConstructor(filter);            break;
-			case "Unique Impressions": constructor = new UniqueImpressionsGraphConstructor(filter); break;
-			case "Unique Clicks":      constructor = new UniqueClicksGraphConstructor(filter);      break;
-			case "Conversions":        constructor = new ConversionGraphConstructor(filter);        break;
-			case "CPC":                constructor = new CPCGraphConstructor(filter);               break;
-			case "CPA":                constructor = new CPAGraphConstructor(filter);               break;
-			case "CPM":                constructor = new CPMGraphConstructor(filter);               break;
-			case "CTR":                constructor = new CTRGraphConstructor(filter);               break;
-			case "Total Cost":         constructor = new TotalCostGraphConstructor(filter);         break;
-			case "Bounce Rate":        constructor = new BounceRateGraphConstructor(filter, bounceFilter);        break;
+			case "Bounces":            constructor = new BounceGraphConstructor(filter, bounceFilter);     break;
+			case "Impressions":        constructor = new ImpressionsGraphConstructor(filter);              break;
+			case "Clicks":             constructor = new ClicksGraphConstructor(filter);                   break;
+			case "Unique Impressions": constructor = new UniqueImpressionsGraphConstructor(filter);        break;
+			case "Unique Clicks":      constructor = new UniqueClicksGraphConstructor(filter);             break;
+			case "Conversions":        constructor = new ConversionGraphConstructor(filter);               break;
+			case "CPC":                constructor = new CPCGraphConstructor(filter);                      break;
+			case "CPA":                constructor = new CPAGraphConstructor(filter);                      break;
+			case "CPM":                constructor = new CPMGraphConstructor(filter);                      break;
+			case "CTR":                constructor = new CTRGraphConstructor(filter);                      break;
+			case "Total Cost":         constructor = new TotalCostGraphConstructor(filter);                break;
+			case "Bounce Rate":        constructor = new BounceRateGraphConstructor(filter, bounceFilter); break;
 		}
 
 		lineChart.setCreateSymbols(false);
@@ -209,7 +203,7 @@ public class AuctionController extends AnchorPane {
 		
 		try {
 			Series<Date, Number> data = constructor.fetchGraph();
-			data.setName(metric);
+			data.setName(metric + " " + filter);
 			lineChart.getData().add(data);
 		} catch (SQLException e) {
 			System.err.println("Unable to fetch data from database: " + e.getMessage());
