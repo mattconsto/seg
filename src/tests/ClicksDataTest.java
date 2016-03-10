@@ -26,6 +26,8 @@ public class ClicksDataTest extends TestCase {
 	@Test
 	public void testFirstMinuteTotal() {
 		try {
+			filter.setTime("Minutes");
+			
 			ClicksGraphConstructor clicksConstructor = new ClicksGraphConstructor(filter);
 
 			ObservableList<XYChart.Data<Date, Number>> data = clicksConstructor.fetchGraph().getData();
@@ -39,6 +41,8 @@ public class ClicksDataTest extends TestCase {
 	@Test
 	public void testFirstHourTotal() {
 		try {
+			filter.setTime("Hours");
+			
 			ClicksGraphConstructor clicksConstructor = new ClicksGraphConstructor(filter);
 
 			ObservableList<XYChart.Data<Date, Number>> data = clicksConstructor.fetchGraph().getData();
@@ -52,6 +56,8 @@ public class ClicksDataTest extends TestCase {
 	@Test
 	public void testFirstDayTotal() {
 		try {
+			filter.setTime("Days");
+			
 			ClicksGraphConstructor clicksConstructor = new ClicksGraphConstructor(filter);
 
 			ObservableList<XYChart.Data<Date, Number>> data = clicksConstructor.fetchGraph().getData();
@@ -65,6 +71,8 @@ public class ClicksDataTest extends TestCase {
 	@Test
 	public void testFirstWeekTotal() {
 		try {
+			filter.setTime("Weeks");
+			
 			ClicksGraphConstructor clicksConstructor = new ClicksGraphConstructor(filter);
 
 			ObservableList<XYChart.Data<Date, Number>> data = clicksConstructor.fetchGraph().getData();

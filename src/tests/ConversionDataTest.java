@@ -26,6 +26,8 @@ public class ConversionDataTest extends TestCase {
 	@Test
 	public void testFirstMinuteTotal() {
 		try {
+			filter.setTime("Minutes");
+			
 			ConversionGraphConstructor conversionConstructor = new ConversionGraphConstructor(filter);
 
 			ObservableList<XYChart.Data<Date, Number>> data = conversionConstructor.fetchGraph().getData();
@@ -39,6 +41,8 @@ public class ConversionDataTest extends TestCase {
 	@Test
 	public void testFirstHourTotal() {
 		try {
+			filter.setTime("Hours");
+			
 			ConversionGraphConstructor conversionConstructor = new ConversionGraphConstructor(filter);
 
 			ObservableList<XYChart.Data<Date, Number>> data = conversionConstructor.fetchGraph().getData();
@@ -52,6 +56,8 @@ public class ConversionDataTest extends TestCase {
 	@Test
 	public void testFirstDayTotal() {
 		try {
+			filter.setTime("Days");
+			
 			ConversionGraphConstructor conversionConstructor = new ConversionGraphConstructor(filter);
 
 			ObservableList<XYChart.Data<Date, Number>> data = conversionConstructor.fetchGraph().getData();
@@ -65,6 +71,8 @@ public class ConversionDataTest extends TestCase {
 	@Test
 	public void testFirstWeekTotal() {
 		try {
+			filter.setTime("Weeks");
+			
 			ConversionGraphConstructor conversionConstructor = new ConversionGraphConstructor(filter);
 
 			ObservableList<XYChart.Data<Date, Number>> data = conversionConstructor.fetchGraph().getData();
