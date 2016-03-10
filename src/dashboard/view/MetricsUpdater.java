@@ -8,21 +8,25 @@ import dashboard.model.DatabaseConnection;
 import dashboard.model.Filter;
 import dashboard.model.ObservableMetrics;
 import javafx.collections.ObservableList;
+import javafx.scene.control.TableView;
 
 public class MetricsUpdater implements Runnable {
 	private ObservableList<ObservableMetrics> table;
 	private Filter                            filter;
 	private boolean                           running = false;
+        private TableView<ObservableMetrics>      tableResults;
 	
-	public MetricsUpdater(ObservableList<ObservableMetrics> table, Filter filter) {
+	public MetricsUpdater(ObservableList<ObservableMetrics> table, Filter filter, TableView<ObservableMetrics> tableResults) {
 		this.table  = table;
 		this.filter = filter;
+                this.tableResults = tableResults;
 	}
 
 	@Override
 	public void run() {
 		try {
 			running = true;
+                        tableResults.setDisable(true);
 			updateMetricsTable();
 		} catch (SQLException e) {
 			System.err.println("Failed to update");
@@ -31,6 +35,7 @@ public class MetricsUpdater implements Runnable {
 	
 	public void stop() {
 		running = false;
+                tableResults.setDisable(false);
 	}
 	
 	private void updateMetricsTable() throws SQLException {
@@ -228,5 +233,6 @@ public class MetricsUpdater implements Runnable {
 		if (results.next()) table.add(new ObservableMetrics("Bounce Rate",String.format("%.1f%%", results.getInt(2)/results.getFloat(1)*100)));
 		
 		results.close();
+                 tableResults.setDisable(false);
 	}
 }

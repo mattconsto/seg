@@ -170,7 +170,7 @@ public class AuctionController extends AnchorPane {
 		updateGraph(filterMetrics.getValue());
 		
 		// Cheap and nasty threading
-		updaterRunnable = new MetricsUpdater(tableMetrics, filter);
+		updaterRunnable = new MetricsUpdater(tableMetrics, filter, tableResults);
 		new Thread(updaterRunnable).start();
 	}
 	
