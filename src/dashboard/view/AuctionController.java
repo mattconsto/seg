@@ -73,6 +73,8 @@ public class AuctionController extends AnchorPane {
 	@FXML private RadioButton rbByBounceTime;
 	@FXML private ToggleGroup grBounce;
 	@FXML private RadioButton rbByBouncePages;
+	
+	private MetricsUpdater updaterRunnable;
 
 	public void setApp(Main application){
 		this.application = application;
@@ -146,6 +148,8 @@ public class AuctionController extends AnchorPane {
 	
 	@FXML
 	private void generateData(ActionEvent event) {
+		if(updaterRunnable != null) updaterRunnable.stop();
+		
 		filter.setDateFrom(filterDateFrom.getValue());
 		filter.setDateTo(filterDateTo.getValue());
 		
@@ -168,7 +172,8 @@ public class AuctionController extends AnchorPane {
 		updateGraph(filterMetrics.getValue());
 		
 		// Cheap and nasty threading
-		new Thread(new MetricsUpdater(tableMetrics, filter)).start();;
+		updaterRunnable = new MetricsUpdater(tableMetrics, filter);
+		new Thread(updaterRunnable).start();
 	}
 	
 	@FXML
