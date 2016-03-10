@@ -23,7 +23,7 @@ public class CPCGraphConstructor extends GraphConstructor{
 	protected Series<Date, Number> generateGraph(Connection conn)
 			throws SQLException, ParseException {
 		ResultSet results = conn.createStatement().executeQuery("SELECT CLICKDATE, CLICKCOST, IMPCOST, NUMCLICKS FROM "
-				+ "(strftime('" + filter.timeFormatSQL +"', CLICKDATE) AS CLICKDATE, SUM(CLICKCOST) AS CLICKCOST, COUNT(ID) AS NUMCLICKS FROM "
+				+ "(SELECT strftime('" + filter.timeFormatSQL +"', CLICKDATE) AS CLICKDATE, SUM(CLICKCOST) AS CLICKCOST, COUNT(ID) AS NUMCLICKS FROM "
 				+ "(SELECT IMPRESSIONS.*, CLICKS.ID, CLICKS.DATE AS CLICKDATE, CLICKS.COST AS CLICKCOST "
 				+ "FROM IMPRESSIONS "
 				+ "INNER JOIN CLICKS "

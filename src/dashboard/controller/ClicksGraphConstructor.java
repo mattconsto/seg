@@ -29,12 +29,12 @@ public class ClicksGraphConstructor extends GraphConstructor {
 				+ " WHERE " + filter.getSql()
 				+ " GROUP BY strftime('" + filter.timeFormatSQL +"', DATE);");
 		*/
-		ResultSet results = conn.createStatement().executeQuery("SELECT strftime('" + filter.timeFormatSQL +"', CLICKS.DATE) AS CLICKDATE,COUNT(*) AS Frequency FROM "
+		ResultSet results = conn.createStatement().executeQuery("SELECT strftime('" + filter.timeFormatSQL +"', CLICKS.DATE),COUNT(*) AS Frequency FROM "
 				+ "CLICKS "
 				+ "INNER JOIN "
 				+ "(SELECT * FROM IMPRESSIONS GROUP BY ID) AS IMPRESSIONS "
 				+ "ON CLICKS.ID=IMPRESSIONS.ID "
-				+ "WHERE " + filter.getSql()
+				+ "WHERE " + filter.getSql().replace("DATE", "CLICKS.DATE")
 				+ " GROUP BY strftime('" + filter.timeFormatSQL +"', CLICKS.DATE);");
 		
 		
