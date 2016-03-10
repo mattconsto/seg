@@ -57,6 +57,14 @@ public class OpenCampaignController extends AnchorPane {
 				selectCampaign.getItems().add(file.getName().replace(".db", ""));
 		}
 		
+		openButton.setDisable(false);
+		importButton.setDisable(false);
+		enterName.setDisable(false);
+		browseButton.setDisable(false);
+		selectCampaign.setDisable(false);
+		
+		folder.setDisable(true);
+		
 		if(selectCampaign.getItems().size() > 0) {
 			selectCampaign.setValue(selectCampaign.getItems().get(0));
 		} else {
@@ -80,9 +88,13 @@ public class OpenCampaignController extends AnchorPane {
 		} else {
 			if (folder.getText() != null) {
 				if (importCsv.checkFilesExist(folder.getText())) {
-					importButton.setVisible(false);
 					p.setVisible(true);
 					openButton.setDisable(true);
+					importButton.setDisable(true);
+					folder.setDisable(true);
+					enterName.setDisable(true);
+					browseButton.setDisable(true);
+					selectCampaign.setDisable(true);
 					DatabaseConnection.closeConnection();
 					DatabaseConnection.setDbfile(enterName.getText() + ".db");	// should check name has is alpha numeric only here as it forms part of the database filename
 				   

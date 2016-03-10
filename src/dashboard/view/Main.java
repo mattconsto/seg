@@ -47,7 +47,7 @@ public class Main extends Application {
 			}
 			stage.setResizable(false);
 			stage.setWidth(600);
-			stage.setHeight(650);
+			stage.setHeight(600);
 			
 			if(preferences.getDouble("OpenCampaign_PositionX", -1) != -1) {
 				stage.setX(preferences.getDouble("OpenCampaign_PositionX", -1));
