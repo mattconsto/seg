@@ -21,12 +21,13 @@ public class UniqueImpressionsGraphConstructor extends GraphConstructor {
 	
 	@Override
 	protected Series<Date, Number> generateGraph(Connection conn) throws SQLException, ParseException {
-		ResultSet results = conn.createStatement().executeQuery("SELECT SUBSTR(DATE, 0, 14) AS DATE,COUNT(DISTINCT ID) AS Frequency, * FROM IMPRESSIONS WHERE " + filter.getSql() +" GROUP BY SUBSTR(DATE, 0, 14);");
+		ResultSet results = conn.createStatement().executeQuery("SELECT strftime('" + filter.timeFormatSQL +"', DATE) AS DATE,COUNT(DISTINCT ID) AS Frequency, * FROM IMPRESSIONS WHERE " + filter.getSql() +" GROUP BY strftime('" + filter.timeFormatSQL +"', DATE);");
 
 		XYChart.Series<Date, Number> series = new XYChart.Series<Date, Number>();
 		series.setName("Unique impressions by date");
 
 		DateFormat format = new SimpleDateFormat(filter.timeFormatJava, Locale.ENGLISH);
+		
 		while (results.next())
 			series.getData().add(new XYChart.Data<Date, Number>(format.parse(results.getString(1)), results.getInt(2)));
 

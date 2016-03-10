@@ -3,7 +3,7 @@ package dashboard.view;
 import dashboard.model.CSVReader;
 import dashboard.model.DatabaseConnection;
 import java.io.File;
-
+import java.util.Arrays;
 import java.util.List;
 
 import javafx.beans.value.ChangeListener;
@@ -49,9 +49,12 @@ public class OpenCampaignController extends AnchorPane {
 	}
 
 	public void init() {
-		for(File file : new File(System.getProperty("user.dir")).listFiles()) {
+		File[] files = new File(System.getProperty("user.dir")).listFiles();
+		Arrays.sort(files, (a, b) -> (int) (b.lastModified() - a.lastModified()));
+		
+		for(File file : files) {
 			if(file.isFile() && file.getName().toLowerCase().endsWith(".db"))
-				selectCampaign.getItems().add(file.getName());
+				selectCampaign.getItems().add(file.getName().replace(".db", ""));
 		}
 	}
 
@@ -121,23 +124,20 @@ public class OpenCampaignController extends AnchorPane {
 	
 	@FXML
 	private void openAction(ActionEvent event) {
-             try {
- 		 if (selectCampaign.getSelectionModel().getSelectedItem() != null && !selectCampaign.getSelectionModel().getSelectedItem().equals("")) {
-
-			 DatabaseConnection.closeConnection();
-			 DatabaseConnection.setDbfile(selectCampaign.getSelectionModel().getSelectedItem().toString());
-			 application.gotoMainForm();
-                    }
-                } catch (Exception e) {
-                 
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+		try {
+			if (selectCampaign.getSelectionModel().getSelectedItem() != null && !selectCampaign.getSelectionModel().getSelectedItem().equals("")) {
+				DatabaseConnection.closeConnection();
+				DatabaseConnection.setDbfile(selectCampaign.getSelectionModel().getSelectedItem().toString() + ".db");
+				application.gotoMainForm();
+			}
+		} catch (Exception e) {
+			Alert alert = new Alert(Alert.AlertType.INFORMATION);
 			alert.setTitle("Open Failed");
 			alert.setHeaderText(null);
 			alert.setContentText("Please select a valid campaign");
 			alert.showAndWait();
-                }
-        }
-	
+		}
+	}
 
 	@FXML
 	private void browseAction(ActionEvent event) {
