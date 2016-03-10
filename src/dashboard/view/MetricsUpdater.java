@@ -91,13 +91,15 @@ public class MetricsUpdater implements Runnable {
 		if (results.next())
 			table.add(new ObservableMetrics("Total Cost",Float.toString(results.getFloat(1)+results.getFloat(2))));
 		
-		results = conn.createStatement().executeQuery("SELECT NUMCLICKS, NUMIMP FROM "
-				+ "(SELECT SUBSTR(DATE, 0, 14) as CLICKDATE, COUNT(*) AS NUMCLICKS FROM "
+		results = conn.createStatement().executeQuery("SELECT SUM(NUMCLICKS), SUM(NUMIMP) FROM "
+				+ "(SELECT CLICKDATE, NUMCLICKS, NUMIMP FROM "
+				+ "(SELECT SUBSTR(CLICKDATE, 0, 14) as CLICKDATE, COUNT(*) AS NUMCLICKS FROM "
 				+ "(SELECT CLICKS.DATE AS CLICKDATE, IMPRESSIONS.* FROM CLICKS INNER JOIN IMPRESSIONS ON CLICKS.ID=IMPRESSIONS.ID GROUP BY CLICKS.ID, CLICKDATE) "
-				+ "WHERE " +  filter.getSql().replace("DATE","CLICKDATE") + ") "
+				+ "WHERE " +  filter.getSql().replace("DATE", "CLICKDATE") + " GROUP BY SUBSTR(CLICKDATE, 0, 14)) "
 				+ "INNER JOIN "
-				+ "(SELECT SUBSTR(DATE, 0, 14) AS DATE, COUNT(*) AS NUMIMP FROM IMPRESSIONS WHERE " +  filter.getSql() + ") "
-				+ "ON DATE=CLICKDATE");
+				+ "(SELECT SUBSTR(DATE, 0, 14) AS DATE, COUNT(*) AS NUMIMP FROM IMPRESSIONS "
+				+ "WHERE " +  filter.getSql() + "GROUP BY SUBSTR(DATE, 0, 14)) "
+				+ "ON DATE=CLICKDATE)");
 
 		if (results.next()) 
 			table.add(new ObservableMetrics("CTR",Float.toString(results.getInt(1)/results.getFloat(2)*100)+"%"));
@@ -107,7 +109,7 @@ public class MetricsUpdater implements Runnable {
 				+ "FROM (SELECT IMPRESSIONS.*, SERVER.* FROM "
 				+ "IMPRESSIONS INNER JOIN SERVER ON IMPRESSIONS.ID=SERVER.ID "
 				+ "GROUP BY SERVER.ENTRYDATE, SERVER.ID) AS SUBQUERY "
-				+ "WHERE CONVERSION = 1 "
+				+ "WHERE CONVERSION = 1 AND " +  filter.getSql() + " "
 				+ "GROUP BY SUBSTR(ENTRYDATE, 0, 14))"
 				+ "INNER JOIN "
 				+ "(SELECT CLICKDATE, CLICKCOST, IMPCOST FROM "
@@ -117,10 +119,10 @@ public class MetricsUpdater implements Runnable {
 				+ "INNER JOIN CLICKS "
 				+ "ON IMPRESSIONS.ID=CLICKS.ID "
 				+ "GROUP BY CLICKS.DATE, CLICKS.ID) "
-				+ "GROUP BY SUBSTR(CLICKDATE, 0, 14)) "
+				+ "WHERE " +  filter.getSql().replace("DATE", "CLICKDATE") + " GROUP BY SUBSTR(CLICKDATE, 0, 14)) "
 				+ "INNER JOIN "
 				+ "(SELECT SUBSTR(DATE,0,14) AS IMPDATE, SUM(COST) AS IMPCOST FROM IMPRESSIONS "
-				+ "GROUP BY SUBSTR(DATE, 0, 14)) "
+				+ "WHERE " +  filter.getSql() + " GROUP BY SUBSTR(DATE, 0, 14)) "
 				+ "ON IMPDATE=CLICKDATE) "
 				+ "ON CLICKDATE=ENTRYDATE;");
 		
