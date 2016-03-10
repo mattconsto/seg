@@ -100,7 +100,7 @@ public class AuctionController extends AnchorPane {
 		configureTable();  
 		configureFilters();
 
-		application.getStage().setTitle(preferences.get("ProductName", "Ad Auction Dashboard") + " - " + DatabaseConnection.getDbfile().replace(".db", ""));
+		application.getStage().setTitle(preferences.get("ProductName", "Ad Auction Dashboard") + " - " + DatabaseConnection.getDbfile().replace(".db", ""));
 		generateGraph.setDisable(false);
 		
 		rbByBounceTime.setUserData("timeBounce");
