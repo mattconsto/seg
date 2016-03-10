@@ -91,16 +91,16 @@
 			<Label layoutX="11.0" layoutY="289.0" prefHeight="17.0" prefWidth="87.0" text="Date to:" AnchorPane.leftAnchor="10.0" />
 			<DatePicker fx:id="filterDateFrom" layoutX="100.0" layoutY="241.0" prefHeight="31.0" prefWidth="94.0" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="10.0" />
 			<DatePicker fx:id="filterDateTo" layoutX="100.0" layoutY="282.0" prefHeight="31.0" prefWidth="91.0" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="10.0" />
-			<TextField fx:id="txtBounceTime" layoutX="130.0" layoutY="354.0" prefHeight="25.0" prefWidth="79.0" AnchorPane.leftAnchor="130.0" AnchorPane.rightAnchor="10.0" Text="-" />
+			<TextField fx:id="txtBounceTime" layoutX="130.0" layoutY="354.0" prefHeight="25.0" prefWidth="79.0" AnchorPane.leftAnchor="130.0" AnchorPane.rightAnchor="10.0" Text="" />
 			<TextField fx:id="txtBouncePages" layoutX="130.0" layoutY="389.0" prefHeight="25.0" prefWidth="78.0" AnchorPane.leftAnchor="130.0" AnchorPane.rightAnchor="10.0" Text="1" />
 			<Separator layoutY="323.0" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
 			<Label layoutX="10.0" layoutY="334.0" text="Bounce criteria:" AnchorPane.leftAnchor="10.0" />
-			<RadioButton fx:id="rbByBounceTime" layoutX="10.0" layoutY="358.0" selected="true" text="Time / s:" AnchorPane.leftAnchor="10.0">
+			<RadioButton fx:id="rbByBounceTime" layoutX="10.0" layoutY="358.0" selected="false" text="Time / s:" AnchorPane.leftAnchor="10.0">
 				<toggleGroup>
 					<ToggleGroup fx:id="grBounce" />
 				</toggleGroup>
 			</RadioButton>
-			<RadioButton fx:id="rbByBouncePages" layoutX="10.0" layoutY="393.0" text="№ Pages:" toggleGroup="$grBounce" AnchorPane.leftAnchor="10.0" />
+			<RadioButton fx:id="rbByBouncePages" layoutX="10.0" layoutY="393.0" selected="true" text="№ Pages:" toggleGroup="$grBounce" AnchorPane.leftAnchor="10.0" />
 			<TableView fx:id="tableResults" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="507.0">
 				<columns>
 					<TableColumn fx:id="metricCol" text="Metric" />
