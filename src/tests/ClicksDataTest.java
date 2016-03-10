@@ -198,13 +198,13 @@ public class ClicksDataTest extends TestCase {
 			clicksConstructor = new ClicksGraphConstructor(filter);
 
 			data = clicksConstructor.fetchGraph().getData();
-			assertEquals(240, data.size());
+			assertEquals(240, data.get(0).getYValue());
 
 			filter.setContext(FXCollections.observableArrayList("Travel"));
 			clicksConstructor = new ClicksGraphConstructor(filter);
 
 			data = clicksConstructor.fetchGraph().getData();
-			assertEquals(240, data.size());
+			assertEquals(240, data.get(0).getYValue());
 		} catch (SQLException sqle) {
 			System.err.println(sqle.getMessage());
 			fail("SQL error");
