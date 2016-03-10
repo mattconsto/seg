@@ -45,8 +45,7 @@
       </menus>
    	</MenuBar>
    	<SplitPane dividerPositions="0.17" layoutX="2.5" layoutY="5.5" prefHeight="879.0" prefWidth="1278.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0">
-      <items>
-		<items>
+      
       		<AnchorPane maxWidth="300.0" minHeight="310.0" minWidth="225.0" prefHeight="160.0" prefWidth="100.0">
          <children>
          			<CheckComboBox fx:id="filterGender" layoutX="100.0" layoutY="10.0" prefHeight="25.0" prefWidth="195.0" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="10.0" />
@@ -130,7 +129,7 @@
       				<NumberAxis side="LEFT" />
       			</yAxis>
       		</LineChart>
-      </items>
+      
    	</SplitPane>
    </children>
 </AnchorPane>
