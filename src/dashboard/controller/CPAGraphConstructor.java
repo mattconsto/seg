@@ -23,27 +23,26 @@ public class CPAGraphConstructor extends GraphConstructor{
 	protected Series<Date, Number> generateGraph(Connection conn)
 			throws SQLException, ParseException {
 		ResultSet results = conn.createStatement().executeQuery("SELECT ENTRYDATE, CLICKCOST, IMPCOST, Frequency FROM "
-				+ "(SELECT SUBSTR(ENTRYDATE, 0, 14) AS ENTRYDATE,COUNT(*) AS Frequency "
+				+ "(SELECT strftime('" + filter.timeFormatSQL +"', ENTRYDATE) AS ENTRYDATE,COUNT(*) AS Frequency "
 				+ "FROM (SELECT IMPRESSIONS.*, SERVER.* FROM "
 				+ "IMPRESSIONS INNER JOIN SERVER ON IMPRESSIONS.ID=SERVER.ID "
 				+ "GROUP BY SERVER.ENTRYDATE, SERVER.ID) AS SUBQUERY "
 				+ "WHERE CONVERSION = 1 AND " + filter.getSql().replace("DATE", "ENTRYDATE") + " "
-				+ "GROUP BY SUBSTR(ENTRYDATE, 0, 14)) "
+				+ "GROUP BY strftime('" + filter.timeFormatSQL +"', ENTRYDATE)) "
 				+ "INNER JOIN "
 				+ "(SELECT CLICKDATE, CLICKCOST, IMPCOST FROM "
-				+ "(SELECT SUBSTR(CLICKDATE, 0, 14) AS CLICKDATE, SUM(CLICKCOST) AS CLICKCOST FROM "
+				+ "(SELECT strftime('" + filter.timeFormatSQL +"', CLICKDATE) AS CLICKDATE, SUM(CLICKCOST) AS CLICKCOST FROM "
 				+ "(SELECT IMPRESSIONS.*, CLICKS.ID, CLICKS.DATE AS CLICKDATE, CLICKS.COST AS CLICKCOST "
 				+ "FROM IMPRESSIONS "
 				+ "INNER JOIN CLICKS "
 				+ "ON IMPRESSIONS.ID=CLICKS.ID "
 				+ "GROUP BY CLICKS.DATE, CLICKS.ID) "
-				+ "WHERE " + filter.getSql().replace("DATE", "CLICKDATE")+ " GROUP BY SUBSTR(CLICKDATE, 0, 14)) "
+				+ "WHERE " + filter.getSql().replace("DATE", "CLICKDATE")+ " GROUP BY strftime('" + filter.timeFormatSQL +"', CLICKDATE)) "
 				+ "INNER JOIN "
-				+ "(SELECT SUBSTR(DATE,0,14) AS IMPDATE, SUM(COST) AS IMPCOST FROM IMPRESSIONS "
-				+ "WHERE " + filter.getSql()+ " GROUP BY SUBSTR(DATE, 0, 14)) "
+				+ "(SELECT strftime('" + filter.timeFormatSQL +"', DATE) AS IMPDATE, SUM(COST) AS IMPCOST FROM IMPRESSIONS "
+				+ "WHERE " + filter.getSql()+ " GROUP BY strftime('" + filter.timeFormatSQL +"', DATE)) "
 				+ "ON IMPDATE=CLICKDATE) "
 				+ "ON CLICKDATE=ENTRYDATE;");
-				//+ "WHERE " + filter.getSql().replace("DATE", "CLICKDATE")+ " GROUP BY SUBSTR(CLICKDATE, 0, 14);");
 
 		XYChart.Series<Date, Number> series = new XYChart.Series<Date, Number>();
 		series.setName("Cost Per Acquisition(CPA) by date");

@@ -21,12 +21,12 @@ public class ClicksGraphConstructor extends GraphConstructor {
 	
 	@Override
 	protected Series<Date, Number> generateGraph(Connection conn) throws SQLException, ParseException {
-		ResultSet results = conn.createStatement().executeQuery("SELECT SUBSTR(DATE, 0, 14) AS DATE,COUNT(*) AS Frequency FROM"
+		ResultSet results = conn.createStatement().executeQuery("SELECT strftime('" + filter.timeFormatSQL +"', DATE) AS DATE,COUNT(*) AS Frequency FROM"
 				+ "(SELECT IMPRESSIONS.*, CLICKS.* FROM IMPRESSIONS"
 				+ " INNER JOIN CLICKS ON IMPRESSIONS.ID=CLICKS.ID"
 				+ " GROUP BY CLICKS.DATE, CLICKS.ID) AS SUBQUERY"
 				+ " WHERE " + filter.getSql()
-				+ " GROUP BY SUBSTR(DATE, 0, 14);");
+				+ " GROUP BY strftime('" + filter.timeFormatSQL +"', DATE);");
 
 		XYChart.Series<Date, Number> series = new XYChart.Series<Date, Number>();
 		series.setName("Clicks by date");

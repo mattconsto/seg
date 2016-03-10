@@ -14,7 +14,6 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import dashboard.Config;
 import dashboard.model.DatabaseConnection;
 
 /**
@@ -22,12 +21,14 @@ import dashboard.model.DatabaseConnection;
  */
 public class Main extends Application {
 	private Stage stage;
+	private Preferences preferences = Preferences.userRoot();
 
 	@Override
 	public void start(Stage primaryStage) {
 		// Setup our stage
 		stage = primaryStage;
-		stage.setTitle(Config.productName);
+		
+		stage.setTitle(preferences.get("ProductName", "Ad Auction Dashboard"));
 		
 		for (int size : new int[] {512, 256, 128, 64, 48, 32, 16})
 			stage.getIcons().add(
@@ -48,8 +49,6 @@ public class Main extends Application {
 			stage.setWidth(600);
 			stage.setHeight(650);
 			
-			Preferences preferences = Preferences.userNodeForPackage(getClass());
-			
 			if(preferences.getDouble("OpenCampaign_PositionX", -1) != -1) {
 				stage.setX(preferences.getDouble("OpenCampaign_PositionX", -1));
 				stage.setY(preferences.getDouble("OpenCampaign_PositionY", -1));
@@ -61,9 +60,6 @@ public class Main extends Application {
 				preferences.putDouble("OpenCampaign_PositionX", stage.getX());
 				preferences.putDouble("OpenCampaign_PositionY", stage.getY());
 			});
-
-			preferences.putDouble("OpenCampaign_PositionX", stage.getX());
-			preferences.putDouble("OpenCampaign_PositionY", stage.getY());
 			
 			stage.show();
 			stage.setOnCloseRequest(e -> DatabaseConnection.closeConnection());
@@ -82,14 +78,13 @@ public class Main extends Application {
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
-
-		Preferences preferences = Preferences.userNodeForPackage(getClass());
 		
 		if(preferences.getDouble("AuctionController_PositionX", -1) != -1) {
 			stage.setWidth(preferences.getDouble("AuctionController_SizeWidth", -1));
 			stage.setHeight(preferences.getDouble("AuctionController_SizeHeight", -1));
 			stage.setX(preferences.getDouble("AuctionController_PositionX", -1));
 			stage.setY(preferences.getDouble("AuctionController_PositionY", -1));
+			stage.setMaximized(preferences.getBoolean("AuctionController_Maximised", false));
 		} else {
 			double deviceScaling = Toolkit.getDefaultToolkit().getScreenResolution() / 96.0;
 			Rectangle bounds = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
@@ -104,6 +99,7 @@ public class Main extends Application {
 			preferences.putDouble("AuctionController_PositionY",  stage.getY());
 			preferences.putDouble("AuctionController_SizeWidth",  stage.getWidth());
 			preferences.putDouble("AuctionController_SizeHeight", stage.getHeight());
+			preferences.putBoolean("AuctionController_Maximised", stage.isMaximized());
 			
 			try {
 				preferences.flush();
@@ -113,11 +109,6 @@ public class Main extends Application {
 			
 			DatabaseConnection.closeConnection(); 
 		});
-
-		preferences.putDouble("AuctionController_PositionX",  stage.getX());
-		preferences.putDouble("AuctionController_PositionY",  stage.getY());
-		preferences.putDouble("AuctionController_SizeWidth",  stage.getWidth());
-		preferences.putDouble("AuctionController_SizeHeight", stage.getHeight());
 	}
 		
 	public Stage getStage() {

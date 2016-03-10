@@ -20,15 +20,16 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
-import dashboard.Config;
 import dashboard.controller.*;
 import dashboard.model.*;
 import java.util.List;
+import java.util.prefs.Preferences;
 /**
  * Auction Controller.
  */
 public class AuctionController extends AnchorPane {
 	private Main application;
+	private Preferences preferences = Preferences.userRoot();
 	
 	@FXML private MenuBar menu;
 	@FXML private MenuItem importCampaign;
@@ -96,7 +97,7 @@ public class AuctionController extends AnchorPane {
 		configureTable();  
 		configureFilters();
 
-		application.getStage().setTitle(Config.productName + " - " + DatabaseConnection.getDbfile().replace(".db", ""));
+		application.getStage().setTitle(preferences.get("ProductName", "Ad Auction Dashboard") + " - " + DatabaseConnection.getDbfile().replace(".db", ""));
 		generateGraph.setDisable(false);
 		
 		rbByBounceTime.setUserData("timeBounce");
@@ -179,7 +180,6 @@ public class AuctionController extends AnchorPane {
 
 	private void updateGraph(String metric) {
 		lineChart.getYAxis().setLabel("Number");
-		lineChart.getXAxis().setTickLabelsVisible(true);
 		GraphConstructor constructor;
 
 		switch(metric) {
@@ -205,6 +205,7 @@ public class AuctionController extends AnchorPane {
 			Series<Date, Number> data = constructor.fetchGraph();
 			data.setName(metric + " " + filter);
 			lineChart.getData().add(data);
+			lineChart.getXAxis().setTickLabelsVisible(true);
 		} catch (SQLException e) {
 			System.err.println("Unable to fetch data from database: " + e.getMessage());
 		}
@@ -221,7 +222,7 @@ public class AuctionController extends AnchorPane {
 			DatabaseConnection.closeConnection();
 			DatabaseConnection.setDbfile(s.getPath());
 
-			application.getStage().setTitle(Config.productName + " - " + DatabaseConnection.getDbfile().replace(".db", ""));
+			application.getStage().setTitle(preferences.get("ProductName", "Ad Auction Dashboard") + " - " + DatabaseConnection.getDbfile().replace(".db", ""));
 			generateGraph.setDisable(false); 
 			generateData(null);
 		}
