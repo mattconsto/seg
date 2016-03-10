@@ -39,12 +39,12 @@
 			<MenuItem fx:id="mnuAbout" text="About" />
 		</Menu>
 	</MenuBar>
-	<SplitPane dividerPositions="0.17" layoutX="2.5" layoutY="5.5" prefHeight="879.0" prefWidth="1278.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="24.0">
+	<SplitPane dividerPositions="0.17" layoutX="2.5" layoutY="5.5" prefHeight="879.0" prefWidth="1278.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="32.0">
 		<AnchorPane maxWidth="300.0" minHeight="310.0" minWidth="225.0" prefHeight="160.0" prefWidth="100.0">
 			<CheckComboBox fx:id="filterGender" layoutX="68.0" layoutY="34.0" prefHeight="25.0" prefWidth="195.0" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="10.0" />
 			<Label layoutX="11.0" layoutY="38.0" text="Gender:" AnchorPane.leftAnchor="10.0" />
 			<CheckComboBox fx:id="filterAge" layoutX="100.0" layoutY="69.0" prefHeight="25.0" prefWidth="195.0" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="10.0" />
-			<Label layoutX="10.0" layoutY="69.0" prefHeight="25.0" prefWidth="25.0" text="Age:" AnchorPane.leftAnchor="10.0" />
+			<Label layoutX="10.0" layoutY="69.0" prefHeight="25.0" prefWidth="50.0" text="Age:" AnchorPane.leftAnchor="10.0" />
 			<CheckComboBox fx:id="filterIncome" layoutX="100.0" layoutY="104.0" prefWidth="150.0" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="10.0" />
 			<Label layoutX="2.0" layoutY="108.0" text="Income:" AnchorPane.leftAnchor="10.0" />
 			<CheckComboBox fx:id="filterContext" layoutX="100.0" layoutY="138.0" prefWidth="150.0" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="10.0" />

@@ -5,6 +5,7 @@ package dashboard.model;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javafx.collections.FXCollections;
@@ -35,19 +36,22 @@ public class Filter {
 	
 	@Override
 	public String toString() {
-		return String.format(
-			"[%s, %s, %s, %s]", 
-			listToString(gender),
-			listToString(age),
-			listToString(income),
-			listToString(context)
-		);
+		return listToString(new String[] {
+			listToString(gender, "(", ")"), listToString(age, "(", ")"),
+			listToString(income, "(", ")"), listToString(context, "(", ")")
+		}, "[", "]");
 	}
 	
-	private String listToString(List<String> list) {
+	private String listToString(String[] list, String open, String close) {
+		return listToString(new ArrayList<>(Arrays.asList(list)), open, close);
+	}
+	
+	private String listToString(List<String> list, String open, String close) {
+		list.removeIf(e -> e.equals("Any") || e.equals(""));
+		
 		     if(list.size() == 0) return "";
 		else if(list.size() == 1) return list.get(0);
-		else                      return "(" + list.stream().skip(1).reduce(list.get(0), (a, b) -> a + "," + b) + ")";
+		else                      return open + list.stream().skip(1).reduce(list.get(0), (a, b) -> a + "," + b) + close;
 	}
 
 	public void setTime(String time) {
