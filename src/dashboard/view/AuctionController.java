@@ -18,6 +18,7 @@ import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart.Series;
 import javafx.scene.control.*;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
@@ -137,6 +138,22 @@ public class AuctionController extends AnchorPane {
 				List <ObservableMetrics> s1 =  tableResults.getSelectionModel().getSelectedItems();
 				if(s1 != null) for(ObservableMetrics metric : s1) updateGraph(metric.getDescription());
 		});
+	}
+	
+	@FXML private void openAbout(ActionEvent event) {
+		Alert about = new Alert(AlertType.INFORMATION);
+		about.setTitle("About");
+		about.setHeaderText(preferences.get("ProductName", "Ad Auction Dashboard"));
+		about.setContentText(
+			"Created by SEG Team 3:\n" + 
+			"\n" + 
+			"• Samuel Beresford\n" + 
+			"• Matthew Consterdine\n" +
+			"• Emma Gadsby\n" +
+			"• Matthew Langford\n" +
+			"• Iovana Pavlovici\n"
+		);
+		about.show();
 	}
 	
 	@FXML private void importCampaignAction(ActionEvent event) {

@@ -30,16 +30,13 @@
 			<items>
 						<MenuItem fx:id="mnuColour" disable="true" text="Colour Scheme" />
 						<MenuItem fx:id="mnuFont" disable="true" text="Font Size" />
-						<MenuItem fx:id="mnuPaths" disable="true" text="Paths" />
 						<MenuItem fx:id="mnuUnits" disable="true" text="Units" />
 			</items>
 				</Menu>
 				<Menu text="Help">
 			<items>
 						<MenuItem fx:id="mnuDefinitions" disable="true" text="Definitions" />
-						<MenuItem fx:id="mnuSearch" disable="true" text="Search" />
-						<MenuItem fx:id="mnuList" disable="true" text="List" />
-						<MenuItem fx:id="mnuAbout" disable="true" text="About" />
+						<MenuItem fx:id="mnuAbout" onAction="#openAbout" text="About" />
 			</items>
 				</Menu>
 		</menus>
