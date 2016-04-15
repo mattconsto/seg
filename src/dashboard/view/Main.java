@@ -11,7 +11,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.JavaFXBuilderFactory;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import dashboard.model.DatabaseConnection;
@@ -30,10 +29,10 @@ public class Main extends Application {
 		
 		stage.setTitle(preferences.get("ProductName", "Ad Auction Dashboard"));
 		
-		for (int size : new int[] {512, 256, 128, 64, 48, 32, 16})
+		/*for (int size : new int[] {512, 256, 128, 64, 48, 32, 16})
 			stage.getIcons().add(
 				new Image(getClass().getResourceAsStream(
-					String.format("/icon%d.png", size))));
+					String.format("/icon%d.png", size))));*/
 		
 		try {
 			OpenCampaignController openCampaign;
@@ -47,7 +46,7 @@ public class Main extends Application {
 			}
 			stage.setResizable(false);
 			stage.setWidth(600);
-			stage.setHeight(600);
+			stage.setHeight(660);
 			
 			if(preferences.getDouble("OpenCampaign_PositionX", -1) != -1) {
 				stage.setX(preferences.getDouble("OpenCampaign_PositionX", -1));
@@ -69,7 +68,7 @@ public class Main extends Application {
 	public void gotoMainForm() {
 		stage.hide();
 		stage.setResizable(true);
-		AuctionController auctionTool;
+		AuctionController auctionTool = null;
 		
 		try {
 			auctionTool = (AuctionController) replaceSceneContent("/dashboard/view/fxml/AuctionTool.fxml", stage);
@@ -109,7 +108,9 @@ public class Main extends Application {
 			
 			DatabaseConnection.closeConnection(); 
 		});
-	}
+                if (auctionTool != null)
+                    auctionTool.initMetricTable();
+        }
 		
 	public Stage getStage() {
 		return stage;

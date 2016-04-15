@@ -28,6 +28,7 @@ public abstract class GraphConstructor {
 	public XYChart.Series<Date, Number> fetchGraph() throws SQLException {
 		try {
 			System.out.println("Constructing Graph");
+                        DatabaseConnection.setDbfile(filter.getCampaign() + ".db");
 			XYChart.Series<Date, Number> result = generateGraph(DatabaseConnection.getConnection());
 			System.out.println("Finished Executing Query");
 			return result; 

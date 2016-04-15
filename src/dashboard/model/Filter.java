@@ -33,7 +33,10 @@ public class Filter {
 	public String dateSQL;
 	public String timeFormatSQL = "%Y-%m-%d %H";
 	public String timeFormatJava = "yyyy-MM-dd HH";
-	
+	public String campaign = "";
+        public String description= "";
+
+   
 	@Override
 	public String toString() {
 		return listToString(new String[] {
@@ -87,7 +90,21 @@ public class Filter {
 	public void setDateSQL(String dateSQL) {
 		this.dateSQL = dateSQL;
 	}
+        
+        public String getCampaign() {
+            return campaign;
+        }
 
+        public String getDescription() {
+            return description;
+        }
+         public void setCampaign(String campaign) {
+            this.campaign = campaign;
+        }
+
+        public void setDescription(String description) {
+            this.description = description;
+        }
 	public void setGender(ObservableList<String> gender) {
 		
 		this.gender.clear();
@@ -416,7 +433,8 @@ public class Filter {
 		age = new ArrayList<String>();
 		income = new ArrayList<String>();
 		context = new ArrayList<String>();
-		
+		campaign = "";
+                description = "";
 		setGender(FXCollections.observableArrayList("Any"));
 		setAge(FXCollections.observableArrayList("Any"));
 		setIncome(FXCollections.observableArrayList("Any"));

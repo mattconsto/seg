@@ -90,7 +90,7 @@ public class OpenCampaignController extends AnchorPane {
 				if (importCsv.checkFilesExist(folder.getText())) {
 					p.setVisible(true);
 					openButton.setDisable(true);
-					importButton.setDisable(true);
+					importButton.setVisible(false);
 					folder.setDisable(true);
 					enterName.setDisable(true);
 					browseButton.setDisable(true);
@@ -146,7 +146,7 @@ public class OpenCampaignController extends AnchorPane {
 		try {
 			if (selectCampaign.getSelectionModel().getSelectedItem() != null && !selectCampaign.getSelectionModel().getSelectedItem().equals("")) {
 				DatabaseConnection.closeConnection();
-				DatabaseConnection.setDbfile(selectCampaign.getSelectionModel().getSelectedItem().toString() + ".db");
+				DatabaseConnection.setDbfile(selectCampaign.getSelectionModel().getSelectedItem().toString() + ".db" );
 				application.gotoMainForm();
 			}
 		} catch (Exception e) {

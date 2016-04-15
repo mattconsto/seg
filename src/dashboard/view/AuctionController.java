@@ -4,7 +4,6 @@ import java.io.File;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Date;
-import java.util.List;
 
 import org.controlsfx.control.CheckComboBox;
 
@@ -24,11 +23,25 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import dashboard.controller.*;
 import dashboard.model.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 import java.util.prefs.Preferences;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.geometry.Pos;
+import javafx.scene.control.TableColumn.CellDataFeatures;
+import javafx.scene.control.TableView.TableViewSelectionModel;
+import javafx.scene.control.cell.CheckBoxTableCell;
+import javafx.util.Callback;
 /**
+
+
  * Auction Controller.
  */
+
+
+
 public class AuctionController extends AnchorPane {
 	private Main application;
 	private Preferences preferences = Preferences.userRoot();
@@ -44,7 +57,7 @@ public class AuctionController extends AnchorPane {
 	@FXML private CheckComboBox<String> filterAge;
 	@FXML private CheckComboBox<String> filterIncome;
 	@FXML private CheckComboBox<String> filterContext;
-	@FXML private ComboBox<String> filterMetrics;
+	//@FXML private ComboBox<String> filterMetrics;
 	@FXML private DatePicker filterDateFrom;
 	@FXML private DatePicker filterDateTo;
 	@FXML private Button generateGraph;
@@ -53,10 +66,10 @@ public class AuctionController extends AnchorPane {
 	@FXML private MenuItem openCampaign;
 	@FXML private TableView<ObservableMetrics> tableResults;
 	@FXML private TableColumn<ObservableMetrics, String> metricCol;
-	@FXML private TableColumn<ObservableMetrics, String> resultCol;
-	
 	private ObservableList<ObservableMetrics> tableMetrics = FXCollections.observableArrayList();
-	private Filter filter;
+	 
+        private HashMap<String, Filter> filters;
+        private Filter filter;
 	private BounceFilter bounceFilter;
 	
 	@FXML private MenuItem deleteCampaign;
@@ -75,15 +88,20 @@ public class AuctionController extends AnchorPane {
 	@FXML private RadioButton rbByBounceTime;
 	@FXML private ToggleGroup grBounce;
 	@FXML private RadioButton rbByBouncePages;
-	
+	@FXML private TextField txtFilterName;
+        @FXML private ComboBox<String> cbCampaign;
+        @FXML private TableColumn<ObservableMetrics, Boolean> selectCol;
 	private MetricsUpdater updaterRunnable;
-
+        
+        
+        private HashMap<String, Series> graphData = new HashMap<String, Series>();
 	public void setApp(Main application){
 		this.application = application;
 	}
 
 	public void init() {
-		filter = new Filter();
+		filters = new HashMap<>();
+                
 		bounceFilter = new BounceFilter();
 		
 		filterDateFrom.setValue((LocalDate.of(2015,01,01)));
@@ -96,8 +114,7 @@ public class AuctionController extends AnchorPane {
 		filterAge.getCheckModel().check(0);
 		filterContext.getCheckModel().check(0);
 		filterIncome.getCheckModel().check(0);
-		metricCol.setCellValueFactory(cellData -> cellData.getValue().descriptionProperty());
-		resultCol.setCellValueFactory(cellData -> cellData.getValue().resultProperty());
+                 
 		configureTable();  
 		configureFilters();
 
@@ -112,9 +129,13 @@ public class AuctionController extends AnchorPane {
 				System.out.println(grBounce.getSelectedToggle().getUserData().toString());
 			}
 		});
+                fillCampaignList();
 	}
 	
 	private void configureFilters() {
+               // if (filters.size() <= iFilter)
+               //     filters.add(new Filter());
+                filter = new Filter();
 		filterGender.getCheckModel().getCheckedItems().addListener(
 			(ListChangeListener.Change<? extends String> c) -> filter.setGender(filterGender));
 		filterAge.getCheckModel().getCheckedItems().addListener(
@@ -124,21 +145,94 @@ public class AuctionController extends AnchorPane {
 		filterContext.getCheckModel().getCheckedItems().addListener(
 			(ListChangeListener.Change<? extends String> c) -> filter.setContext(filterContext));
 		filterTime.valueProperty().addListener(c -> filter.setTime(filterTime.getValue()));
+                
+                
 	}
-	
+	public void initMetricTable() {    
+            TableMenu.addCustomTableMenu(tableResults);
+            tableMetrics.clear();
+            tableMetrics.add(new ObservableMetrics("Bounces"));
+            tableMetrics.add(new ObservableMetrics("Clicks"));
+            tableMetrics.add(new ObservableMetrics("Conversions"));
+    	    tableMetrics.add(new ObservableMetrics("Impressions"));
+            tableMetrics.add(new ObservableMetrics("Unique Clicks"));
+            tableMetrics.add(new ObservableMetrics("Unique Impressions"));
+            tableMetrics.add(new ObservableMetrics("Total Cost"));
+	    tableMetrics.add(new ObservableMetrics("CTR"));
+            tableMetrics.add(new ObservableMetrics("CPA"));
+            tableMetrics.add(new ObservableMetrics("CPC"));
+            tableMetrics.add(new ObservableMetrics("CPM"));	
+            tableMetrics.add(new ObservableMetrics("Bounce Rate"));
+            
+            
+        }
+        
+        private void fillCampaignList() {
+            
+                File[] files = new File(System.getProperty("user.dir")).listFiles();
+		Arrays.sort(files, (a, b) -> (int) (b.lastModified() - a.lastModified()));
+		
+		for(File file : files) {
+			if(file.isFile() && file.getName().toLowerCase().endsWith(".db"))
+				cbCampaign.getItems().add(file.getName().replace(".db", ""));
+		}
+                cbCampaign.setValue(DatabaseConnection.getDbfile().replace(".db", ""));
+                
+        } 
+        private void addColumn(String colName) {
+            
+            TableColumn tc = new TableColumn(colName);
+            final int colNo = filters.size();
+            tc.setCellValueFactory(new Callback<CellDataFeatures<ObservableMetrics, String>, ObservableValue<String>>() {
+                @Override
+                public ObservableValue<String> call(CellDataFeatures<ObservableMetrics, String> p) {
+                    return new SimpleStringProperty(p.getValue().getResults(colNo));
+                }
+            });
+            tableResults.getColumns().add(tc);
+            
+        }
 	// Configure the table widget: set up its column, and register the
 	// selection changed listener.
 	private void configureTable() {
-		metricCol.setCellValueFactory(new PropertyValueFactory<>("description"));
-		resultCol.setCellValueFactory(new PropertyValueFactory<>("result"));
-		tableResults.setItems(tableMetrics);
-		tableResults.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-		tableResults.getSelectionModel().getSelectedItems().addListener(
-			(ListChangeListener.Change<? extends ObservableMetrics> c) -> {
-				List <ObservableMetrics> s1 =  tableResults.getSelectionModel().getSelectedItems();
-				if(s1 != null) for(ObservableMetrics metric : s1) updateGraph(metric.getDescription());
-		});
-	}
+          
+            tableResults.getColumns().clear();
+            TableColumn<ObservableMetrics,Boolean>  checkCol = new TableColumn<>("Show");
+            checkCol.setCellValueFactory( new PropertyValueFactory<ObservableMetrics,Boolean>( "select" ) );
+            checkCol.setCellFactory( new Callback<TableColumn<ObservableMetrics,Boolean>, TableCell<ObservableMetrics,Boolean>>() {
+                @Override
+                public TableCell<ObservableMetrics,Boolean> call( TableColumn<ObservableMetrics,Boolean> param ) {
+                    return new CheckBoxTableCell<ObservableMetrics,Boolean>(){
+                        { setAlignment( Pos.CENTER );}
+                        @Override
+                        public void updateItem( Boolean item, boolean empty ){
+                            if ( ! empty ) {
+                                TableRow  row = getTableRow();
+                                if ( row != null ) {
+                                    int rowNo = row.getIndex();
+                                    TableViewSelectionModel  s = getTableView().getSelectionModel();
+                                    if ( item ) {
+                                        updateGraph(  getTableView().getItems().get(rowNo).getDescription());
+                                        s.select( rowNo );
+                                    }
+                                    else  {
+                                        removeGraph(  getTableView().getItems().get(rowNo).getDescription());
+                                        s.clearSelection( rowNo );
+                                    }
+                                }
+                            }
+                            super.updateItem( item, empty );
+                        }
+                    };
+                }
+            } );         
+            tableResults.getColumns().add(checkCol);
+            metricCol = new TableColumn<>("Metric");
+            metricCol.setCellValueFactory(new PropertyValueFactory<>("description")); 
+            tableResults.getColumns().add(metricCol);
+            tableResults.setItems(tableMetrics);
+        }
+       
 	
 	@FXML private void openAbout(ActionEvent event) {
 		Alert about = new Alert(AlertType.INFORMATION);
@@ -171,68 +265,119 @@ public class AuctionController extends AnchorPane {
 	@FXML
 	private void generateData(ActionEvent event) {
 		if(updaterRunnable != null) updaterRunnable.stop();
-		
-		filter.setDateFrom(filterDateFrom.getValue());
-		filter.setDateTo(filterDateTo.getValue());
-		
-		bounceFilter.setTimeLimit(0);
-		bounceFilter.setPageLimit(0);
-		if(grBounce.getSelectedToggle().getUserData().toString().equalsIgnoreCase("timeBounce")){
-			try{
-				bounceFilter.setTimeLimit(Integer.parseInt(txtBounceTime.getText()));
-			}catch(NumberFormatException nfe){}
-		}
-		else{
-			try{
-				bounceFilter.setPageLimit(Integer.parseInt(txtBouncePages.getText()));
-			}catch(NumberFormatException nfe){}
-		}
+                // todo - check valid entry for name and campaign
+                if (!txtFilterName.getText().isEmpty() && !filters.containsKey(txtFilterName.getText()))
+                { 
+                    filter.setDescription(txtFilterName.getText());
+                    filter.setCampaign(cbCampaign.getValue());
+                    filter.setDateFrom(filterDateFrom.getValue());
+                    filter.setDateTo(filterDateTo.getValue());
+                    bounceFilter.setTimeLimit(0);
+                    bounceFilter.setPageLimit(0);
+                    if(grBounce.getSelectedToggle().getUserData().toString().equalsIgnoreCase("timeBounce")){
+                            try{
+                                    bounceFilter.setTimeLimit(Integer.parseInt(txtBounceTime.getText()));
+                            }catch(NumberFormatException nfe){}
+                    }
+                    else{
+                            try{
+                                    bounceFilter.setPageLimit(Integer.parseInt(txtBouncePages.getText()));
+                            }catch(NumberFormatException nfe){}
+                    }
+                    //updateGraph(filterMetrics.getValue());
+                    addColumn(txtFilterName.getText());
+                    TableMenu.addCustomTableMenu(tableResults);
+                    tableResults.getColumns().get(filters.size()).setVisible(true);
 
-		updateGraph(filterMetrics.getValue());
-		
-		// Cheap and nasty threading
-		updaterRunnable = new MetricsUpdater(tableMetrics, filter, bounceFilter);
-		new Thread(updaterRunnable).start();
+                    // Cheap and nasty threading
+                    updaterRunnable = new MetricsUpdater(tableMetrics, filter, bounceFilter, filters.size(),  tableResults);
+                     filters.put(txtFilterName.getText(), filter);
+                     new Thread(updaterRunnable).start();
+
+                    configureFilters();
+                }
 	}
 	
 	@FXML
 	private void clearData(ActionEvent event) {
 		updaterRunnable.stop();
 		lineChart.getData().clear();
+                filters.clear();
+                graphData.clear();
+                configureTable();
+                
 		tableMetrics.clear();
+                initMetricTable();
 		lineChart.getXAxis().setTickLabelsVisible(false);
 	}
+        private void removeGraph(String metric){
+            String key;
+            
+            for(Map.Entry<String, Filter> f : filters.entrySet()){  
+
+                key = f.getKey() + " : " + metric;
+                if (graphData.containsKey(key))
+                    lineChart.getData().remove(graphData.get(key));
+            }
+        }
+                
 
 	private void updateGraph(String metric) {
+            
 		GraphConstructor constructor;
+                lineChart.setCreateSymbols(false);  
+                lineChart.setLegendVisible(true);
+                Series<Date, Number> data = null;
+                String key;
+                int i = 2;
+                 for(Map.Entry<String, Filter> f : filters.entrySet()){  
 
-		switch(metric) {
-			default:
-			case "Bounces":            constructor = new BounceGraphConstructor(filter, bounceFilter);     break;
-			case "Impressions":        constructor = new ImpressionsGraphConstructor(filter);              break;
-			case "Clicks":             constructor = new ClicksGraphConstructor(filter);                   break;
-			case "Unique Impressions": constructor = new UniqueImpressionsGraphConstructor(filter);        break;
-			case "Unique Clicks":      constructor = new UniqueClicksGraphConstructor(filter);             break;
-			case "Conversions":        constructor = new ConversionGraphConstructor(filter);               break;
-			case "CPC":                constructor = new CPCGraphConstructor(filter);                      break;
-			case "CPA":                constructor = new CPAGraphConstructor(filter);                      break;
-			case "CPM":                constructor = new CPMGraphConstructor(filter);                      break;
-			case "CTR":                constructor = new CTRGraphConstructor(filter);                      break;
-			case "Total Cost":         constructor = new TotalCostGraphConstructor(filter);                break;
-			case "Bounce Rate":        constructor = new BounceRateGraphConstructor(filter, bounceFilter); break;
-		}
+                    if (tableResults.getColumns().get(i).isVisible()) {
+                        key = f.getKey() + " : " + metric;
+                        if (graphData.containsKey(key)) {
+                            data = graphData.get(key);
+                            if (!lineChart.getData().contains(data))
+                                lineChart.getData().add(data);
+                        }
+                        else {
+                            switch(metric) {
+                                    default:
+                                    case "Bounces":            constructor = new BounceGraphConstructor(f.getValue(), bounceFilter);     break;
+                                    case "Impressions":        constructor = new ImpressionsGraphConstructor(f.getValue());              break;
+                                    case "Clicks":             constructor = new ClicksGraphConstructor(f.getValue());                   break;
+                                    case "Unique Impressions": constructor = new UniqueImpressionsGraphConstructor(f.getValue());        break;
+                                    case "Unique Clicks":      constructor = new UniqueClicksGraphConstructor(f.getValue());             break;
+                                    case "Conversions":        constructor = new ConversionGraphConstructor(f.getValue());               break;
+                                    case "CPC":                constructor = new CPCGraphConstructor(f.getValue());                      break;
+                                    case "CPA":                constructor = new CPAGraphConstructor(f.getValue());                      break;
+                                    case "CPM":                constructor = new CPMGraphConstructor(f.getValue());                      break;
+                                    case "CTR":                constructor = new CTRGraphConstructor(f.getValue());                      break;
+                                    case "Total Cost":         constructor = new TotalCostGraphConstructor(f.getValue());                break;
+                                    case "Bounce Rate":        constructor = new BounceRateGraphConstructor(f.getValue(), bounceFilter); break;
+                            }
 
-		lineChart.setCreateSymbols(false);
-		lineChart.setLegendVisible(true);
-		
-		try {
-			Series<Date, Number> data = constructor.fetchGraph();
-			data.setName((metric + " " + filter + " / " + filterTime.getValue().replaceFirst("s$", "")).replaceAll("  ", " "));
-			lineChart.getData().add(data);
-			lineChart.getXAxis().setTickLabelsVisible(true);
-		} catch (SQLException e) {
-			System.err.println("Unable to fetch data from database: " + e.getMessage());
-		}
+                            try {
+                                    data = constructor.fetchGraph();
+                                    data.setName(key);
+                                    lineChart.getData().add(data);
+                                    graphData.put(key, data);
+
+
+                            } catch (SQLException e) {
+                                    System.err.println("Unable to fetch data from database: " + e.getMessage());
+                            }
+                        }
+                    } else {
+                        key = f.getKey() + " : " + metric;
+                        if (graphData.containsKey(key))
+                            lineChart.getData().remove(graphData.get(key));
+                    }
+                    i++;
+                }
+               lineChart.setCreateSymbols(false);
+               lineChart.setLegendVisible(true);
+               lineChart.getXAxis().setTickLabelsVisible(true);
+               
 	}
 	
 	@FXML
@@ -245,10 +390,9 @@ public class AuctionController extends AnchorPane {
 		if (s != null) {  
 			DatabaseConnection.closeConnection();
 			DatabaseConnection.setDbfile(s.getPath());
-
 			application.getStage().setTitle(preferences.get("ProductName", "Ad Auction Dashboard") + " - " + DatabaseConnection.getDbfile().replace(".db", ""));
 			generateGraph.setDisable(false); 
-			generateData(null);
+			//generateData(null);
 		}
 	}   
 }
