@@ -24,6 +24,7 @@ public class ImpressionsDataTest extends TestCase {
 	public void setUp() {
 		DatabaseConnection.setDbfile("TestData.db");
 		filter = new Filter();
+		filter.setCampaign("TestData");
 	}
 
 	@Test
@@ -80,6 +81,25 @@ public class ImpressionsDataTest extends TestCase {
 
 			ObservableList<XYChart.Data<Date, Number>> data = impressionsConstructor.fetchGraph().getData();
 			assertEquals(5760, data.get(0).getYValue());
+		} catch (SQLException sqle) {
+			System.err.println(sqle.getMessage());
+			fail("SQL error");
+		}
+	}
+	
+	/*
+	 * Test the edge-case where an invalid time granuality is set.
+	 * Default case set to hours.
+	 */
+	@Test
+	public void testInvalidTimeTotal() {
+		try {
+			filter.setTime("Other");
+			
+			ImpressionsGraphConstructor impressionsConstructor = new ImpressionsGraphConstructor(filter);
+
+			ObservableList<XYChart.Data<Date, Number>> data = impressionsConstructor.fetchGraph().getData();
+			assertEquals(2880, data.get(0).getYValue());
 		} catch (SQLException sqle) {
 			System.err.println(sqle.getMessage());
 			fail("SQL error");

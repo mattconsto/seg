@@ -23,6 +23,7 @@ public class BounceDataTest extends TestCase {
 	public void setUp() {
 		DatabaseConnection.setDbfile("TestData.db");
 		filter = new Filter();
+		filter.setCampaign("TestData");
 		bounceFilter = new BounceFilter();
 		bounceFilter.setPageLimit(1);
 	}

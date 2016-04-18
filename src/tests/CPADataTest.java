@@ -21,6 +21,7 @@ public class CPADataTest extends TestCase {
 	public void setUp() {
 		DatabaseConnection.setDbfile("TestData.db");
 		filter = new Filter();
+		filter.setCampaign("TestData");
 	}
 
 	@Test
