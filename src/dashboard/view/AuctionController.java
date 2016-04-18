@@ -1,24 +1,29 @@
 package dashboard.view;
 
 import java.io.File;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Date;
 
 import org.controlsfx.control.CheckComboBox;
 
+import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart.Series;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.WritableImage;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import dashboard.controller.*;
@@ -27,8 +32,10 @@ import dashboard.model.*;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-
 import java.util.prefs.Preferences;
+
+import javax.imageio.ImageIO;
+
 import javafx.beans.property.SimpleStringProperty;
 import javafx.geometry.Pos;
 import javafx.scene.control.TableColumn.CellDataFeatures;
@@ -89,6 +96,8 @@ public class AuctionController extends AnchorPane {
 	@FXML private ComboBox<String> cbCampaign;
 	@FXML private TableColumn<ObservableMetrics, Boolean> selectCol;
 	private MetricsUpdater updaterRunnable;
+	
+	private FileChooser fileChooser;
 
 	private HashMap<String, Series<Date, Number>> graphData = new HashMap<String, Series<Date, Number>>();
 	public void setApp(Main application){
@@ -109,6 +118,8 @@ public class AuctionController extends AnchorPane {
 		filterAge.getCheckModel().check(0);
 		filterContext.getCheckModel().check(0);
 		filterIncome.getCheckModel().check(0);
+		
+		fileChooser = new FileChooser();
 			 
 		configureTable();  
 		configureFilters();
@@ -242,6 +253,31 @@ public class AuctionController extends AnchorPane {
 	@FXML private void importCampaignAction(ActionEvent event) {
 		if(updaterRunnable != null) updaterRunnable.stop();
 		application.start(application.getStage());
+	}
+	
+	@FXML private void saveGraphAs(ActionEvent event) {
+		configureFileChooser(fileChooser);
+		WritableImage snapshot = lineChart.snapshot(new SnapshotParameters(), null);
+		File newFile = fileChooser.showSaveDialog(application.getStage());
+		if(newFile != null) {
+			try
+			{
+				ImageIO.write(SwingFXUtils.fromFXImage(snapshot, null), "png", newFile);
+			}
+			catch(IOException e)
+			{
+				//TODO: Error dialog!
+				System.err.println("Could not save image.");
+			}
+		}
+	}
+	
+	private static void configureFileChooser(final FileChooser fc){
+		fc.setTitle("Save graph as...");
+		fc.setInitialDirectory(new File(System.getProperty("user.dir")));
+		fc.getExtensionFilters().addAll(
+				new FileChooser.ExtensionFilter("PNG", "*.png*")
+		);
 	}
 
 	@FXML
