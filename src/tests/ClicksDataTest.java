@@ -83,6 +83,21 @@ public class ClicksDataTest extends TestCase {
 			fail("SQL error");
 		}
 	}
+	
+	@Test
+	public void testInvalidTimeTotal() {
+		try {
+			filter.setTime("Other");
+			
+			ClicksGraphConstructor clicksConstructor = new ClicksGraphConstructor(filter);
+
+			ObservableList<XYChart.Data<Date, Number>> data = clicksConstructor.fetchGraph().getData();
+			assertEquals(1440, data.get(0).getYValue());
+		} catch (SQLException sqle) {
+			System.err.println(sqle.getMessage());
+			fail("SQL error");
+		}
+	}
 
 	@Test
 	public void testFirstHourGender() {
@@ -98,6 +113,13 @@ public class ClicksDataTest extends TestCase {
 
 			data = clicksConstructor.fetchGraph().getData();
 			assertEquals(720, data.get(0).getYValue());
+			
+			//Test invalid gender
+			filter.setGender(FXCollections.observableArrayList("Invalid"));
+			clicksConstructor = new ClicksGraphConstructor(filter);
+
+			data = clicksConstructor.fetchGraph().getData();
+			assertEquals(1440, data.get(0).getYValue());
 		} catch (SQLException sqle) {
 			System.err.println(sqle.getMessage());
 			fail("SQL error");
@@ -136,6 +158,13 @@ public class ClicksDataTest extends TestCase {
 
 			data = clicksConstructor.fetchGraph().getData();
 			assertEquals(288, data.get(0).getYValue());
+			
+			//Test invalid age
+			filter.setAge(FXCollections.observableArrayList("Invalid"));
+			clicksConstructor = new ClicksGraphConstructor(filter);
+
+			data = clicksConstructor.fetchGraph().getData();
+			assertEquals(1440, data.get(0).getYValue());
 		} catch (SQLException sqle) {
 			System.err.println(sqle.getMessage());
 			fail("SQL error");
@@ -162,6 +191,13 @@ public class ClicksDataTest extends TestCase {
 
 			data = clicksConstructor.fetchGraph().getData();
 			assertEquals(480, data.get(0).getYValue());
+			
+			//Test invalid income
+			filter.setIncome(FXCollections.observableArrayList("Invalid"));
+			clicksConstructor = new ClicksGraphConstructor(filter);
+
+			data = clicksConstructor.fetchGraph().getData();
+			assertEquals(1440, data.get(0).getYValue());
 		} catch (SQLException sqle) {
 			System.err.println(sqle.getMessage());
 			fail("SQL error");
@@ -206,6 +242,12 @@ public class ClicksDataTest extends TestCase {
 
 			data = clicksConstructor.fetchGraph().getData();
 			assertEquals(240, data.get(0).getYValue());
+			
+			filter.setContext(FXCollections.observableArrayList("Invalid"));
+			clicksConstructor = new ClicksGraphConstructor(filter);
+
+			data = clicksConstructor.fetchGraph().getData();
+			assertEquals(1440, data.get(0).getYValue());
 		} catch (SQLException sqle) {
 			System.err.println(sqle.getMessage());
 			fail("SQL error");

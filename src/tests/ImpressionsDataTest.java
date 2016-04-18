@@ -89,6 +89,7 @@ public class ImpressionsDataTest extends TestCase {
 	
 	/*
 	 * Test the edge-case where an invalid time granuality is set.
+	 * Currently assuming that default goes to hours
 	 */
 	@Test
 	public void testInvalidTimeTotal() {
@@ -98,7 +99,7 @@ public class ImpressionsDataTest extends TestCase {
 			ImpressionsGraphConstructor impressionsConstructor = new ImpressionsGraphConstructor(filter);
 
 			ObservableList<XYChart.Data<Date, Number>> data = impressionsConstructor.fetchGraph().getData();
-			assertEquals(5760, data.get(0).getYValue());
+			assertEquals(2880, data.get(0).getYValue());
 		} catch (SQLException sqle) {
 			System.err.println(sqle.getMessage());
 			fail("SQL error");

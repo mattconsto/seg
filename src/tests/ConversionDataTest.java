@@ -83,6 +83,21 @@ public class ConversionDataTest extends TestCase {
 			fail("SQL error");
 		}
 	}
+	
+	@Test
+	public void testInvalidTimeTotal() {
+		try {
+			filter.setTime("Other");
+			
+			ConversionGraphConstructor conversionConstructor = new ConversionGraphConstructor(filter);
+
+			ObservableList<XYChart.Data<Date, Number>> data = conversionConstructor.fetchGraph().getData();
+			assertEquals(360, data.get(0).getYValue());
+		} catch (SQLException sqle) {
+			System.err.println(sqle.getMessage());
+			fail("SQL error");
+		}
+	}
 
 	@Test
 	public void testFirstHourGender() {
@@ -98,6 +113,13 @@ public class ConversionDataTest extends TestCase {
 
 			data = conversionConstructor.fetchGraph().getData();
 			assertEquals(180, data.get(0).getYValue());
+			
+			//Test invalid gender
+			filter.setGender(FXCollections.observableArrayList("Invalid"));
+			conversionConstructor = new ConversionGraphConstructor(filter);
+
+			data = conversionConstructor.fetchGraph().getData();
+			assertEquals(360, data.get(0).getYValue());
 		} catch (SQLException sqle) {
 			System.err.println(sqle.getMessage());
 			fail("SQL error");
@@ -136,6 +158,13 @@ public class ConversionDataTest extends TestCase {
 
 			data = conversionConstructor.fetchGraph().getData();
 			assertEquals(72, data.get(0).getYValue());
+			
+			//Test invalid age
+			filter.setAge(FXCollections.observableArrayList("Invalid"));
+			conversionConstructor = new ConversionGraphConstructor(filter);
+
+			data = conversionConstructor.fetchGraph().getData();
+			assertEquals(360, data.get(0).getYValue());
 		} catch (SQLException sqle) {
 			System.err.println(sqle.getMessage());
 			fail("SQL error");
@@ -162,6 +191,13 @@ public class ConversionDataTest extends TestCase {
 
 			data = conversionConstructor.fetchGraph().getData();
 			assertEquals(120, data.get(0).getYValue());
+			
+			//Test invalid income
+			filter.setIncome(FXCollections.observableArrayList("Income"));
+			conversionConstructor = new ConversionGraphConstructor(filter);
+
+			data = conversionConstructor.fetchGraph().getData();
+			assertEquals(360, data.get(0).getYValue());
 		} catch (SQLException sqle) {
 			System.err.println(sqle.getMessage());
 			fail("SQL error");
@@ -206,6 +242,13 @@ public class ConversionDataTest extends TestCase {
 
 			data = conversionConstructor.fetchGraph().getData();
 			assertEquals(60, data.get(0).getYValue());
+			
+			//Test invalid context
+			filter.setContext(FXCollections.observableArrayList("Invalid"));
+			conversionConstructor = new ConversionGraphConstructor(filter);
+
+			data = conversionConstructor.fetchGraph().getData();
+			assertEquals(360, data.get(0).getYValue());
 		} catch (SQLException sqle) {
 			System.err.println(sqle.getMessage());
 			fail("SQL error");

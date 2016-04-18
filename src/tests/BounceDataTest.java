@@ -11,6 +11,7 @@ import junit.framework.TestCase;
 import org.junit.Test;
 
 import dashboard.controller.BounceGraphConstructor;
+import dashboard.controller.ImpressionsGraphConstructor;
 import dashboard.model.BounceFilter;
 import dashboard.model.DatabaseConnection;
 import dashboard.model.Filter;
@@ -87,6 +88,25 @@ public class BounceDataTest extends TestCase {
 			fail("SQL error");
 		}
 	}
+	
+	/*
+	 * Test the edge-case where an invalid time granuality is set.
+	 * Currently assuming that default goes to hours
+	 */
+	@Test
+	public void testInvalidTimeTotal() {
+		try {
+			filter.setTime("Other");
+			
+			BounceGraphConstructor bounceConstructor = new BounceGraphConstructor(filter, bounceFilter);
+
+			ObservableList<XYChart.Data<Date, Number>> data = bounceConstructor.fetchGraph().getData();
+			assertEquals(720, data.get(0).getYValue());
+		} catch (SQLException sqle) {
+			System.err.println(sqle.getMessage());
+			fail("SQL error");
+		}
+	}
 
 	@Test
 	public void testFirstHourGender() {
@@ -102,6 +122,13 @@ public class BounceDataTest extends TestCase {
 
 			data = bounceConstructor.fetchGraph().getData();
 			assertEquals(360, data.get(0).getYValue());
+			
+			//Test invalid gender
+			filter.setGender(FXCollections.observableArrayList("Invalid"));
+			bounceConstructor = new BounceGraphConstructor(filter, bounceFilter);
+
+			data = bounceConstructor.fetchGraph().getData();
+			assertEquals(720, data.get(0).getYValue());
 		} catch (SQLException sqle) {
 			System.err.println(sqle.getMessage());
 			fail("SQL error");
@@ -140,6 +167,13 @@ public class BounceDataTest extends TestCase {
 
 			data = bounceConstructor.fetchGraph().getData();
 			assertEquals(144, data.get(0).getYValue());
+			
+			//Test invalid age
+			filter.setAge(FXCollections.observableArrayList("Invalid"));
+			bounceConstructor = new BounceGraphConstructor(filter, bounceFilter);
+
+			data = bounceConstructor.fetchGraph().getData();
+			assertEquals(720, data.get(0).getYValue());
 		} catch (SQLException sqle) {
 			System.err.println(sqle.getMessage());
 			fail("SQL error");
@@ -166,6 +200,13 @@ public class BounceDataTest extends TestCase {
 
 			data = bounceConstructor.fetchGraph().getData();
 			assertEquals(240, data.get(0).getYValue());
+			
+			//Test invalid Income
+			filter.setIncome(FXCollections.observableArrayList("Invalid"));
+			bounceConstructor = new BounceGraphConstructor(filter, bounceFilter);
+
+			data = bounceConstructor.fetchGraph().getData();
+			assertEquals(720, data.get(0).getYValue());
 		} catch (SQLException sqle) {
 			System.err.println(sqle.getMessage());
 			fail("SQL error");
@@ -210,6 +251,13 @@ public class BounceDataTest extends TestCase {
 
 			data = bounceConstructor.fetchGraph().getData();
 			assertEquals(120, data.get(0).getYValue());
+			
+			//Test invalid context
+			filter.setContext(FXCollections.observableArrayList("Invalid"));
+			bounceConstructor = new BounceGraphConstructor(filter, bounceFilter);
+
+			data = bounceConstructor.fetchGraph().getData();
+			assertEquals(720, data.get(0).getYValue());
 		} catch (SQLException sqle) {
 			System.err.println(sqle.getMessage());
 			fail("SQL error");

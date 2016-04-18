@@ -8,7 +8,6 @@ import java.util.Date;
 
 import org.controlsfx.control.CheckComboBox;
 
-import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;

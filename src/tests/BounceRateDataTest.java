@@ -87,6 +87,21 @@ public class BounceRateDataTest extends TestCase {
 			fail("SQL error");
 		}
 	}
+	
+	@Test
+	public void testInvalidTimeTotal() {
+		try {
+			filter.setTime("Other");
+			
+			BounceRateGraphConstructor bounceConstructor = new BounceRateGraphConstructor(filter, bounceFilter);
+
+			ObservableList<XYChart.Data<Date, Number>> data = bounceConstructor.fetchGraph().getData();
+			assertEquals(0.5f, data.get(0).getYValue());
+		} catch (SQLException sqle) {
+			System.err.println(sqle.getMessage());
+			fail("SQL error");
+		}
+	}
 
 	@Test
 	public void testFirstHourGender() {
@@ -98,6 +113,13 @@ public class BounceRateDataTest extends TestCase {
 			assertEquals(0.5f, data.get(0).getYValue());
 
 			filter.setGender(FXCollections.observableArrayList("Male"));
+			bounceConstructor = new BounceRateGraphConstructor(filter, bounceFilter);
+
+			data = bounceConstructor.fetchGraph().getData();
+			assertEquals(0.5f, data.get(0).getYValue());
+			
+			//Test invalid gender
+			filter.setGender(FXCollections.observableArrayList("Invalid"));
 			bounceConstructor = new BounceRateGraphConstructor(filter, bounceFilter);
 
 			data = bounceConstructor.fetchGraph().getData();
@@ -140,6 +162,13 @@ public class BounceRateDataTest extends TestCase {
 
 			data = bounceConstructor.fetchGraph().getData();
 			assertEquals(0.5f, data.get(0).getYValue());
+			
+			//Test invalid age
+			filter.setAge(FXCollections.observableArrayList("Invalid"));
+			bounceConstructor = new BounceRateGraphConstructor(filter, bounceFilter);
+
+			data = bounceConstructor.fetchGraph().getData();
+			assertEquals(0.5f, data.get(0).getYValue());
 		} catch (SQLException sqle) {
 			System.err.println(sqle.getMessage());
 			fail("SQL error");
@@ -162,6 +191,13 @@ public class BounceRateDataTest extends TestCase {
 			assertEquals(0.5f, data.get(0).getYValue());
 
 			filter.setIncome(FXCollections.observableArrayList("High"));
+			bounceConstructor = new BounceRateGraphConstructor(filter, bounceFilter);
+
+			data = bounceConstructor.fetchGraph().getData();
+			assertEquals(0.5f, data.get(0).getYValue());
+			
+			//Test invalid income
+			filter.setIncome(FXCollections.observableArrayList("Invalid"));
 			bounceConstructor = new BounceRateGraphConstructor(filter, bounceFilter);
 
 			data = bounceConstructor.fetchGraph().getData();
@@ -206,6 +242,13 @@ public class BounceRateDataTest extends TestCase {
 			assertEquals(0.5f, data.get(0).getYValue());
 
 			filter.setContext(FXCollections.observableArrayList("Travel"));
+			bounceConstructor = new BounceRateGraphConstructor(filter, bounceFilter);
+
+			data = bounceConstructor.fetchGraph().getData();
+			assertEquals(0.5f, data.get(0).getYValue());
+			
+			//Test invalid context
+			filter.setContext(FXCollections.observableArrayList("Invalid"));
 			bounceConstructor = new BounceRateGraphConstructor(filter, bounceFilter);
 
 			data = bounceConstructor.fetchGraph().getData();
