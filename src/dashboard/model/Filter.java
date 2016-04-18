@@ -16,26 +16,25 @@ import org.controlsfx.control.IndexedCheckModel;
 
 public class Filter {
 
-	public boolean genderEnabled = true;
-	public boolean ageEnabled = true;
-	public boolean incomeEnabled = true;
-	public boolean contextEnabled = true;
-	public List <String> gender;
-	public List <String> age;
-	public List <String> income; 
-	public List <String> context;
-	public LocalDate dateTo;
-	public LocalDate dateFrom;
-	public String contextSQL = "1";
-	public String ageSQL = "1";
-	public String incomeSQL = "1";
-	public String genderSQL = "1";
-	public String dateSQL;
-	public String timeFormatSQL = "%Y-%m-%d %H";
-	public String timeFormatJava = "yyyy-MM-dd HH";
-	public String campaign = "";
-	public String description= "";
-
+	private boolean genderEnabled = true;
+	private boolean ageEnabled = true;
+	private boolean incomeEnabled = true;
+	private boolean contextEnabled = true;
+	private List <String> gender;
+	private List <String> age;
+	private List <String> income; 
+	private List <String> context;
+	private LocalDate dateTo;
+	private LocalDate dateFrom;
+	private String contextSQL = "1";
+	private String ageSQL = "1";
+	private String incomeSQL = "1";
+	private String genderSQL = "1";
+	private String dateSQL;
+	private String timeFormatSQL = "%Y-%m-%d %H";
+	private String timeFormatJava = "yyyy-MM-dd HH";
+	private String campaign = "";
+	private String description= "";
 
 	@Override
 	public String toString() {
@@ -83,6 +82,14 @@ public class Filter {
 		}
 	}
 	
+	public String getTimeFormatJava(){
+		return timeFormatJava;
+	}
+	
+	public String getTimeFormatSQL(){
+		return timeFormatSQL;
+	}
+	
 	public String getDateSQL() {
 		return dateSQL;
 	}
@@ -112,6 +119,7 @@ public class Filter {
 			this.gender.add (s);
 		setGenderSQL();
 	}
+	
 	private void setAnyGender(CheckComboBox<String> c) {
 		c.getItems().clear();
 		c.getItems().addAll("Any","Female","Male");
@@ -267,14 +275,15 @@ public class Filter {
 
 	
 	private void setGenderSQL() {
-		genderSQL = "";
-		if (gender.isEmpty() || gender.contains("Any") || (gender.contains("Female") && gender.contains("Male"))){
-			genderSQL = "1";
-		}
-		else if (gender.contains("Male"))
+		/*if (gender.isEmpty() || gender.contains("Any") || (gender.contains("Female") && gender.contains("Male"))){
+			
+		}*/
+		if (gender.contains("Male") && !gender.contains("Female"))
 			genderSQL = "gender = 0";
+		else if(gender.contains("Female") && !gender.contains("Male"))
+			genderSQL = "gender = 1";
 		else
-			genderSQL = "gender = 1";   
+			genderSQL = "1";
 	}
 	
 	private void setIncomeSQL() {
@@ -331,7 +340,7 @@ public class Filter {
 							break;
 				  
 					default:
-							ageSQL += "1 = 1";
+							ageSQL += "1";
 							break;
 				}
 			}
@@ -384,7 +393,7 @@ public class Filter {
 							contextSQL += "CONTEXT=5";
 							break;
 					default:
-							contextSQL += "1 = 1";
+							contextSQL += "1";
 							break;
 					}
 				}
@@ -422,11 +431,6 @@ public class Filter {
 		setDateSQL();
 	}
 	
-	//TODO: Either make this do something or delete it
-	public void setDateFromSQL() {
-		
-	}
-	
 	/* Default constructor sets all fields to 'any', and leaves date range unrestricted */
 	public Filter() {
 		gender = new ArrayList<String>();
@@ -434,7 +438,8 @@ public class Filter {
 		income = new ArrayList<String>();
 		context = new ArrayList<String>();
 		campaign = "";
-		description = "";
+        description = "";
+        
 		setGender(FXCollections.observableArrayList("Any"));
 		setAge(FXCollections.observableArrayList("Any"));
 		setIncome(FXCollections.observableArrayList("Any"));
