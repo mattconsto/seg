@@ -291,8 +291,29 @@ public class AuctionController extends AnchorPane {
 	private void generateData(ActionEvent event) {
 		if(updaterRunnable != null) updaterRunnable.stop();
 			// todo - check valid entry for name and campaign
-			if (!txtFilterName.getText().isEmpty() && !filters.containsKey(txtFilterName.getText()))
-			{ 
+		 if (filters.size() == 10 ) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Too many filters");
+                    alert.setHeaderText(null);
+                    alert.setContentText("You are only allowed upto 10 filters at a time.");
+                    alert.showAndWait();
+                }
+                else if ( txtFilterName.getText().isEmpty()) { 
+                       
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Please enter a campaign name");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Please enter a campaign name");
+                    alert.showAndWait();
+                }
+                else if  (filters.containsKey(txtFilterName.getText())) {
+                     Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Campaign name in use");
+                    alert.setHeaderText(null);
+                    alert.setContentText("This campaign name has already been used. Please enter a unique campaign name");
+                    alert.showAndWait();
+                }
+                else {
 				filter.setDescription(txtFilterName.getText());
 				filter.setCampaign(cbCampaign.getValue());
 				filter.setDateFrom(filterDateFrom.getValue());
