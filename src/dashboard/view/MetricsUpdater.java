@@ -9,7 +9,6 @@ import dashboard.model.BounceFilter;
 import dashboard.model.DatabaseConnection;
 import dashboard.model.Filter;
 import dashboard.model.ObservableMetrics;
-import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
 public class MetricsUpdater implements Runnable {

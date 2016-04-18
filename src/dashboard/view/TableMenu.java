@@ -5,23 +5,14 @@
  */
 package dashboard.view;
 
-/**
- *
- * @author 
- */
- 
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.geometry.Side;
 import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.CustomMenuItem;
-import javafx.scene.control.Label;
-import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.input.MouseEvent;
 
 import com.sun.javafx.scene.control.skin.TableHeaderRow;
 import com.sun.javafx.scene.control.skin.TableViewSkin;
@@ -34,7 +25,7 @@ public class TableMenu {
 	 * IMPORTANT: Modification is only possible AFTER the table has been made visible, otherwise you'd get a NullPointerException
 	 * @param tableView
 	 */
-	public static void addCustomTableMenu( TableView tableView) {
+	public static void addCustomTableMenu( TableView<?> tableView) {
 
 		// enable table menu
 		tableView.setTableMenuButtonVisible(true);
@@ -44,7 +35,7 @@ public class TableMenu {
 
 	}
 	
-	private static void setCustomContextMenu( TableView table) {
+	private static void setCustomContextMenu( TableView<?> table) {
 
 		TableViewSkin<?> tableSkin = (TableViewSkin<?>) table.getSkin();
 
@@ -94,7 +85,7 @@ public class TableMenu {
 	 * @param cm
 	 * @param table
 	 */
-	private static ContextMenu createContextMenu( TableView table) {
+	private static ContextMenu createContextMenu( TableView<?> table) {
 		
 		ContextMenu cm = new ContextMenu();
 		

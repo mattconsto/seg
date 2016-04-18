@@ -17,7 +17,7 @@ public final class ObservableMetrics {
 
     public ObservableMetrics(String desc) {	
         this.select = new SimpleBooleanProperty(false);
-        this.results = new ArrayList();
+        this.results = new ArrayList<SimpleStringProperty>();
         for (int i = 0; i < 10; i++)
             this.results.add(new SimpleStringProperty("0"));
         this.description = new SimpleStringProperty(desc);
@@ -41,8 +41,5 @@ public final class ObservableMetrics {
   
     public ObservableValue<Boolean> selectProperty() {
             return select;
-    }
-    private List<SimpleStringProperty> SimpleStringProperty(String res) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

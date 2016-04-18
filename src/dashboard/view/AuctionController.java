@@ -23,6 +23,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import dashboard.controller.*;
 import dashboard.model.*;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -94,7 +95,7 @@ public class AuctionController extends AnchorPane {
 	private MetricsUpdater updaterRunnable;
         
         
-        private HashMap<String, Series> graphData = new HashMap<String, Series>();
+        private HashMap<String, Series<Date, Number>> graphData = new HashMap<String, Series<Date, Number>>();
 	public void setApp(Main application){
 		this.application = application;
 	}
@@ -181,7 +182,7 @@ public class AuctionController extends AnchorPane {
         } 
         private void addColumn(String colName) {
             
-            TableColumn tc = new TableColumn(colName);
+            TableColumn<ObservableMetrics, String> tc = new TableColumn<ObservableMetrics, String>(colName);
             final int colNo = filters.size();
             tc.setCellValueFactory(new Callback<CellDataFeatures<ObservableMetrics, String>, ObservableValue<String>>() {
                 @Override
@@ -207,10 +208,10 @@ public class AuctionController extends AnchorPane {
                         @Override
                         public void updateItem( Boolean item, boolean empty ){
                             if ( ! empty ) {
-                                TableRow  row = getTableRow();
+                                TableRow<?>  row = getTableRow();
                                 if ( row != null ) {
                                     int rowNo = row.getIndex();
-                                    TableViewSelectionModel  s = getTableView().getSelectionModel();
+                                    TableViewSelectionModel<?>  s = getTableView().getSelectionModel();
                                     if ( item ) {
                                         updateGraph(  getTableView().getItems().get(rowNo).getDescription());
                                         s.select( rowNo );
