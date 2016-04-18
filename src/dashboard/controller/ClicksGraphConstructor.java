@@ -22,26 +22,26 @@ public class ClicksGraphConstructor extends GraphConstructor {
 	@Override
 	protected Series<Date, Number> generateGraph(Connection conn) throws SQLException, ParseException {
 		/*
-		ResultSet results = conn.createStatement().executeQuery("SELECT strftime('" + filter.timeFormatSQL +"', DATE) AS DATE,COUNT(*) AS Frequency FROM"
+		ResultSet results = conn.createStatement().executeQuery("SELECT strftime('" + filter.getTimeFormatSQL() +"', DATE) AS DATE,COUNT(*) AS Frequency FROM"
 				+ "(SELECT IMPRESSIONS.*, CLICKS.* FROM IMPRESSIONS"
 				+ " INNER JOIN CLICKS ON IMPRESSIONS.ID=CLICKS.ID"
 				+ " GROUP BY CLICKS.DATE, CLICKS.ID) AS SUBQUERY"
 				+ " WHERE " + filter.getSql()
-				+ " GROUP BY strftime('" + filter.timeFormatSQL +"', DATE);");
+				+ " GROUP BY strftime('" + filter.getTimeFormatSQL() +"', DATE);");
 		*/
-		ResultSet results = conn.createStatement().executeQuery("SELECT strftime('" + filter.timeFormatSQL +"', CLICKS.DATE),COUNT(*) AS Frequency FROM "
+		ResultSet results = conn.createStatement().executeQuery("SELECT strftime('" + filter.getTimeFormatSQL() +"', CLICKS.DATE),COUNT(*) AS Frequency FROM "
 				+ "CLICKS "
 				+ "INNER JOIN "
 				+ "(SELECT * FROM IMPRESSIONS GROUP BY ID) AS IMPRESSIONS "
 				+ "ON CLICKS.ID=IMPRESSIONS.ID "
 				+ "WHERE " + filter.getSql().replace("DATE", "CLICKS.DATE")
-				+ " GROUP BY strftime('" + filter.timeFormatSQL +"', CLICKS.DATE);");
+				+ " GROUP BY strftime('" + filter.getTimeFormatSQL() +"', CLICKS.DATE);");
 		
 		
 		XYChart.Series<Date, Number> series = new XYChart.Series<Date, Number>();
 		series.setName("Clicks by date");
 
-		DateFormat format = new SimpleDateFormat(filter.timeFormatJava, Locale.ENGLISH);
+		DateFormat format = new SimpleDateFormat(filter.getTimeFormatJava(), Locale.ENGLISH);
 		while (results.next())
 			series.getData().add(new XYChart.Data<Date, Number>(format.parse(results.getString(1)), results.getInt(2)));
 

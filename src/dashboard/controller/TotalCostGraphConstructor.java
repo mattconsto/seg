@@ -23,22 +23,22 @@ public class TotalCostGraphConstructor extends GraphConstructor{
 	protected Series<Date, Number> generateGraph(Connection conn)
 			throws SQLException, ParseException {
 		ResultSet results = conn.createStatement().executeQuery("SELECT IMPDATE, CLICKCOST, IMPCOST FROM "
-				+ "(SELECT strftime('" + filter.timeFormatSQL +"', CLICKDATE) AS CLICKDATE, SUM(CLICKCOST) AS CLICKCOST FROM "
+				+ "(SELECT strftime('" + filter.getTimeFormatSQL() +"', CLICKDATE) AS CLICKDATE, SUM(CLICKCOST) AS CLICKCOST FROM "
 				+ "(SELECT IMPRESSIONS.*, CLICKS.ID, CLICKS.DATE AS CLICKDATE, CLICKS.COST AS CLICKCOST "
 				+ "FROM IMPRESSIONS "
 				+ "INNER JOIN CLICKS "
 				+ "ON IMPRESSIONS.ID=CLICKS.ID "
 				+ "GROUP BY CLICKS.DATE, CLICKS.ID) "
-				+ "WHERE " + filter.getSql().replace("DATE", "CLICKDATE")+ " GROUP BY strftime('" + filter.timeFormatSQL +"', CLICKDATE)) "
+				+ "WHERE " + filter.getSql().replace("DATE", "CLICKDATE")+ " GROUP BY strftime('" + filter.getTimeFormatSQL() +"', CLICKDATE)) "
 				+ "INNER JOIN "
-				+ "(SELECT strftime('" + filter.timeFormatSQL +"', DATE) AS IMPDATE, SUM(COST) AS IMPCOST FROM IMPRESSIONS "
-				+ "WHERE " + filter.getSql()+ " GROUP BY strftime('" + filter.timeFormatSQL +"', DATE)) "
+				+ "(SELECT strftime('" + filter.getTimeFormatSQL() +"', DATE) AS IMPDATE, SUM(COST) AS IMPCOST FROM IMPRESSIONS "
+				+ "WHERE " + filter.getSql()+ " GROUP BY strftime('" + filter.getTimeFormatSQL() +"', DATE)) "
 				+ "ON IMPDATE=CLICKDATE");
 
 		XYChart.Series<Date, Number> series = new XYChart.Series<Date, Number>();
 		series.setName(" by date");
 
-		DateFormat format = new SimpleDateFormat(filter.timeFormatJava, Locale.ENGLISH);
+		DateFormat format = new SimpleDateFormat(filter.getTimeFormatJava(), Locale.ENGLISH);
 		
 		int i = -1;
 		while (results.next()){

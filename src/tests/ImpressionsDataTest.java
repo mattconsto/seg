@@ -89,7 +89,6 @@ public class ImpressionsDataTest extends TestCase {
 	
 	/*
 	 * Test the edge-case where an invalid time granuality is set.
-	 * Default case set to hours.
 	 */
 	@Test
 	public void testInvalidTimeTotal() {
@@ -99,7 +98,7 @@ public class ImpressionsDataTest extends TestCase {
 			ImpressionsGraphConstructor impressionsConstructor = new ImpressionsGraphConstructor(filter);
 
 			ObservableList<XYChart.Data<Date, Number>> data = impressionsConstructor.fetchGraph().getData();
-			assertEquals(2880, data.get(0).getYValue());
+			assertEquals(5760, data.get(0).getYValue());
 		} catch (SQLException sqle) {
 			System.err.println(sqle.getMessage());
 			fail("SQL error");
@@ -120,6 +119,13 @@ public class ImpressionsDataTest extends TestCase {
 
 			data = impressionsConstructor.fetchGraph().getData();
 			assertEquals(1440, data.get(0).getYValue());
+			
+			//Test invalid gender
+			filter.setGender(FXCollections.observableArrayList("Invalid"));
+			impressionsConstructor = new ImpressionsGraphConstructor(filter);
+
+			data = impressionsConstructor.fetchGraph().getData();
+			assertEquals(2880, data.get(0).getYValue());
 		} catch (SQLException sqle) {
 			System.err.println(sqle.getMessage());
 			fail("SQL error");
@@ -158,6 +164,13 @@ public class ImpressionsDataTest extends TestCase {
 
 			data = impressionsConstructor.fetchGraph().getData();
 			assertEquals(576, data.get(0).getYValue());
+			
+			//Test invalid age
+			filter.setAge(FXCollections.observableArrayList("Invalid"));
+			impressionsConstructor = new ImpressionsGraphConstructor(filter);
+
+			data = impressionsConstructor.fetchGraph().getData();
+			assertEquals(2880, data.get(0).getYValue());
 		} catch (SQLException sqle) {
 			System.err.println(sqle.getMessage());
 			fail("SQL error");
@@ -184,6 +197,13 @@ public class ImpressionsDataTest extends TestCase {
 
 			data = impressionsConstructor.fetchGraph().getData();
 			assertEquals(960, data.get(0).getYValue());
+			
+			//Test invalid income
+			filter.setIncome(FXCollections.observableArrayList("Invalid"));
+			impressionsConstructor = new ImpressionsGraphConstructor(filter);
+
+			data = impressionsConstructor.fetchGraph().getData();
+			assertEquals(2880, data.get(0).getYValue());
 		} catch (SQLException sqle) {
 			System.err.println(sqle.getMessage());
 			fail("SQL error");
@@ -228,6 +248,13 @@ public class ImpressionsDataTest extends TestCase {
 
 			data = impressionsConstructor.fetchGraph().getData();
 			assertEquals(480, data.get(0).getYValue());
+			
+			//Test invalid filter
+			filter.setContext(FXCollections.observableArrayList("Invalid"));
+			impressionsConstructor = new ImpressionsGraphConstructor(filter);
+
+			data = impressionsConstructor.fetchGraph().getData();
+			assertEquals(2880, data.get(0).getYValue());
 		} catch (SQLException sqle) {
 			System.err.println(sqle.getMessage());
 			fail("SQL error");

@@ -21,17 +21,17 @@ public class ConversionGraphConstructor extends GraphConstructor {
 	
 	@Override
 	protected Series<Date, Number> generateGraph(Connection conn) throws SQLException, ParseException {
-		ResultSet results = conn.createStatement().executeQuery("SELECT strftime('" + filter.timeFormatSQL +"', ENTRYDATE) AS ENTRYDATE,COUNT(*) AS Frequency "
+		ResultSet results = conn.createStatement().executeQuery("SELECT strftime('" + filter.getTimeFormatSQL() +"', ENTRYDATE) AS ENTRYDATE,COUNT(*) AS Frequency "
 				+ "FROM (SELECT IMPRESSIONS.*, SERVER.* FROM "
 				+ "IMPRESSIONS INNER JOIN SERVER ON IMPRESSIONS.ID=SERVER.ID "
 				+ "GROUP BY SERVER.ENTRYDATE, SERVER.ID) AS SUBQUERY "
 				+ "WHERE CONVERSION = 1 AND " + filter.getSql().replace("DATE", "ENTRYDATE")
-				+ " GROUP BY strftime('" + filter.timeFormatSQL +"', ENTRYDATE);");
+				+ " GROUP BY strftime('" + filter.getTimeFormatSQL() +"', ENTRYDATE);");
 
 		XYChart.Series<Date, Number> series = new XYChart.Series<Date, Number>();
 		series.setName("Conversions by date");
 
-		DateFormat format = new SimpleDateFormat(filter.timeFormatJava, Locale.ENGLISH);
+		DateFormat format = new SimpleDateFormat(filter.getTimeFormatJava(), Locale.ENGLISH);
 		while (results.next())
 			series.getData().add(new XYChart.Data<Date, Number>(format.parse(results.getString(1)), results.getInt(2)));
 

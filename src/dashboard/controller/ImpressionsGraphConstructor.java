@@ -21,12 +21,12 @@ public class ImpressionsGraphConstructor extends GraphConstructor {
 	
 	@Override
 	protected Series<Date, Number> generateGraph(Connection conn) throws SQLException, ParseException {
-		ResultSet results = conn.createStatement().executeQuery("SELECT strftime('" + filter.timeFormatSQL +"', DATE) AS DATE,COUNT(*) AS Frequency, * FROM IMPRESSIONS WHERE " + filter.getSql() +" GROUP BY strftime('" + filter.timeFormatSQL +"', DATE);");
+		ResultSet results = conn.createStatement().executeQuery("SELECT strftime('" + filter.getTimeFormatSQL() +"', DATE) AS DATE,COUNT(*) AS Frequency, * FROM IMPRESSIONS WHERE " + filter.getSql() +" GROUP BY strftime('" + filter.getTimeFormatSQL() +"', DATE);");
 		
 		XYChart.Series<Date, Number> series = new XYChart.Series<Date, Number>();
 		series.setName("Impressions by date");
 
-		DateFormat format = new SimpleDateFormat(filter.timeFormatJava, Locale.ENGLISH);
+		DateFormat format = new SimpleDateFormat(filter.getTimeFormatJava(), Locale.ENGLISH);
 		while (results.next())
 			series.getData().add(new XYChart.Data<Date, Number>(format.parse(results.getString(1)), results.getInt(2)));
 
