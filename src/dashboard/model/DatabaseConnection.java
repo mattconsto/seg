@@ -21,15 +21,15 @@ public class DatabaseConnection {
 	}
 
 	public static void setDbfile(String dbfilename)  {
-            try {
-               if (!dbfile.equals(dbfilename)) {
-                   if(connection != null && !connection.isClosed()) 
-                       connection.close();
-                   connection = null;
-                   dbfile = dbfilename;
-               }
-            } catch (SQLException e) {
-            }
+		try {
+			if (!dbfile.equals(dbfilename)) {
+				if(connection != null && !connection.isClosed()) 
+					connection.close();
+				connection = null;
+				dbfile = dbfilename;
+			}
+		} catch (SQLException e) {
+		}
 	}
 	/**
 	 * Get a connection to the database
