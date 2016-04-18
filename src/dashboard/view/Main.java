@@ -108,9 +108,9 @@ public class Main extends Application {
 			
 			DatabaseConnection.closeConnection(); 
 		});
-                if (auctionTool != null)
-                    auctionTool.initMetricTable();
-        }
+		if (auctionTool != null)
+			auctionTool.initMetricTable();
+	}
 		
 	public Stage getStage() {
 		return stage;

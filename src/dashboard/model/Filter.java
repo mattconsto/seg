@@ -36,7 +36,6 @@ public class Filter {
 	private String campaign = "";
 	private String description= "";
 
-   
 	@Override
 	public String toString() {
 		return listToString(new String[] {
@@ -98,24 +97,23 @@ public class Filter {
 	public void setDateSQL(String dateSQL) {
 		this.dateSQL = dateSQL;
 	}
-        
-    public String getCampaign() {
-        return campaign;
-    }
 
-    public String getDescription() {
-        return description;
-    }
-     public void setCampaign(String campaign) {
-        this.campaign = campaign;
-    }
+	public String getCampaign() {
+		return campaign;
+	}
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-    
+	public String getDescription() {
+		return description;
+	}
+	public void setCampaign(String campaign) {
+		this.campaign = campaign;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	
 	public void setGender(ObservableList<String> gender) {
-		
 		this.gender.clear();
 		for (String s : gender)
 			this.gender.add (s);

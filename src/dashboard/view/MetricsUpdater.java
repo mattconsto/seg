@@ -9,24 +9,23 @@ import dashboard.model.BounceFilter;
 import dashboard.model.DatabaseConnection;
 import dashboard.model.Filter;
 import dashboard.model.ObservableMetrics;
-import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
 public class MetricsUpdater implements Runnable {
 	private ObservableList<ObservableMetrics> table;
-        private TableView<ObservableMetrics> tableView;
+	private TableView<ObservableMetrics> tableView;
 	private Filter                            filter;
 	private BounceFilter bounceFilter;
 	private boolean                           running = false;
 	private int iFilter;
-        
+
 	public MetricsUpdater(ObservableList<ObservableMetrics> table, Filter filter, BounceFilter bounceFilter, int index,
-                TableView<ObservableMetrics> t) {
+			TableView<ObservableMetrics> t) {
 		this.tableView = t;
-                this.table  = table;
+		this.table  = table;
 		this.filter = filter;
 		this.bounceFilter = bounceFilter;
-                this.iFilter = index;
+		this.iFilter = index;
 	}
 
 	@Override
@@ -44,7 +43,7 @@ public class MetricsUpdater implements Runnable {
 	}
 	
 	private void updateMetricsTable() throws SQLException {
-                DatabaseConnection.setDbfile(filter.getCampaign() + ".db");
+		DatabaseConnection.setDbfile(filter.getCampaign() + ".db");
 		Connection conn = DatabaseConnection.getConnection();
 		//table.clear();
 		ResultSet results = conn.createStatement().executeQuery("SELECT COUNT(*) AS Frequency, * FROM "
@@ -89,8 +88,8 @@ public class MetricsUpdater implements Runnable {
 		}
 
 		results = conn.createStatement().executeQuery("SELECT COUNT(*) AS Frequency, * FROM IMPRESSIONS WHERE " +  filter.getSql() +";");
-                
-                if (results.next()) table.get(3).setResults(iFilter, results.getString(1));
+		
+		if (results.next()) table.get(3).setResults(iFilter, results.getString(1));
 		
 		//if (results.next()) table.add(new ObservableMetrics("Impressions",results.getString(1)));
 		
@@ -250,8 +249,8 @@ public class MetricsUpdater implements Runnable {
 		if (results.next()) table.get(11).setResults(iFilter,String.format("%.1f%%", results.getInt(2)/results.getFloat(1)*100));
 		
 		results.close();
-                
-              //  tableView.getColumns().get(iFilter +1).setVisible(true);
-                tableView.refresh();
+
+		//  tableView.getColumns().get(iFilter +1).setVisible(true);
+		tableView.refresh();
 	}
 }
