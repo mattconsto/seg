@@ -287,6 +287,8 @@ public class AuctionController extends AnchorPane {
 		        job.endJob();
 		    }
 		}
+		
+		lineChart.getTransforms().clear();
 	}
 	
 	@FXML private void saveGraphAs(ActionEvent event) {
