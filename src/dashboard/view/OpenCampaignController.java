@@ -150,6 +150,7 @@ public class OpenCampaignController extends AnchorPane {
 				application.gotoMainForm();
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			Alert alert = new Alert(Alert.AlertType.INFORMATION);
 			alert.setTitle("Open Failed");
 			alert.setHeaderText(null);

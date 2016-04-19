@@ -3,6 +3,7 @@
 <?import java.lang.*?>
 <?import java.net.*?>
 <?import java.util.*?>
+
 <?import javafx.geometry.*?>
 <?import javafx.collections.*?>
 <?import javafx.scene.chart.*?>
@@ -10,134 +11,124 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.paint.*?>
- 
-<?import org.controlsfx.control.CheckComboBox?> 
+
+<?import org.controlsfx.control.CheckComboBox?>
 <?import extfx.scene.chart.DateAxis?>
 
-<AnchorPane id="AnchorPane" styleClass="background" stylesheets="@AuctionTool.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dashboard.view.AuctionController">
-	<children>
-		<MenuBar fx:id="menu" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-		<menus>
-				<Menu text="File">
-			<items>
-						<MenuItem fx:id="importCampaign" onAction="#importCampaignAction" text="Import Campaign(s)" />
-						<MenuItem fx:id="exportCampaign" onAction="#saveGraphAs" text="Save graph as..." />
-						<MenuItem fx:id="printCampaign" disable="true" text="Print" />
-						<MenuItem fx:id="close" onAction="#closeAction" text="Close" />
-			</items>
-				</Menu>
-				<Menu text="Preferences">
-			<items>
-						<MenuItem fx:id="mnuColour" disable="true" text="Colour Scheme" />
-						<MenuItem fx:id="mnuFont" disable="true" text="Font Size" />
-						<MenuItem fx:id="mnuUnits" disable="true" text="Units" />
-			</items>
-				</Menu>
-				<Menu text="Help">
-			<items>
-						<MenuItem fx:id="mnuDefinitions" disable="true" text="Definitions" />
-						<MenuItem fx:id="mnuAbout" onAction="#openAbout" text="About" />
-			</items>
-				</Menu>
-		</menus>
+<BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" id="AnchorPane" styleClass="background" stylesheets="@AuctionTool.css" fx:controller="dashboard.view.AuctionController">
+	<top>
+		<MenuBar fx:id="menu">
+			<Menu text="File">
+				<MenuItem fx:id="importCampaign" onAction="#importCampaignAction" text="Import Campaign(s)" />
+				<MenuItem fx:id="exportCampaign" onAction="#saveGraphAs" text="Save graph as..." />
+				<MenuItem fx:id="printCampaign" disable="true" text="Print" />
+				<MenuItem fx:id="close" onAction="#closeAction" text="Close" />
+			</Menu>
+			<Menu text="Preferences">
+				<MenuItem fx:id="mnuColour" disable="true" text="Colour Scheme" />
+				<MenuItem fx:id="mnuFont" disable="true" text="Font Size" />
+				<MenuItem fx:id="mnuUnits" disable="true" text="Units" />
+			</Menu>
+			<Menu text="Help">
+				<MenuItem fx:id="mnuDefinitions" disable="true" text="Definitions" />
+				<MenuItem fx:id="mnuAbout" onAction="#openAbout" text="About" />
+			</Menu>
 		</MenuBar>
-		<SplitPane dividerPositions="0.17" layoutX="2.5" layoutY="5.5" prefHeight="879.0" prefWidth="1278.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="24.0">
-		<items>
-				<AnchorPane maxWidth="900.0" minHeight="310.0" minWidth="225.0" prefHeight="160.0" prefWidth="500.0">
-			<children>
-						<Button fx:id="generateGraph" disable="true" layoutX="10.0" layoutY="407.0" onAction="#generateData" prefHeight="52.0" prefWidth="88.0" text="Add" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" />
-						<Button fx:id="clearGraph" layoutX="130.0" layoutY="407.0" onAction="#clearData" prefHeight="52.0" prefWidth="88.0" text="Clear" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" />
-                  <Accordion prefHeight="210.0" prefWidth="225.0" AnchorPane.bottomAnchor="75.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                    <panes>
-                      <TitledPane animated="false" text="Filter Criteria">
-                        <content>
-                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                                 <children>
-                  						<CheckComboBox fx:id="filterGender" layoutX="125.0" layoutY="21.0" prefHeight="25.0" prefWidth="195.0" AnchorPane.leftAnchor="106.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="35.0" />
-                  						<Label layoutX="29.6" layoutY="35.6" prefHeight="25.0" prefWidth="42.0" text="Gender:" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="35.0" />
-                  						<CheckComboBox fx:id="filterAge" layoutX="125.0" layoutY="56.0" prefHeight="25.0" prefWidth="195.0" AnchorPane.leftAnchor="106.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="70.0" />
-                  						<Label layoutX="19.6" layoutY="59.6" prefHeight="25.0" prefWidth="50.0" text="Age:" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="70.0" />
-                  						<CheckComboBox fx:id="filterIncome" layoutX="125.0" layoutY="89.6" prefHeight="25.0" prefWidth="56.0" AnchorPane.leftAnchor="106.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="105.0" />
-                  						<Label layoutX="19.6" layoutY="68.6" prefHeight="25.0" prefWidth="42.0" text="Income:" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="105.0" />
-                  						<CheckComboBox fx:id="filterContext" layoutX="125.0" layoutY="125.0" prefWidth="150.0" AnchorPane.leftAnchor="106.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="140.0" />
-                  						<ComboBox fx:id="filterTime" layoutX="125.0" layoutY="159.0" prefWidth="150.0" AnchorPane.leftAnchor="106.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="175.0">
-                  							<items>
-                  								<FXCollections fx:factory="observableArrayList">
-                  									<String fx:value="Minutes" />
-                  									<String fx:value="Hours" />
-                  									<String fx:value="Days" />
-                  									<String fx:value="Weeks" />
-                  									<String fx:value="Months" />
-                  									<String fx:value="Years" />
-                  								</FXCollections>
-                  							</items>
-                  							<value>
-                  								<String fx:value="Hours" />
-                  							</value>
-                  						</ComboBox>
-                  						<Label layoutX="35.6" layoutY="203.6" prefHeight="25.0" prefWidth="88.0" text="Time Unit:" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="175.0" />
-                  						<Label layoutX="94.6" layoutY="116.6" prefHeight="25.0" prefWidth="44.0" text="Context:" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="140.0" />
-                  				
-                  						<Label layoutX="35.6" layoutY="226.6" prefHeight="25.0" prefWidth="42.0" text="Time Filter" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="210.0" />
-                  						<Label layoutX="35.6" layoutY="249.6" prefHeight="25.0" prefWidth="87.0" text="Date from:" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="250.0" />
-                  						<Label layoutX="19.6" layoutY="269.6" prefHeight="25.0" prefWidth="87.0" text="Date to:" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="290.0" />
-                  						<DatePicker fx:id="filterDateFrom" layoutX="125.0" layoutY="228.0" prefHeight="31.0" prefWidth="94.0" AnchorPane.leftAnchor="106.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="250.0" />
-                  						<DatePicker fx:id="filterDateTo" layoutX="125.0" layoutY="269.0" prefHeight="31.0" prefWidth="91.0" AnchorPane.leftAnchor="106.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="290.0" />
-                                    <TextField fx:id="txtFilterName" layoutX="29.6" layoutY="309.0" prefHeight="25.0" prefWidth="185.0" promptText="Name Filter" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="340.0" />
-                                    <Label layoutX="19.6" layoutY="19.6" prefHeight="25.0" prefWidth="57.0" text="Campaign:" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                                    <ComboBox fx:id="cbCampaign" layoutX="54.0" layoutY="429.0" prefWidth="150.0" AnchorPane.leftAnchor="70.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                                 </children>
-                              </AnchorPane>
-                        </content>
-                      </TitledPane>
-                      <TitledPane animated="false" text="Bounce Criteria">
-                        <content>
-                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                                 <children>
-                  						<TextField fx:id="txtBounceTime" layoutX="106.0" layoutY="36.0" prefHeight="25.0" prefWidth="79.0" promptText="10" AnchorPane.leftAnchor="106.0" AnchorPane.rightAnchor="0.0" />
-                  						<TextField fx:id="txtBouncePages" layoutX="106.0" layoutY="71.0" prefHeight="25.0" prefWidth="78.0" promptText="1" AnchorPane.leftAnchor="106.0" AnchorPane.rightAnchor="0.0" />
-                  						<Label layoutX="-14.0" layoutY="16.0" text="Bounce criteria:" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                  						<RadioButton fx:id="rbByBounceTime" layoutX="-14.0" layoutY="40.0" text="Time / s:" AnchorPane.leftAnchor="0.0">
-                  							<toggleGroup>
-                  								<ToggleGroup fx:id="grBounce" />
-                  							</toggleGroup>
-                  						</RadioButton>
-                  						<RadioButton fx:id="rbByBouncePages" layoutX="-14.0" layoutY="75.0" selected="true" text="№ Pages:" toggleGroup="$grBounce" AnchorPane.leftAnchor="0.0" />
-                                 </children>
-                              </AnchorPane>
-                        </content>
-                      </TitledPane>
-                      <TitledPane animated="false" prefHeight="331.0" prefWidth="225.0" text="Metric Display">
-                        <content>
-                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="616.0" prefWidth="223.0">
-                                 <children>
-                  						 
-                                                                <TableView fx:id="tableResults" tableMenuButtonVisible="true" editable="true" layoutX="19.0" layoutY="52.0" prefHeight="95.0" prefWidth="204.0" AnchorPane.bottomAnchor="-11.0" AnchorPane.leftAnchor="-11.0" AnchorPane.rightAnchor="-11.0" AnchorPane.topAnchor="-11.0">
-                  							<columns>
-                                                                        	
-                                                      			</columns>
-                  							<columnResizePolicy>
-                  								<TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                  							</columnResizePolicy>
-                  						</TableView>
-                                 </children>
-                              </AnchorPane>
-                        </content>
-                      </TitledPane>
-                    </panes>
-                  </Accordion>
-			</children>
-				</AnchorPane>
-				<LineChart fx:id="lineChart" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-					<xAxis>
-						<DateAxis side="BOTTOM" tickLabelsVisible="false" />
-                                                <!--CategoryAxis side="BOTTOM" /-->
-					</xAxis>
-					<yAxis>
-						<NumberAxis side="LEFT" />
-					</yAxis>
-				</LineChart>
-		</items>
+	</top>
+	
+	<center>
+		<SplitPane dividerPositions="0.10">
+			<AnchorPane>
+				<VBox prefHeight="210.0" prefWidth="225.0" AnchorPane.bottomAnchor="70.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+					<TitledPane fx:id="defaultTitledPane" prefWidth="100.0" text="Filter Criteria">
+						<GridPane hgap="10" vgap="10">
+							<padding><Insets top="10" right="10" bottom="10" left="10"/></padding>
+							<columnConstraints>
+				        <ColumnConstraints minWidth="100" />
+				        <ColumnConstraints hgrow="ALWAYS" />
+				      </columnConstraints>
+				      
+							<Label text="Campaign:" GridPane.rowIndex="0" GridPane.columnIndex="0" />
+							<ComboBox fx:id="cbCampaign" GridPane.rowIndex="0" GridPane.columnIndex="1" prefWidth="50" maxWidth="Infinity" />
+							
+							<Label text="Gender:" GridPane.rowIndex="1" GridPane.columnIndex="0" />
+							<CheckComboBox fx:id="filterGender" GridPane.rowIndex="1" GridPane.columnIndex="1" prefWidth="50" maxWidth="Infinity" />
+							
+							<Label text="Age:" GridPane.rowIndex="2" GridPane.columnIndex="0" />
+							<CheckComboBox fx:id="filterAge" GridPane.rowIndex="2" GridPane.columnIndex="1" prefWidth="50" maxWidth="Infinity" />
+							
+							<Label text="Income:" GridPane.rowIndex="3" GridPane.columnIndex="0" />
+							<CheckComboBox fx:id="filterIncome" GridPane.rowIndex="3" GridPane.columnIndex="1" prefWidth="50" maxWidth="Infinity" />
+							
+							<Label text="Context:" GridPane.rowIndex="4" GridPane.columnIndex="0" />
+							<CheckComboBox fx:id="filterContext" GridPane.rowIndex="4" GridPane.columnIndex="1" prefWidth="50" maxWidth="Infinity" />
+							
+							<Label text="Time Unit:" GridPane.rowIndex="5" GridPane.columnIndex="0" />
+							<ComboBox fx:id="filterTime" GridPane.rowIndex="5" GridPane.columnIndex="1" prefWidth="50" maxWidth="Infinity">
+								<items>
+									<FXCollections fx:factory="observableArrayList">
+										<String fx:value="Minutes" />
+										<String fx:value="Hours" />
+										<String fx:value="Days" />
+										<String fx:value="Weeks" />
+										<String fx:value="Months" />
+										<String fx:value="Years" />
+									</FXCollections>
+								</items>
+								<value>
+									<String fx:value="Hours" />
+								</value>
+							</ComboBox>
+							
+							<Label text="Date from:" GridPane.rowIndex="6" GridPane.columnIndex="0" />
+							<DatePicker fx:id="filterDateFrom" GridPane.rowIndex="6" GridPane.columnIndex="1" prefWidth="50" maxWidth="Infinity" />
+							
+							<Label text="Date to:" GridPane.rowIndex="7" GridPane.columnIndex="0" />
+							<DatePicker fx:id="filterDateTo" GridPane.rowIndex="7" GridPane.columnIndex="1" prefWidth="50"  maxWidth="Infinity" />
+							
+							<TextField fx:id="txtFilterName" promptText="Filter Name" GridPane.rowIndex="8" GridPane.columnIndex="1" />
+						</GridPane>
+					</TitledPane>
+					
+					<TitledPane expanded="true" prefWidth="100.0" text="Bounce Criteria">
+						<GridPane hgap="10" vgap="10">
+							<padding><Insets top="10" right="10" bottom="10" left="10"/></padding>
+							<columnConstraints>
+				        <ColumnConstraints minWidth="100" />
+				        <ColumnConstraints hgrow="ALWAYS" />
+				      </columnConstraints>
+							
+							<RadioButton fx:id="rbByBounceTime" text="Time / s:" GridPane.rowIndex="0" GridPane.columnIndex="0">
+								<toggleGroup>
+									<ToggleGroup fx:id="grBounce" />
+								</toggleGroup>
+							</RadioButton>
+							<TextField fx:id="txtBounceTime" prefWidth="50" promptText="10" GridPane.rowIndex="0" GridPane.columnIndex="1" />
+							
+							<RadioButton fx:id="rbByBouncePages" selected="true" text="№ Pages:" toggleGroup="$grBounce" GridPane.rowIndex="1" GridPane.columnIndex="0" />
+							<TextField fx:id="txtBouncePages" prefWidth="50" promptText="1" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+						</GridPane>
+					</TitledPane>
+					
+					<TitledPane expanded="true" prefWidth="100.0" text="Metrics Display">
+						<TableView fx:id="tableResults" tableMenuButtonVisible="true" editable="true">
+							<columns />
+						</TableView>
+					</TitledPane>
+				</VBox>
+				
+				<Button fx:id="generateGraph" disable="true" onAction="#generateData" prefHeight="50.0" prefWidth="75.0" text="Add" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" />
+				<Button fx:id="clearGraph" onAction="#clearData" prefHeight="50.0" prefWidth="75.0" text="Clear" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+			</AnchorPane>
+			
+			<LineChart fx:id="lineChart">
+				<xAxis>
+					<DateAxis side="BOTTOM" tickLabelsVisible="false" />
+				</xAxis>
+				<yAxis>
+					<NumberAxis side="LEFT" />
+				</yAxis>
+			</LineChart>
 		</SplitPane>
-	</children>
-</AnchorPane>
+	</center>
+</BorderPane>

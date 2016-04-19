@@ -94,6 +94,9 @@ public class AuctionController extends AnchorPane {
 	@FXML private TextField txtFilterName;
 	@FXML private ComboBox<String> cbCampaign;
 	@FXML private TableColumn<ObservableMetrics, Boolean> selectCol;
+	
+	@FXML private TitledPane defaultTitledPane;
+	
 	private MetricsUpdater updaterRunnable;
 	
 	private FileChooser fileChooser;
@@ -135,6 +138,8 @@ public class AuctionController extends AnchorPane {
 			}
 		});
 		fillCampaignList();
+		
+		defaultTitledPane.setExpanded(true);
 	}
 	
 	private void configureFilters() {
@@ -182,6 +187,8 @@ public class AuctionController extends AnchorPane {
 	
 	private void addColumn(String colName) {
 		TableColumn<ObservableMetrics, String> tc = new TableColumn<ObservableMetrics, String>(colName);
+		tc.setMaxWidth(100);
+		tc.setMinWidth(100);
 		final int colNo = filters.size();
 		tc.setCellValueFactory(new Callback<CellDataFeatures<ObservableMetrics, String>, ObservableValue<String>>() {
 			@Override
@@ -197,6 +204,8 @@ public class AuctionController extends AnchorPane {
 	private void configureTable() {
 		tableResults.getColumns().clear();
 		TableColumn<ObservableMetrics,Boolean>  checkCol = new TableColumn<>("Show");
+		checkCol.setMinWidth(50);
+		checkCol.setMaxWidth(50);
 		checkCol.setCellValueFactory( new PropertyValueFactory<ObservableMetrics,Boolean>( "select" ) );
 		checkCol.setCellFactory( new Callback<TableColumn<ObservableMetrics,Boolean>, TableCell<ObservableMetrics,Boolean>>() {
 			@Override
@@ -227,6 +236,8 @@ public class AuctionController extends AnchorPane {
 		} );		 
 		tableResults.getColumns().add(checkCol);
 		metricCol = new TableColumn<>("Metric");
+		metricCol.setMinWidth(150);
+		metricCol.setMaxWidth(150);
 		metricCol.setCellValueFactory(new PropertyValueFactory<>("description")); 
 		tableResults.getColumns().add(metricCol);
 		tableResults.setItems(tableMetrics);

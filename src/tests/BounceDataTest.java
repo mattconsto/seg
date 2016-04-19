@@ -11,7 +11,6 @@ import junit.framework.TestCase;
 import org.junit.Test;
 
 import dashboard.controller.BounceGraphConstructor;
-import dashboard.controller.ImpressionsGraphConstructor;
 import dashboard.model.BounceFilter;
 import dashboard.model.DatabaseConnection;
 import dashboard.model.Filter;

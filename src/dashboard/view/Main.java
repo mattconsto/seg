@@ -11,7 +11,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.JavaFXBuilderFactory;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import dashboard.model.DatabaseConnection;
 
@@ -120,7 +119,7 @@ public class Main extends Application {
 		FXMLLoader loader = new FXMLLoader();
 		loader.setBuilderFactory(new JavaFXBuilderFactory());
 		loader.setLocation(Main.class.getResource(fxml));
-		stage.setScene(new Scene((AnchorPane) loader.load(Main.class.getResourceAsStream(fxml))));
+		stage.setScene(new Scene(loader.load(Main.class.getResourceAsStream(fxml))));
 		return (Node) loader.getController();
 	}
 }
