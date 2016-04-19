@@ -422,7 +422,8 @@ public class AuctionController extends AnchorPane {
 	}
 	
 	@FXML private void clearData(ActionEvent event) {
-		updaterRunnable.stop();
+		if(updaterRunnable != null)
+			updaterRunnable.stop();
 		lineChart.getData().clear();
 		filters.clear();
 		graphData.clear();
