@@ -139,7 +139,7 @@ public class AuctionController extends AnchorPane {
 			}
 		});
 		fillCampaignList();
-		Platform.runLater(() -> splitPane.setDividerPosition(0, 0.15));
+		Platform.runLater(() -> splitPane.setDividerPosition(0, 0.175));
 	}
 	
 	private void configureFilters() {
@@ -167,10 +167,10 @@ public class AuctionController extends AnchorPane {
 		tableMetrics.add(new ObservableMetrics("Unique Clicks"));
 		tableMetrics.add(new ObservableMetrics("Unique Impressions"));
 		tableMetrics.add(new ObservableMetrics("Total Cost"));
-		tableMetrics.add(new ObservableMetrics("CTR"));
-		tableMetrics.add(new ObservableMetrics("CPA"));
-		tableMetrics.add(new ObservableMetrics("CPC"));
-		tableMetrics.add(new ObservableMetrics("CPM"));	
+		tableMetrics.add(new ObservableMetrics("Click Through Rate"));
+		tableMetrics.add(new ObservableMetrics("Cost Per Aquisition"));
+		tableMetrics.add(new ObservableMetrics("Cost Per Click"));
+		tableMetrics.add(new ObservableMetrics("Cost Per Mille"));	
 		tableMetrics.add(new ObservableMetrics("Bounce Rate"));
 	}
 		
