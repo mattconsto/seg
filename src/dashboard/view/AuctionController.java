@@ -151,9 +151,8 @@ public class AuctionController extends AnchorPane {
 	}
 	
 	private void configureFilters() {
-		// if (filters.size() <= iFilter)
-		//	 filters.add(new Filter());
-			filter = new Filter();
+		 
+                filter = new Filter();
 		filterGender.getCheckModel().getCheckedItems().addListener(
 			(ListChangeListener.Change<? extends String> c) -> filter.setGender(filterGender));
 		filterAge.getCheckModel().getCheckedItems().addListener(
@@ -195,8 +194,8 @@ public class AuctionController extends AnchorPane {
 	
 	private void addColumn(String colName) {
 		TableColumn<ObservableMetrics, String> tc = new TableColumn<ObservableMetrics, String>(colName);
-		tc.setMaxWidth(100);
-		tc.setMinWidth(100);
+		//tc.setMaxWidth(100);
+		//tc.setMinWidth(100);
 		final int colNo = filters.size();
 		tc.setCellValueFactory(new Callback<CellDataFeatures<ObservableMetrics, String>, ObservableValue<String>>() {
 			@Override
@@ -244,8 +243,8 @@ public class AuctionController extends AnchorPane {
 		} );		 
 		tableResults.getColumns().add(checkCol);
 		metricCol = new TableColumn<>("Metric");
-		metricCol.setMinWidth(150);
-		metricCol.setMaxWidth(150);
+		metricCol.setMinWidth(120);
+		//metricCol.setMaxWidth(150);
 		metricCol.setCellValueFactory(new PropertyValueFactory<>("description")); 
 		tableResults.getColumns().add(metricCol);
 		tableResults.setItems(tableMetrics);
