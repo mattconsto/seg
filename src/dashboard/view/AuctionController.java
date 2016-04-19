@@ -35,6 +35,7 @@ import java.util.prefs.Preferences;
 
 import javax.imageio.ImageIO;
 
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.geometry.Pos;
 import javafx.scene.control.TableColumn.CellDataFeatures;
@@ -95,7 +96,7 @@ public class AuctionController extends AnchorPane {
 	@FXML private ComboBox<String> cbCampaign;
 	@FXML private TableColumn<ObservableMetrics, Boolean> selectCol;
 	
-	@FXML private TitledPane defaultTitledPane;
+	@FXML private SplitPane splitPane;
 	
 	private MetricsUpdater updaterRunnable;
 	
@@ -138,8 +139,9 @@ public class AuctionController extends AnchorPane {
 			}
 		});
 		fillCampaignList();
+		Platform.runLater(() -> splitPane.setDividerPosition(0, 0.175));
 		
-		defaultTitledPane.setExpanded(true);
+		txtFilterName.setText(GenerateName.generate());
 	}
 	
 	private void configureFilters() {
@@ -167,10 +169,10 @@ public class AuctionController extends AnchorPane {
 		tableMetrics.add(new ObservableMetrics("Unique Clicks"));
 		tableMetrics.add(new ObservableMetrics("Unique Impressions"));
 		tableMetrics.add(new ObservableMetrics("Total Cost"));
-		tableMetrics.add(new ObservableMetrics("CTR"));
-		tableMetrics.add(new ObservableMetrics("CPA"));
-		tableMetrics.add(new ObservableMetrics("CPC"));
-		tableMetrics.add(new ObservableMetrics("CPM"));	
+		tableMetrics.add(new ObservableMetrics("Click Through Rate"));
+		tableMetrics.add(new ObservableMetrics("Cost Per Aquisition"));
+		tableMetrics.add(new ObservableMetrics("Cost Per Click"));
+		tableMetrics.add(new ObservableMetrics("Cost Per Mille"));	
 		tableMetrics.add(new ObservableMetrics("Bounce Rate"));
 	}
 		
@@ -363,6 +365,7 @@ public class AuctionController extends AnchorPane {
 				 new Thread(updaterRunnable).start();
 
 				configureFilters();
+				txtFilterName.setText(GenerateName.generate());
 			}
 	}
 	
@@ -376,6 +379,7 @@ public class AuctionController extends AnchorPane {
 		tableMetrics.clear();
 		initMetricTable();
 		lineChart.getXAxis().setTickLabelsVisible(false);
+		GenerateName.generate();
 	}
 	
 	private void removeGraph(String metric){

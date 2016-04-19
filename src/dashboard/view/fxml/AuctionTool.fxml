@@ -37,10 +37,10 @@
 	</top>
 	
 	<center>
-		<SplitPane dividerPositions="0.10">
+		<SplitPane dividerPositions="0.175" fx:id="splitPane">
 			<AnchorPane>
 				<VBox prefHeight="210.0" prefWidth="225.0" AnchorPane.bottomAnchor="70.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-					<TitledPane fx:id="defaultTitledPane" prefWidth="100.0" text="Filter Criteria">
+					<TitledPane prefWidth="100.0" text="Filter Criteria">
 						<GridPane hgap="10" vgap="10">
 							<padding><Insets top="10" right="10" bottom="10" left="10"/></padding>
 							<columnConstraints>
@@ -86,7 +86,8 @@
 							<Label text="Date to:" GridPane.rowIndex="7" GridPane.columnIndex="0" />
 							<DatePicker fx:id="filterDateTo" GridPane.rowIndex="7" GridPane.columnIndex="1" prefWidth="50"  maxWidth="Infinity" />
 							
-							<TextField fx:id="txtFilterName" promptText="Filter Name" GridPane.rowIndex="8" GridPane.columnIndex="1" />
+							<Label text="Name:" GridPane.rowIndex="8" GridPane.columnIndex="0" />
+							<TextField fx:id="txtFilterName" GridPane.rowIndex="8" GridPane.columnIndex="1" />
 						</GridPane>
 					</TitledPane>
 					
