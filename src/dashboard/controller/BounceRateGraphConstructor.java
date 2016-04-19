@@ -40,6 +40,23 @@ public class BounceRateGraphConstructor extends GraphConstructor{
 				+ " GROUP BY strftime('" + filter.getTimeFormatSQL() +"', ENTRYDATE)) "
 				+ "ON DATE=CLICKDATE GROUP BY DATE");
 
+/*		ResultSet results = conn.createStatement().executeQuery("SELECT ENTRYDATE, NUMCLICKS, NUMBOUNCES FROM "
+				+ "(SELECT strftime('" + filter.getTimeFormatSQL() +"', CLICKS.DATE) AS CLICKDATE,COUNT(*) AS NUMCLICKS FROM "
+				+ "CLICKS "
+				+ "INNER JOIN "
+				+ "(SELECT * FROM IMPRESSIONS GROUP BY ID) AS IMPRESSIONS "
+				+ "ON CLICKS.ID=IMPRESSIONS.ID "
+				+ "WHERE " + filter.getSql().replace("DATE", "CLICKDATE")
+				+ " GROUP BY strftime('" + filter.getTimeFormatSQL() +"', CLICKDATE)) "
+				+ "INNER JOIN "
+				+ "(SELECT strftime('" + filter.getTimeFormatSQL() +"', SERVER.ENTRYDATE) AS ENTRYDATE,COUNT(*) AS NUMBOUNCES FROM "
+				+ "SERVER "
+				+ "INNER JOIN "
+				+ "(SELECT * FROM IMPRESSIONS GROUP BY ID) AS IMPRESSIONS "
+				+ "ON SERVER.ID=IMPRESSIONS.ID "
+				+ "WHERE " + bounceFilter.getSQL() + " AND " + filter.getSql().replace("DATE", "ENTRYDATE") + " GROUP BY strftime('" + filter.getTimeFormatSQL() +"', ENTRYDATE)) "
+				+ "ON ENTRYDATE=CLICKDATE GROUP BY ENTRYDATE");*/
+		
 		XYChart.Series<Date, Number> series = new XYChart.Series<Date, Number>();
 		series.setName(" by date");
 
