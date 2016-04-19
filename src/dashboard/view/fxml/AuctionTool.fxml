@@ -19,9 +19,9 @@
 	<top>
 		<MenuBar fx:id="menu">
 			<Menu text="File">
-				<MenuItem fx:id="importCampaign" onAction="#importCampaignAction" text="Import Campaign(s)" />
-				<MenuItem fx:id="exportCampaign" onAction="#saveGraphAs" text="Save graph as..." />
-				<MenuItem fx:id="printCampaign" disable="true" text="Print" />
+				<MenuItem fx:id="importCampaign" onAction="#importCampaignAction" text="Manage Campaign(s)" />
+				<MenuItem fx:id="exportCampaign" onAction="#saveGraphAs" text="Export Graph" />
+				<MenuItem fx:id="printCampaign" onAction="#printGraph" text="Print Graph" />
 				<MenuItem fx:id="close" onAction="#closeAction" text="Close" />
 			</Menu>
 			<Menu text="Preferences">

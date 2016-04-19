@@ -24,6 +24,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.transform.Scale;
 import javafx.stage.FileChooser;
 import dashboard.controller.*;
 import dashboard.model.*;
@@ -38,6 +39,11 @@ import javax.imageio.ImageIO;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.geometry.Pos;
+import javafx.print.PageLayout;
+import javafx.print.PageOrientation;
+import javafx.print.Paper;
+import javafx.print.Printer;
+import javafx.print.PrinterJob;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView.TableViewSelectionModel;
 import javafx.scene.control.cell.CheckBoxTableCell;
@@ -267,6 +273,22 @@ public class AuctionController extends AnchorPane {
 		application.start(application.getStage());
 	}
 	
+	@FXML private void printGraph(ActionEvent event) {
+        Printer printer = Printer.getDefaultPrinter();
+        PageLayout pageLayout = printer.createPageLayout(Paper.A4, PageOrientation.LANDSCAPE, Printer.MarginType.HARDWARE_MINIMUM);
+        double scaleX = pageLayout.getPrintableWidth() / lineChart.getBoundsInParent().getWidth();
+        double scaleY = pageLayout.getPrintableHeight() / lineChart.getBoundsInParent().getHeight();
+        lineChart.getTransforms().add(new Scale(scaleX, scaleY));
+
+		PrinterJob job = PrinterJob.createPrinterJob();
+		if (job != null && job.showPrintDialog(lineChart.getScene().getWindow())){
+		    boolean success = job.printPage(pageLayout, lineChart);
+		    if (success) {
+		        job.endJob();
+		    }
+		}
+	}
+	
 	@FXML private void saveGraphAs(ActionEvent event) {
 		configureFileChooser(fileChooser);
 		WritableImage snapshot = lineChart.snapshot(new SnapshotParameters(), null);
@@ -274,6 +296,7 @@ public class AuctionController extends AnchorPane {
 		if(newFile != null) {
 			try
 			{
+				if(!newFile.getName().endsWith(".png")) newFile = new File(newFile.getPath() + ".png");
 				ImageIO.write(SwingFXUtils.fromFXImage(snapshot, null), "png", newFile);
 			}
 			catch(IOException e)
