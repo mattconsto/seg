@@ -83,6 +83,21 @@ public class CPADataTest extends TestCase {
 			fail("SQL error");
 		}
 	}
+	
+	@Test
+	public void testInvalidTimeTotal() {
+		try {
+			filter.setTime("Other");
+			
+			CPAGraphConstructor cpaConstructor = new CPAGraphConstructor(filter);
+
+			ObservableList<XYChart.Data<Date, Number>> data = cpaConstructor.fetchGraph().getData();
+			assertEquals(48f, data.get(0).getYValue());
+		} catch (SQLException sqle) {
+			System.err.println(sqle.getMessage());
+			fail("SQL error");
+		}
+	}
 
 	@Test
 	public void testFirstHourGender() {
@@ -94,6 +109,13 @@ public class CPADataTest extends TestCase {
 			assertEquals(48f, data.get(0).getYValue());
 
 			filter.setGender(FXCollections.observableArrayList("Male"));
+			cpaConstructor = new CPAGraphConstructor(filter);
+
+			data = cpaConstructor.fetchGraph().getData();
+			assertEquals(48f, data.get(0).getYValue());
+			
+			//Test invalid gender
+			filter.setGender(FXCollections.observableArrayList("Invalid"));
 			cpaConstructor = new CPAGraphConstructor(filter);
 
 			data = cpaConstructor.fetchGraph().getData();
@@ -136,6 +158,13 @@ public class CPADataTest extends TestCase {
 
 			data = cpaConstructor.fetchGraph().getData();
 			assertEquals(48f, data.get(0).getYValue());
+			
+			//Test invalid age
+			filter.setAge(FXCollections.observableArrayList("Invalid"));
+			cpaConstructor = new CPAGraphConstructor(filter);
+
+			data = cpaConstructor.fetchGraph().getData();
+			assertEquals(48f, data.get(0).getYValue());
 		} catch (SQLException sqle) {
 			System.err.println(sqle.getMessage());
 			fail("SQL error");
@@ -158,6 +187,13 @@ public class CPADataTest extends TestCase {
 			assertEquals(48f, data.get(0).getYValue());
 
 			filter.setIncome(FXCollections.observableArrayList("High"));
+			cpaConstructor = new CPAGraphConstructor(filter);
+
+			data = cpaConstructor.fetchGraph().getData();
+			assertEquals(48f, data.get(0).getYValue());
+			
+			//Test invalid income
+			filter.setIncome(FXCollections.observableArrayList("Income"));
 			cpaConstructor = new CPAGraphConstructor(filter);
 
 			data = cpaConstructor.fetchGraph().getData();
@@ -202,6 +238,13 @@ public class CPADataTest extends TestCase {
 			assertEquals(48f, data.get(0).getYValue());
 
 			filter.setContext(FXCollections.observableArrayList("Travel"));
+			cpaConstructor = new CPAGraphConstructor(filter);
+
+			data = cpaConstructor.fetchGraph().getData();
+			assertEquals(48f, data.get(0).getYValue());
+			
+			//Test invalid context
+			filter.setContext(FXCollections.observableArrayList("Invalid"));
 			cpaConstructor = new CPAGraphConstructor(filter);
 
 			data = cpaConstructor.fetchGraph().getData();
