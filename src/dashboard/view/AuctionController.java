@@ -334,13 +334,25 @@ public class AuctionController extends AnchorPane {
 				bounceFilter.setPageLimit(0);
 				if(grBounce.getSelectedToggle().getUserData().toString().equalsIgnoreCase("timeBounce")){
 					try{
-						bounceFilter.setTimeLimit(Integer.parseInt(txtBounceTime.getText()));
-					}catch(NumberFormatException nfe){}
+						System.out.println("Time: "+txtBounceTime.getText());
+						if(!txtBounceTime.getText().isEmpty())
+							bounceFilter.setTimeLimit(Integer.parseInt(txtBounceTime.getText()));
+						else
+							bounceFilter.setTimeLimit(10);
+					}catch(NumberFormatException nfe){
+						bounceFilter.setTimeLimit(10);
+					}
 				}
 				else{
 					try{
-						bounceFilter.setPageLimit(Integer.parseInt(txtBouncePages.getText()));
-					}catch(NumberFormatException nfe){}
+						System.out.println("Pages: "+txtBouncePages.getText());
+						if(!txtBouncePages.getText().isEmpty())
+							bounceFilter.setPageLimit(Integer.parseInt(txtBouncePages.getText()));
+						else
+							bounceFilter.setPageLimit(1);
+					}catch(NumberFormatException nfe){
+						bounceFilter.setPageLimit(1);
+					}
 				}
 				//updateGraph(filterMetrics.getValue());
 				addColumn(txtFilterName.getText());
