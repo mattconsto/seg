@@ -140,6 +140,8 @@ public class AuctionController extends AnchorPane {
 		});
 		fillCampaignList();
 		Platform.runLater(() -> splitPane.setDividerPosition(0, 0.175));
+		
+		txtFilterName.setText(GenerateName.generate());
 	}
 	
 	private void configureFilters() {
@@ -351,6 +353,7 @@ public class AuctionController extends AnchorPane {
 				 new Thread(updaterRunnable).start();
 
 				configureFilters();
+				txtFilterName.setText(GenerateName.generate());
 			}
 	}
 	
