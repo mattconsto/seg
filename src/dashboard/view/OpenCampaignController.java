@@ -6,6 +6,7 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
@@ -71,6 +72,14 @@ public class OpenCampaignController extends AnchorPane {
 			selectCampaign.setDisable(true);
 			openButton.setDisable(true);
 		}
+		
+		Platform.runLater(new Runnable() {
+			
+			@Override
+			public void run() {
+				openButton.requestFocus();
+			}
+		});
 	}
 
 	@FXML
