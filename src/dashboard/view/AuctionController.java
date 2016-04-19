@@ -367,6 +367,7 @@ public class AuctionController extends AnchorPane {
 		tableMetrics.clear();
 		initMetricTable();
 		lineChart.getXAxis().setTickLabelsVisible(false);
+		GenerateName.generate();
 	}
 	
 	private void removeGraph(String metric){
