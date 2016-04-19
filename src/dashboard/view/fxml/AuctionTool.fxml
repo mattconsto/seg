@@ -30,7 +30,7 @@
 				<MenuItem fx:id="mnuUnits" disable="true" text="Units" />
 			</Menu>
 			<Menu text="Help">
-				<MenuItem fx:id="mnuDefinitions" disable="true" text="Definitions" />
+				<MenuItem fx:id="mnuDefinitions" onAction="#showDefintions" text="Definitions" />
 				<MenuItem fx:id="mnuAbout" onAction="#openAbout" text="About" />
 			</Menu>
 		</MenuBar>

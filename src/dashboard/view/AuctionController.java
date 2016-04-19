@@ -254,8 +254,8 @@ public class AuctionController extends AnchorPane {
 	
 	@FXML private void openAbout(ActionEvent event) {
 		Alert about = new Alert(AlertType.INFORMATION);
-		about.setTitle("About");
-		about.setHeaderText(preferences.get("ProductName", "Ad Auction Dashboard"));
+		about.setTitle(preferences.get("ProductName", "Ad Auction Dashboard") + " - About");
+		about.setHeaderText("About");
 		about.setContentText(
 			"Created by SEG Team 3:\n" + 
 			"\n" + 
@@ -266,6 +266,33 @@ public class AuctionController extends AnchorPane {
 			"• Iovana Pavlovici\n"
 		);
 		about.show();
+	}
+	
+	@FXML private void showDefintions(ActionEvent event) {
+		Alert about = new Alert(AlertType.INFORMATION);
+		about.setTitle(preferences.get("ProductName", "Ad Auction Dashboard") + " - Definitions");
+		about.setHeaderText("Definitions");
+		about.setContentText(
+			"Acquisition: same as conversion.\n" + 
+			"Bounce: A user clicks on an ad, but then fails to interact with the website (typically detected when a user navigates away from the website after a short time, or when only a single page has been viewed).\n" + 
+			"Bounce Rate: The average number of bounces per click.\n" + 
+			"Campaign: An effort by the marketing agency to gain exposure for a client’s website by participating in a range of ad auctions offered by different providers and networks. Bid amounts, keywords and other variables will be tailored to the client’s needs.\n" + 
+			"Click: A click occurs when a user clicks on an ad that is shown to them.\n" + 
+			"Click Cost: The cost of a particular click (usually determined through an auction process).\n" + 
+			"Click-through-rate (CTR): The average number of clicks per impression.\n" + 
+			"Conversion: A conversion, or acquisition, occurs when a user clicks and then acts on an ad. The specific definition of an action depends on the campaign (e.g., buying a product, registering as a new customer or joining a mailing list).\n" + 
+			"Conversion Rate: The average number of conversions per click.\n" + 
+			"Cost-per-acquisition (CPA): The average amount of money spent on an advertising campaign for each acquisition (i.e., conversion).\n" + 
+			"Cost-per-click (CPC): The average amount of money spent on an advertising campaign for each click.\n" + 
+			"Cost-per-thousand impressions (CPM): The average amount of money spent on an advertising campaign for every one thousand impressions.\n" + 
+			"Impression: An impression occurs whenever an ad is shown to a user, regardless of whether they click on it.\n" + 
+			"Uniques: The number of unique users that click on an ad during the course of a campaign."
+		);
+		about.setHeight(625);
+		about.setWidth(800);
+		about.show();
+		about.setHeight(625);
+		about.setWidth(800);
 	}
 	
 	@FXML private void importCampaignAction(ActionEvent event) {
