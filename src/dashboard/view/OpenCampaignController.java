@@ -81,10 +81,7 @@ public class OpenCampaignController extends AnchorPane {
 			}
 		});
 	}
-
-	@FXML
-	private void selectCampaignAction(ActionEvent event) {}
-
+	
 	@FXML
 	private void importAction(ActionEvent event) {
 		CSVReader importCsv = new CSVReader();

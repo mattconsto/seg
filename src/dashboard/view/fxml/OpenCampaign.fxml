@@ -7,6 +7,7 @@
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import dashboard.view.FocusedButton?>
 
 <VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" id="AnchorPane" styleClass="background" stylesheets="@AuctionTool.css" fx:controller="dashboard.view.OpenCampaignController">
 	<ImageView fitWidth="500.0" pickOnBounds="true" preserveRatio="true">
@@ -22,11 +23,11 @@
       <ColumnConstraints minWidth="100" />
     </columnConstraints>
     
-		<TextField fx:id="folder" promptText="Folder to import" GridPane.rowIndex="0" GridPane.columnIndex="0" />
+		<TextField fx:id="folder" onAction="#browseAction" promptText="Folder to import" GridPane.rowIndex="0" GridPane.columnIndex="0" />
 		<Button fx:id="browseButton" onAction="#browseAction" text="Browse" maxWidth="Infinity" GridPane.rowIndex="0" GridPane.columnIndex="1" />
 		
-		<TextField fx:id="enterName" promptText="Enter name for campaign" GridPane.rowIndex="1" GridPane.columnIndex="0" />
-		<Button fx:id="importButton" onAction="#importAction" text="Import" maxWidth="Infinity" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+		<TextField fx:id="enterName" onAction="#importAction" promptText="Enter name for campaign" GridPane.rowIndex="1" GridPane.columnIndex="0" />
+		<FocusedButton fx:id="importButton" onAction="#importAction" text="Import" maxWidth="Infinity" GridPane.rowIndex="1" GridPane.columnIndex="1" />
 		
 		<ProgressBar fx:id="p" progress="0.0" visible="true" minHeight="10.0" prefHeight="10.0" maxWidth="Infinity" GridPane.rowIndex="2" GridPane.columnIndex="0" GridPane.columnSpan="2" />
 	</GridPane>
@@ -50,7 +51,7 @@
       <ColumnConstraints minWidth="100" />
     </columnConstraints>
     
-		<ComboBox fx:id="selectCampaign" onAction="#selectCampaignAction" promptText="Select Campaign" maxWidth="Infinity" GridPane.rowIndex="0" GridPane.columnIndex="0" />
-		<Button fx:id="openButton" onAction="#openAction" text="Open" maxWidth="Infinity" GridPane.rowIndex="0" GridPane.columnIndex="1" />
+		<ComboBox fx:id="selectCampaign" promptText="Select Campaign" maxWidth="Infinity" GridPane.rowIndex="0" GridPane.columnIndex="0" />
+		<FocusedButton fx:id="openButton" onAction="#openAction" text="Open" maxWidth="Infinity" GridPane.rowIndex="0" GridPane.columnIndex="1" />
 	</GridPane>
 </VBox>
