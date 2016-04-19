@@ -14,6 +14,7 @@
 
 <?import org.controlsfx.control.CheckComboBox?>
 <?import extfx.scene.chart.DateAxis?>
+<?import dashboard.view.FeedbackRestrictiveTextField?>
 
 <BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" id="AnchorPane" styleClass="background" stylesheets="@AuctionTool.css" fx:controller="dashboard.view.AuctionController">
 	<top>
@@ -104,10 +105,10 @@
 									<ToggleGroup fx:id="grBounce" />
 								</toggleGroup>
 							</RadioButton>
-							<TextField fx:id="txtBounceTime" prefWidth="50" promptText="10" GridPane.rowIndex="0" GridPane.columnIndex="1" />
+							<FeedbackRestrictiveTextField fx:id="txtBounceTime" restrict="[0-9]" prefWidth="50" promptText="10" GridPane.rowIndex="0" GridPane.columnIndex="1" />
 							
 							<RadioButton fx:id="rbByBouncePages" selected="true" text="№ Pages:" toggleGroup="$grBounce" GridPane.rowIndex="1" GridPane.columnIndex="0" />
-							<TextField fx:id="txtBouncePages" prefWidth="50" promptText="1" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+							<FeedbackRestrictiveTextField fx:id="txtBouncePages" restrict="[0-9]" prefWidth="50" promptText="1" GridPane.rowIndex="1" GridPane.columnIndex="1" />
 						</GridPane>
 					</TitledPane>
 					

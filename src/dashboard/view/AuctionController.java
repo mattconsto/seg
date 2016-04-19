@@ -93,8 +93,8 @@ public class AuctionController extends AnchorPane {
 	@FXML private MenuItem mnuSearch;
 	@FXML private MenuItem mnuList;
 	@FXML private MenuItem mnuAbout;
-	@FXML private TextField txtBounceTime;
-	@FXML private TextField txtBouncePages;
+	@FXML private FeedbackRestrictiveTextField txtBounceTime;
+	@FXML private FeedbackRestrictiveTextField txtBouncePages;
 	@FXML private RadioButton rbByBounceTime;
 	@FXML private ToggleGroup grBounce;
 	@FXML private RadioButton rbByBouncePages;
@@ -144,6 +144,8 @@ public class AuctionController extends AnchorPane {
 				System.out.println(grBounce.getSelectedToggle().getUserData().toString());
 			}
 		});
+		txtBounceTime.addListener(e -> System.err.println("Numbers Only!"));
+		txtBouncePages.addListener(e -> System.err.println("Numbers Only!"));
 		fillCampaignList();
 		Platform.runLater(() -> splitPane.setDividerPosition(0, 0.175));
 		
