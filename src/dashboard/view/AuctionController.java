@@ -299,6 +299,7 @@ public class AuctionController extends AnchorPane {
 	
 	@FXML private void importCampaignAction(ActionEvent event) {
 		if(updaterRunnable != null) updaterRunnable.stop();
+		application.getStage().setMaximized(false);
 		application.start(application.getStage());
 	}
 	
