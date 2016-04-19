@@ -122,7 +122,7 @@
 				<Button fx:id="clearGraph" onAction="#clearData" prefHeight="50.0" prefWidth="75.0" text="Clear" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" />
 			</AnchorPane>
 			
-			<LineChart fx:id="lineChart">
+			<LineChart fx:id="lineChart" style="-fx-background-color: #ffffff;" >
 				<xAxis>
 					<DateAxis side="BOTTOM" tickLabelsVisible="false" />
 				</xAxis>
