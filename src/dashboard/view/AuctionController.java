@@ -403,9 +403,13 @@ public class AuctionController extends AnchorPane {
 						case "Unique Impressions": constructor = new UniqueImpressionsGraphConstructor(f.getValue());		break;
 						case "Unique Clicks":	  constructor = new UniqueClicksGraphConstructor(f.getValue());		 break;
 						case "Conversions":		constructor = new ConversionGraphConstructor(f.getValue());		   break;
+						case "Cost Per Click":
 						case "CPC":			constructor = new CPCGraphConstructor(f.getValue());				  break;
+						case "Cost Per Aquisition":
 						case "CPA":			constructor = new CPAGraphConstructor(f.getValue());				  break;
+						case "Cost Per Mille":
 						case "CPM":			constructor = new CPMGraphConstructor(f.getValue());				  break;
+						case "Click Through Rate":
 						case "CTR":			constructor = new CTRGraphConstructor(f.getValue());				  break;
 						case "Total Cost":		 constructor = new TotalCostGraphConstructor(f.getValue());			break;
 						case "Bounce Rate":		constructor = new BounceRateGraphConstructor(f.getValue(), bounceFilter); break;

@@ -58,6 +58,7 @@ public class MetricsUpdater implements Runnable {
 				+ "WHERE "+ bounceFilter.getSQL() +" AND " + filter.getSql() + ";");
 
 		if (results.next()) table.get(0).setResults(iFilter, intFormatter.format(results.getDouble(1)));
+		tableView.refresh();
 		
 		if(!running) {
 			results.close();
@@ -72,6 +73,7 @@ public class MetricsUpdater implements Runnable {
 
 		//if (results.next()) table.add(new ObservableMetrics("Clicks",results.getString(1)));
 		if (results.next()) table.get(1).setResults(iFilter, intFormatter.format(results.getDouble(1)));
+		tableView.refresh();
 		
 		if(!running) {
 			results.close();
@@ -83,7 +85,9 @@ public class MetricsUpdater implements Runnable {
 				+ "IMPRESSIONS INNER JOIN SERVER ON IMPRESSIONS.ID=SERVER.ID "
 				+ "GROUP BY SERVER.ENTRYDATE, SERVER.ID) AS SUBQUERY "
 				+ "WHERE CONVERSION = 1 AND " + filter.getSql() + ";");
-                if (results.next()) table.get(2).setResults(iFilter, intFormatter.format(results.getDouble(1)));
+		
+        if (results.next()) table.get(2).setResults(iFilter, intFormatter.format(results.getDouble(1)));
+		tableView.refresh();
 		
 		//if (results.next()) table.add(new ObservableMetrics("Conversions",results.getString(1)));
 		
@@ -95,6 +99,7 @@ public class MetricsUpdater implements Runnable {
 		results = conn.createStatement().executeQuery("SELECT COUNT(*) AS Frequency, * FROM IMPRESSIONS WHERE " +  filter.getSql() +";");
 		
 		if (results.next()) table.get(3).setResults(iFilter, intFormatter.format(results.getDouble(1)));
+		tableView.refresh();
 		
 		//if (results.next()) table.add(new ObservableMetrics("Impressions",results.getString(1)));
 		
@@ -111,6 +116,7 @@ public class MetricsUpdater implements Runnable {
 
 		//if (results.next()) table.add(new ObservableMetrics("Unique Clicks",results.getString(1)));
 		if (results.next()) table.get(4).setResults(iFilter, intFormatter.format(results.getDouble(1)));
+		tableView.refresh();
 		
 		if(!running) {
 			results.close();
@@ -121,6 +127,7 @@ public class MetricsUpdater implements Runnable {
 
 		//if (results.next()) table.add(new ObservableMetrics("Unique Impressions",results.getString(1)));
 		if (results.next()) table.get(5).setResults(iFilter, intFormatter.format(results.getDouble(1)));
+		tableView.refresh();
 		
 		if(!running) {
 			results.close();
@@ -141,6 +148,7 @@ public class MetricsUpdater implements Runnable {
 		
 		//if (results.next()) table.add(new ObservableMetrics("Total Cost",Float.toString(results.getFloat(1)+results.getFloat(2))));
 		if (results.next()) table.get(6).setResults(iFilter, currency+decFormatter.format(results.getFloat(1)+results.getFloat(2)));
+		tableView.refresh();
 		
 		if(!running) {
 			results.close();
@@ -159,6 +167,8 @@ public class MetricsUpdater implements Runnable {
 
 		//if (results.next()) table.add(new ObservableMetrics("CTR",Float.toString(results.getInt(1)/results.getFloat(2)*100)+"%"));
 		if (results.next()) table.get(7).setResults(iFilter,String.format("%.3f%%", results.getInt(1)/results.getFloat(2)*100));
+		tableView.refresh();
+		
 		if(!running) {
 			results.close();
 			return;
@@ -188,6 +198,7 @@ public class MetricsUpdater implements Runnable {
 		
 		//if (results.next()) table.add(new ObservableMetrics("CPA",Float.toString((results.getFloat(1) + results.getFloat(2)) / results.getInt(3))));
 		if (results.next()) table.get(8).setResults(iFilter, currency+decFormatter.format((results.getFloat(1) + results.getFloat(2)) / results.getInt(3)));
+		tableView.refresh();
 		
 		if(!running) {
 			results.close();
@@ -209,6 +220,7 @@ public class MetricsUpdater implements Runnable {
 		
 //		if (results.next()) table.add(new ObservableMetrics("CPC",Float.toString((results.getFloat(1) + results.getFloat(2)) / results.getInt(3))));
 		if (results.next()) table.get(9).setResults(iFilter, currency+decFormatter.format((results.getFloat(1) + results.getFloat(2)) / results.getInt(3)));
+		tableView.refresh();
 		
 		if(!running) {
 			results.close();
@@ -231,6 +243,7 @@ public class MetricsUpdater implements Runnable {
 		
 		//if (results.next()) table.add(new ObservableMetrics("CPM",Float.toString(((results.getFloat(1)+results.getFloat(2))/results.getFloat(3))*1000)));
 		if (results.next()) table.get(10).setResults(iFilter, currency+decFormatter.format(((results.getFloat(1)+results.getFloat(2))/results.getFloat(3))*1000));
+		tableView.refresh();
 		
 		if(!running) {
 			results.close();
@@ -252,6 +265,7 @@ public class MetricsUpdater implements Runnable {
 		
 		//if (results.next()) table.add(new ObservableMetrics("Bounce Rate",String.format("%.1f%%", results.getInt(2)/results.getFloat(1)*100)));
 		if (results.next()) table.get(11).setResults(iFilter,String.format("%.1f%%", results.getInt(2)/results.getFloat(1)*100));
+		tableView.refresh();
 		
 		results.close();
 
