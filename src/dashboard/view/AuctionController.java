@@ -257,7 +257,7 @@ public class AuctionController extends AnchorPane {
 		about.setTitle(preferences.get("ProductName", "Ad Auction Dashboard") + " - About");
 		about.setHeaderText("About");
 		about.setContentText(
-			"Created by SEG Team 3:\n" + 
+			"Created by SEG Team 3 2016:\n" + 
 			"\n" + 
 			"• Samuel Beresford\n" + 
 			"• Matthew Consterdine\n" +
