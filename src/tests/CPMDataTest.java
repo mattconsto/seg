@@ -70,6 +70,21 @@ public class CPMDataTest extends TestCase {
 	}
 
 	@Test
+	public void testInvalidTimeTotal() {
+		try {
+			filter.setTime("Other");
+			
+			CPMGraphConstructor cpmConstructor = new CPMGraphConstructor(filter);
+
+			ObservableList<XYChart.Data<Date, Number>> data = cpmConstructor.fetchGraph().getData();
+			assertEquals(6000f, data.get(0).getYValue());
+		} catch (SQLException sqle) {
+			System.err.println(sqle.getMessage());
+			fail("SQL error");
+		}
+	}
+	
+	@Test
 	public void testFirstWeekTotal() {
 		try {
 			filter.setTime("Weeks");
@@ -94,6 +109,13 @@ public class CPMDataTest extends TestCase {
 			assertEquals(6000f, data.get(0).getYValue());
 
 			filter.setGender(FXCollections.observableArrayList("Male"));
+			cpmConstructor = new CPMGraphConstructor(filter);
+
+			data = cpmConstructor.fetchGraph().getData();
+			assertEquals(6000f, data.get(0).getYValue());
+			
+			//Test invalid gender
+			filter.setGender(FXCollections.observableArrayList("Invalid"));
 			cpmConstructor = new CPMGraphConstructor(filter);
 
 			data = cpmConstructor.fetchGraph().getData();
@@ -136,6 +158,13 @@ public class CPMDataTest extends TestCase {
 
 			data = cpmConstructor.fetchGraph().getData();
 			assertEquals(6000f, data.get(0).getYValue());
+			
+			//Test invalid age
+			filter.setAge(FXCollections.observableArrayList("Invalid"));
+			cpmConstructor = new CPMGraphConstructor(filter);
+
+			data = cpmConstructor.fetchGraph().getData();
+			assertEquals(6000f, data.get(0).getYValue());
 		} catch (SQLException sqle) {
 			System.err.println(sqle.getMessage());
 			fail("SQL error");
@@ -158,6 +187,13 @@ public class CPMDataTest extends TestCase {
 			assertEquals(6000f, data.get(0).getYValue());
 
 			filter.setIncome(FXCollections.observableArrayList("High"));
+			cpmConstructor = new CPMGraphConstructor(filter);
+
+			data = cpmConstructor.fetchGraph().getData();
+			assertEquals(6000f, data.get(0).getYValue());
+			
+			//Test invalid income
+			filter.setIncome(FXCollections.observableArrayList("Invalid"));
 			cpmConstructor = new CPMGraphConstructor(filter);
 
 			data = cpmConstructor.fetchGraph().getData();
@@ -202,6 +238,13 @@ public class CPMDataTest extends TestCase {
 			assertEquals(6000f, data.get(0).getYValue());
 
 			filter.setContext(FXCollections.observableArrayList("Travel"));
+			cpmConstructor = new CPMGraphConstructor(filter);
+
+			data = cpmConstructor.fetchGraph().getData();
+			assertEquals(6000f, data.get(0).getYValue());
+			
+			//Test invalid context
+			filter.setContext(FXCollections.observableArrayList("Invalid"));
 			cpmConstructor = new CPMGraphConstructor(filter);
 
 			data = cpmConstructor.fetchGraph().getData();
