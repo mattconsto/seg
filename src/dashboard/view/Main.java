@@ -119,7 +119,7 @@ public class Main extends Application {
 		FXMLLoader loader = new FXMLLoader();
 		loader.setBuilderFactory(new JavaFXBuilderFactory());
 		loader.setLocation(Main.class.getResource(fxml));
-		stage.setScene(new Scene(loader.load(Main.class.getResourceAsStream(fxml))));
+		stage.setScene(new Scene(loader.load(Main.class.getResourceAsStream(fxml)), stage.getWidth(), stage.getHeight()));
 		return (Node) loader.getController();
 	}
 }

@@ -35,6 +35,7 @@ import java.util.prefs.Preferences;
 
 import javax.imageio.ImageIO;
 
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.geometry.Pos;
 import javafx.scene.control.TableColumn.CellDataFeatures;
@@ -95,7 +96,7 @@ public class AuctionController extends AnchorPane {
 	@FXML private ComboBox<String> cbCampaign;
 	@FXML private TableColumn<ObservableMetrics, Boolean> selectCol;
 	
-	@FXML private TitledPane defaultTitledPane;
+	@FXML private SplitPane splitPane;
 	
 	private MetricsUpdater updaterRunnable;
 	
@@ -138,8 +139,7 @@ public class AuctionController extends AnchorPane {
 			}
 		});
 		fillCampaignList();
-		
-		defaultTitledPane.setExpanded(true);
+		Platform.runLater(() -> splitPane.setDividerPosition(0, 0.15));
 	}
 	
 	private void configureFilters() {
