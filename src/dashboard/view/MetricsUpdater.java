@@ -53,7 +53,7 @@ public class MetricsUpdater implements Runnable {
 		DatabaseConnection.setDbfile(filter.getCampaign() + ".db");
 		Connection conn = DatabaseConnection.getConnection();
 		//table.clear();
-		ResultSet results = conn.createStatement().executeQuery("SELECT COUNT(*) AS Frequency, * FROM "
+		ResultSet results = conn.createStatement().executeQuery("SELECT COUNT(*) AS Frequency FROM "
 				+ "(SELECT IMPRESSIONS.*, SERVER.* FROM IMPRESSIONS "
 				+ "INNER JOIN SERVER ON IMPRESSIONS.ID=SERVER.ID "
 				+ "GROUP BY SERVER.ENTRYDATE, SERVER.ID) AS SUBQUERY "
@@ -67,7 +67,7 @@ public class MetricsUpdater implements Runnable {
 			return;
 		}
 
-		results = conn.createStatement().executeQuery("SELECT COUNT(*) AS Frequency, * FROM"
+		results = conn.createStatement().executeQuery("SELECT COUNT(*) AS Frequency FROM"
 				+ "(SELECT IMPRESSIONS.*, CLICKS.* FROM IMPRESSIONS"
 				+ " INNER JOIN CLICKS ON IMPRESSIONS.ID=CLICKS.ID"
 				+ " GROUP BY CLICKS.DATE, CLICKS.ID) AS SUBQUERY"
@@ -82,7 +82,7 @@ public class MetricsUpdater implements Runnable {
 			return;
 		}
 
-		results = conn.createStatement().executeQuery("SELECT COUNT(*) AS Frequency, * "
+		results = conn.createStatement().executeQuery("SELECT COUNT(*) AS Frequency "
 				+ "FROM (SELECT IMPRESSIONS.*, SERVER.* FROM "
 				+ "IMPRESSIONS INNER JOIN SERVER ON IMPRESSIONS.ID=SERVER.ID "
 				+ "GROUP BY SERVER.ENTRYDATE, SERVER.ID) AS SUBQUERY "
@@ -98,7 +98,7 @@ public class MetricsUpdater implements Runnable {
 			return;
 		}
 
-		results = conn.createStatement().executeQuery("SELECT COUNT(*) AS Frequency, * FROM IMPRESSIONS WHERE " +  filter.getSql() +";");
+		results = conn.createStatement().executeQuery("SELECT COUNT(*) AS Frequency FROM IMPRESSIONS WHERE " +  filter.getSql() +";");
 		
 		if (results.next()) table.get(3).setResults(iFilter, intFormatter.format(results.getDouble(1)));
 		tableView.refresh();
@@ -110,7 +110,7 @@ public class MetricsUpdater implements Runnable {
 			return;
 		}
 
-		results = conn.createStatement().executeQuery("SELECT COUNT(DISTINCT ID) AS Frequency, * FROM"
+		results = conn.createStatement().executeQuery("SELECT COUNT(DISTINCT ID) AS Frequency FROM"
 				+ "(SELECT IMPRESSIONS.*, CLICKS.* FROM IMPRESSIONS"
 				+ " INNER JOIN CLICKS ON IMPRESSIONS.ID=CLICKS.ID"
 				+ " GROUP BY CLICKS.DATE, CLICKS.ID) AS SUBQUERY"
@@ -125,7 +125,7 @@ public class MetricsUpdater implements Runnable {
 			return;
 		}
 		
-		results = conn.createStatement().executeQuery("SELECT COUNT(DISTINCT ID) AS Frequency, * FROM IMPRESSIONS WHERE " +  filter.getSql() +";");
+		results = conn.createStatement().executeQuery("SELECT COUNT(DISTINCT ID) AS Frequency FROM IMPRESSIONS WHERE " +  filter.getSql() +";");
 
 		//if (results.next()) table.add(new ObservableMetrics("Unique Impressions",results.getString(1)));
 		if (results.next()) table.get(5).setResults(iFilter, intFormatter.format(results.getDouble(1)));
