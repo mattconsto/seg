@@ -1,5 +1,6 @@
 package dashboard.view;
 
+import java.awt.Desktop;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -343,6 +344,7 @@ public class AuctionController extends AnchorPane {
 			{
 				if(!newFile.getName().endsWith(".png")) newFile = new File(newFile.getPath() + ".png");
 				ImageIO.write(SwingFXUtils.fromFXImage(snapshot, null), "png", newFile);
+				Desktop.getDesktop().open(newFile);
 			}
 			catch(IOException e)
 			{
@@ -465,6 +467,7 @@ public class AuctionController extends AnchorPane {
 				BufferedWriter out = new BufferedWriter(new FileWriter(newFile));
 				out.write(output.toString());
 				out.close();
+				Desktop.getDesktop().open(newFile);
 			} catch(IOException e) {
 				System.err.println("Could not save csv.");
 			}
