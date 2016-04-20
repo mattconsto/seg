@@ -72,6 +72,23 @@ public class UniqueClicksDataTest extends TestCase {
 	@Test
 	public void testFirstWeekTotal() {
 		try {
+			filter.setTime("Weeks");
+			
+			UniqueClicksGraphConstructor clicksConstructor = new UniqueClicksGraphConstructor(filter);
+
+			ObservableList<XYChart.Data<Date, Number>> data = clicksConstructor.fetchGraph().getData();
+			assertEquals(180, data.get(0).getYValue());
+		} catch (SQLException sqle) {
+			System.err.println(sqle.getMessage());
+			fail("SQL error");
+		}
+	}
+	
+	@Test
+	public void testInvalidTimeTotal() {
+		try {
+			filter.setTime("Other");
+			
 			UniqueClicksGraphConstructor clicksConstructor = new UniqueClicksGraphConstructor(filter);
 
 			ObservableList<XYChart.Data<Date, Number>> data = clicksConstructor.fetchGraph().getData();
@@ -96,6 +113,13 @@ public class UniqueClicksDataTest extends TestCase {
 
 			data = clicksConstructor.fetchGraph().getData();
 			assertEquals(90, data.get(0).getYValue());
+			
+			//Test invalid gender
+			filter.setGender(FXCollections.observableArrayList("Invalid"));
+			clicksConstructor = new UniqueClicksGraphConstructor(filter);
+
+			data = clicksConstructor.fetchGraph().getData();
+			assertEquals(180, data.get(0).getYValue());
 		} catch (SQLException sqle) {
 			System.err.println(sqle.getMessage());
 			fail("SQL error");
@@ -134,6 +158,13 @@ public class UniqueClicksDataTest extends TestCase {
 
 			data = clicksConstructor.fetchGraph().getData();
 			assertEquals(36, data.get(0).getYValue());
+			
+			//Test invalid age
+			filter.setAge(FXCollections.observableArrayList("Invalid"));
+			clicksConstructor = new UniqueClicksGraphConstructor(filter);
+
+			data = clicksConstructor.fetchGraph().getData();
+			assertEquals(180, data.get(0).getYValue());
 		} catch (SQLException sqle) {
 			System.err.println(sqle.getMessage());
 			fail("SQL error");
@@ -160,6 +191,13 @@ public class UniqueClicksDataTest extends TestCase {
 
 			data = clicksConstructor.fetchGraph().getData();
 			assertEquals(60, data.get(0).getYValue());
+			
+			//Test invalid income
+			filter.setIncome(FXCollections.observableArrayList("Invalid"));
+			clicksConstructor = new UniqueClicksGraphConstructor(filter);
+
+			data = clicksConstructor.fetchGraph().getData();
+			assertEquals(180, data.get(0).getYValue());
 		} catch (SQLException sqle) {
 			System.err.println(sqle.getMessage());
 			fail("SQL error");
@@ -204,6 +242,13 @@ public class UniqueClicksDataTest extends TestCase {
 
 			data = clicksConstructor.fetchGraph().getData();
 			assertEquals(30, data.get(0).getYValue());
+			
+			//Test invalid context
+			filter.setContext(FXCollections.observableArrayList("Invalid"));
+			clicksConstructor = new UniqueClicksGraphConstructor(filter);
+
+			data = clicksConstructor.fetchGraph().getData();
+			assertEquals(180, data.get(0).getYValue());
 		} catch (SQLException sqle) {
 			System.err.println(sqle.getMessage());
 			fail("SQL error");

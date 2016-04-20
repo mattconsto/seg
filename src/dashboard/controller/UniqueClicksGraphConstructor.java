@@ -21,12 +21,13 @@ public class UniqueClicksGraphConstructor extends GraphConstructor {
 	
 	@Override
 	protected Series<Date, Number> generateGraph(Connection conn) throws SQLException, ParseException {
-		ResultSet results = conn.createStatement().executeQuery("SELECT strftime('" + filter.getTimeFormatSQL() +"', DATE) AS DATE,COUNT(DISTINCT ID) AS Frequency FROM"
-				+ "(SELECT IMPRESSIONS.*, CLICKS.* FROM IMPRESSIONS"
-				+ " INNER JOIN CLICKS ON IMPRESSIONS.ID=CLICKS.ID"
-				+ " GROUP BY CLICKS.DATE, CLICKS.ID) AS SUBQUERY"
-				+ " WHERE " + filter.getSql()
-				+ " GROUP BY strftime('" + filter.getTimeFormatSQL() +"', DATE);");
+		ResultSet results = conn.createStatement().executeQuery("SELECT strftime('" + filter.getTimeFormatSQL() +"', CLICKS.DATE),COUNT(DISTINCT CLICKS.ID) AS Frequency FROM "
+				+ "CLICKS "
+				+ "INNER JOIN "
+				+ "(SELECT * FROM IMPRESSIONS GROUP BY ID) AS IMPRESSIONS "
+				+ "ON CLICKS.ID=IMPRESSIONS.ID "
+				+ "WHERE " + filter.getSql().replace("DATE", "CLICKS.DATE")
+				+ " GROUP BY strftime('" + filter.getTimeFormatSQL() +"', CLICKS.DATE);");
 
 		XYChart.Series<Date, Number> series = new XYChart.Series<Date, Number>();
 		series.setName("Unique clicks by date");

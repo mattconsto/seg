@@ -1,6 +1,9 @@
 package dashboard.view;
 
+import java.awt.Desktop;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -16,8 +19,13 @@ import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.SnapshotParameters;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart.Data;
 import javafx.scene.chart.XYChart.Series;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
@@ -26,6 +34,7 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.transform.Scale;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import dashboard.controller.*;
 import dashboard.model.*;
 
@@ -93,8 +102,8 @@ public class AuctionController extends AnchorPane {
 	@FXML private MenuItem mnuSearch;
 	@FXML private MenuItem mnuList;
 	@FXML private MenuItem mnuAbout;
-	@FXML private TextField txtBounceTime;
-	@FXML private TextField txtBouncePages;
+	@FXML private FeedbackRestrictiveTextField txtBounceTime;
+	@FXML private FeedbackRestrictiveTextField txtBouncePages;
 	@FXML private RadioButton rbByBounceTime;
 	@FXML private ToggleGroup grBounce;
 	@FXML private RadioButton rbByBouncePages;
@@ -144,6 +153,8 @@ public class AuctionController extends AnchorPane {
 				System.out.println(grBounce.getSelectedToggle().getUserData().toString());
 			}
 		});
+		txtBounceTime.addListener(e -> System.err.println("Numbers Only!"));
+		txtBouncePages.addListener(e -> System.err.println("Numbers Only!"));
 		fillCampaignList();
 		Platform.runLater(() -> splitPane.setDividerPosition(0, 0.175));
 		
@@ -221,19 +232,18 @@ public class AuctionController extends AnchorPane {
 				{ setAlignment( Pos.CENTER );}
 				@Override
 				public void updateItem( Boolean item, boolean empty ){
-					if ( ! empty ) {
-						TableRow<?>  row = getTableRow();
+					if ( !empty ) {
+						TableRow<?> row = getTableRow();
 						if ( row != null ) {
-						int rowNo = row.getIndex();
-						TableViewSelectionModel<?>  s = getTableView().getSelectionModel();
-						if ( item ) {
-							updateGraph(  getTableView().getItems().get(rowNo).getDescription());
-							s.select( rowNo );
-						}
-						else  {
-							removeGraph(  getTableView().getItems().get(rowNo).getDescription());
-							s.clearSelection( rowNo );
-						}
+							int rowNo = row.getIndex();
+							TableViewSelectionModel<?> s = getTableView().getSelectionModel();
+							if ( item ) {
+								updateGraph( getTableView().getItems().get(rowNo).getDescription());
+								s.select( rowNo );
+							} else {
+								removeGraph( getTableView().getItems().get(rowNo).getDescription());
+								s.clearSelection( rowNo );
+							}
 						}
 					}
 					super.updateItem( item, empty );
@@ -253,10 +263,10 @@ public class AuctionController extends AnchorPane {
 	
 	@FXML private void openAbout(ActionEvent event) {
 		Alert about = new Alert(AlertType.INFORMATION);
-		about.setTitle("About");
-		about.setHeaderText(preferences.get("ProductName", "Ad Auction Dashboard"));
+		about.setTitle(preferences.get("ProductName", "Ad Auction Dashboard") + " - About");
+		about.setHeaderText("About");
 		about.setContentText(
-			"Created by SEG Team 3:\n" + 
+			"Created by SEG Team 3 2016:\n" + 
 			"\n" + 
 			"• Samuel Beresford\n" + 
 			"• Matthew Consterdine\n" +
@@ -267,8 +277,36 @@ public class AuctionController extends AnchorPane {
 		about.show();
 	}
 	
+	@FXML private void showDefintions(ActionEvent event) {
+		Alert about = new Alert(AlertType.INFORMATION);
+		about.setTitle(preferences.get("ProductName", "Ad Auction Dashboard") + " - Definitions");
+		about.setHeaderText("Definitions");
+		about.setContentText(
+			"Acquisition: same as conversion.\n" + 
+			"Bounce: A user clicks on an ad, but then fails to interact with the website (typically detected when a user navigates away from the website after a short time, or when only a single page has been viewed).\n" + 
+			"Bounce Rate: The average number of bounces per click.\n" + 
+			"Campaign: An effort by the marketing agency to gain exposure for a client’s website by participating in a range of ad auctions offered by different providers and networks. Bid amounts, keywords and other variables will be tailored to the client’s needs.\n" + 
+			"Click: A click occurs when a user clicks on an ad that is shown to them.\n" + 
+			"Click Cost: The cost of a particular click (usually determined through an auction process).\n" + 
+			"Click-through-rate (CTR): The average number of clicks per impression.\n" + 
+			"Conversion: A conversion, or acquisition, occurs when a user clicks and then acts on an ad. The specific definition of an action depends on the campaign (e.g., buying a product, registering as a new customer or joining a mailing list).\n" + 
+			"Conversion Rate: The average number of conversions per click.\n" + 
+			"Cost-per-acquisition (CPA): The average amount of money spent on an advertising campaign for each acquisition (i.e., conversion).\n" + 
+			"Cost-per-click (CPC): The average amount of money spent on an advertising campaign for each click.\n" + 
+			"Cost-per-thousand impressions (CPM): The average amount of money spent on an advertising campaign for every one thousand impressions.\n" + 
+			"Impression: An impression occurs whenever an ad is shown to a user, regardless of whether they click on it.\n" + 
+			"Uniques: The number of unique users that click on an ad during the course of a campaign."
+		);
+		about.setHeight(625);
+		about.setWidth(800);
+		about.show();
+		about.setHeight(625);
+		about.setWidth(800);
+	}
+	
 	@FXML private void importCampaignAction(ActionEvent event) {
 		if(updaterRunnable != null) updaterRunnable.stop();
+		application.getStage().setMaximized(false);
 		application.start(application.getStage());
 	}
 	
@@ -291,7 +329,13 @@ public class AuctionController extends AnchorPane {
 	}
 	
 	@FXML private void saveGraphAs(ActionEvent event) {
-		configureFileChooser(fileChooser);
+		fileChooser.setTitle("Save graph as...");
+		fileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
+		fileChooser.getExtensionFilters().clear();
+		fileChooser.getExtensionFilters().addAll(
+				new FileChooser.ExtensionFilter("PNG", "*.png")
+		);
+		
 		WritableImage snapshot = lineChart.snapshot(new SnapshotParameters(), null);
 		File newFile = fileChooser.showSaveDialog(application.getStage());
 		if(newFile != null) {
@@ -299,6 +343,7 @@ public class AuctionController extends AnchorPane {
 			{
 				if(!newFile.getName().endsWith(".png")) newFile = new File(newFile.getPath() + ".png");
 				ImageIO.write(SwingFXUtils.fromFXImage(snapshot, null), "png", newFile);
+				Desktop.getDesktop().open(newFile);
 			}
 			catch(IOException e)
 			{
@@ -306,14 +351,6 @@ public class AuctionController extends AnchorPane {
 				System.err.println("Could not save image.");
 			}
 		}
-	}
-	
-	private static void configureFileChooser(final FileChooser fc){
-		fc.setTitle("Save graph as...");
-		fc.setInitialDirectory(new File(System.getProperty("user.dir")));
-		fc.getExtensionFilters().addAll(
-				new FileChooser.ExtensionFilter("PNG", "*.png*")
-		);
 	}
 
 	@FXML
@@ -393,8 +430,95 @@ public class AuctionController extends AnchorPane {
 			}
 	}
 	
+	@FXML private void exportData() {
+		System.out.println("Export");
+		
+		StringBuilder output = new StringBuilder();
+		
+		int i = 0;
+		for(TableColumn<ObservableMetrics, ?> column : tableResults.getColumns()) {
+			if(i > 1) output.append(",");
+			if(i > 0) output.append(column.getText());
+			i++;
+		}
+		
+		output.append("\n");
+		
+		for(ObservableMetrics metrics : tableResults.getItems()) {
+			output.append(metrics.getDescription());
+			for(int j = 0; j < tableResults.getColumns().size() - 2; j++) {
+				output.append(",\"" + metrics.getResults(j) + "\"");
+			}
+			output.append("\n");
+		}
+		
+		fileChooser.setTitle("Save data as...");
+		fileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
+		fileChooser.getExtensionFilters().clear();
+		fileChooser.getExtensionFilters().addAll(
+				new FileChooser.ExtensionFilter("CSV", "*.csv")
+		);
+		
+		File newFile = fileChooser.showSaveDialog(application.getStage());
+		if(newFile != null) {
+			try {
+				if(!newFile.getName().endsWith(".csv")) newFile = new File(newFile.getPath() + ".csv");
+				BufferedWriter out = new BufferedWriter(new FileWriter(newFile));
+				out.write(output.toString());
+				out.close();
+				Desktop.getDesktop().open(newFile);
+			} catch(IOException e) {
+				System.err.println("Could not save csv.");
+			}
+		}
+	}
+	
+	private void showHistogram(Series<Date, Number> series) {
+		BarChart<String, Number> histogram = new BarChart<>(new CategoryAxis(), new NumberAxis());
+		histogram.setTitle(series.getName() + " Histogram");
+		histogram.setStyle("-fx-background-color: #ffffff;");
+		histogram.setLegendVisible(false);
+		histogram.getYAxis().setLabel("Frequency");
+		histogram.getXAxis().setLabel(series.getName());
+		histogram.setBarGap(1);
+		histogram.setCategoryGap(0);
+
+		int   buckets = 25;
+		int[] data    = new int[buckets];
+		int   minimum = Integer.MAX_VALUE;
+		int   maximum = Integer.MIN_VALUE;
+		
+		for(Data<Date, Number> entry : series.getData()) {
+			int value = entry.getYValue().intValue();
+			if(value < minimum) minimum = value;
+			if(value > maximum) maximum = value;
+		}
+		
+		double segment = (double) (maximum - minimum) / (double) (buckets - 1);
+		
+		for(Data<Date, Number> entry : series.getData()) {
+			int value = entry.getYValue().intValue();
+			data[(int) ((value - minimum)/segment)]++;
+		}
+		
+		Series<String, Number> histogram_series = new Series<>();
+		
+		for(int i = 0; i < buckets; i++) {
+			histogram_series.getData().add(new Data<String, Number>(Integer.toString((int) (minimum + i * segment)), data[i]));
+		}
+		
+		histogram.getData().add(histogram_series);
+		
+		Stage stage = new Stage();
+		stage.setTitle(series.getName() + " Histogram");
+		stage.setMinHeight(115);
+		stage.setScene(new Scene(histogram));
+		stage.show();
+	}
+	
 	@FXML private void clearData(ActionEvent event) {
-		updaterRunnable.stop();
+		if(updaterRunnable != null)
+			updaterRunnable.stop();
 		lineChart.getData().clear();
 		filters.clear();
 		graphData.clear();
@@ -456,7 +580,9 @@ public class AuctionController extends AnchorPane {
 						data.setName(key);
 						lineChart.getData().add(data);
 						graphData.put(key, data);
-
+						
+						final Series<Date, Number> final_data = data;
+						final_data.getNode().setOnMouseClicked(e -> showHistogram(final_data));
 
 					} catch (SQLException e) {
 						System.err.println("Unable to fetch data from database: " + e.getMessage());

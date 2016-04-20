@@ -44,8 +44,8 @@ public class Main extends Application {
 				ex.printStackTrace();
 			}
 			stage.setResizable(false);
-			stage.setWidth(600);
-			stage.setHeight(660);
+			stage.setHeight(505);
+			stage.setWidth(500);
 			
 			if(preferences.getDouble("OpenCampaign_PositionX", -1) != -1) {
 				stage.setX(preferences.getDouble("OpenCampaign_PositionX", -1));

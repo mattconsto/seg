@@ -1,11 +1,12 @@
 package dashboard.model;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 
-public final class ObservableMetrics {
+public final class ObservableMetrics implements Iterable<SimpleStringProperty> {
 	private final List<SimpleStringProperty> results;
 	private final SimpleStringProperty description;
 	private final SimpleBooleanProperty select;
@@ -14,7 +15,6 @@ public final class ObservableMetrics {
 		return select;
 	}
 	
-
 	public ObservableMetrics(String desc) {	
 		this.select = new SimpleBooleanProperty(false);
 		this.results = new ArrayList<SimpleStringProperty>();
@@ -28,6 +28,9 @@ public final class ObservableMetrics {
 	}
 	public String getResults(int i) {
 			return results.get(i).get();
+	}
+	public Iterator<SimpleStringProperty> iterator() {
+		return results.iterator();
 	}
 	public ObservableValue<String> resultsProperty(int i) {
 			return results.get(i);
