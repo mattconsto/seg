@@ -18,9 +18,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.SnapshotParameters;
-import javafx.scene.chart.BarChart;
-import javafx.scene.chart.CategoryAxis;
-import javafx.scene.chart.Chart;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart.Data;
@@ -431,11 +428,14 @@ public class AuctionController extends AnchorPane {
 	}
 	
 	private void showHistogram(Series<Date, Number> series) {
-		BarChart<String, Number> histogram = new BarChart<>(new CategoryAxis(), new NumberAxis());
+		LineChart<Number, Number> histogram = new LineChart<>(new NumberAxis(), new NumberAxis());
 		histogram.setTitle(series.getName() + " Histogram");
 		histogram.setStyle("-fx-background-color: #ffffff;");
+		histogram.setLegendVisible(false);
+		histogram.getYAxis().setLabel("Frequency");
+		histogram.getXAxis().setLabel(series.getName());
 
-		int   buckets = 10;
+		int   buckets = 25;
 		int[] data    = new int[buckets];
 		int   minimum = Integer.MAX_VALUE;
 		int   maximum = Integer.MIN_VALUE;
@@ -446,15 +446,17 @@ public class AuctionController extends AnchorPane {
 			if(value > maximum) maximum = value;
 		}
 		
+		double segment = (double) (maximum - minimum) / (double) (buckets - 1);
+		
 		for(Data<Date, Number> entry : series.getData()) {
 			int value = entry.getYValue().intValue();
-			data[(value - minimum)/((maximum - minimum) / (buckets - 1))]++;
+			data[(int) ((value - minimum)/segment)]++;
 		}
 		
-		Series<String, Number> histogram_series = new Series<>();
+		Series<Number, Number> histogram_series = new Series<>();
 		
 		for(int i = 0; i < buckets; i++) {
-			histogram_series.getData().add(new Data<String, Number>(Integer.toString(i), data[i]));
+			histogram_series.getData().add(new Data<Number, Number>((int) (minimum + i * segment), data[i]));
 		}
 		
 		histogram.getData().add(histogram_series);
