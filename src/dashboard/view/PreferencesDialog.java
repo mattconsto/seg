@@ -1,6 +1,7 @@
 package dashboard.view;
 
 import java.util.Optional;
+import java.util.prefs.Preferences;
 
 import javafx.geometry.Insets;
 import javafx.scene.control.ButtonType;
@@ -16,6 +17,7 @@ import javafx.stage.Window;
 public class PreferencesDialog extends Dialog<Boolean>{
 	private Window owner;
 	AuctionController controller;
+	private Preferences preferences = Preferences.userRoot();
 	
 	public PreferencesDialog(AuctionController controller, Window owner){
 		this.controller = controller;

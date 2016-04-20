@@ -202,7 +202,7 @@ public class MetricsUpdater  {
               DecimalFormatSymbols symbols = new DecimalFormat().getDecimalFormatSymbols();
 		DecimalFormat intFormatter = new DecimalFormat("#" + symbols.getGroupingSeparator() + "###");
 		DecimalFormat decFormatter = new DecimalFormat("#" + symbols.getGroupingSeparator() + "###" + symbols.getDecimalSeparator() + "00");
-		String currency = "£";
+		String currency = "Â£";
                 Connection connection = null;
              
              
