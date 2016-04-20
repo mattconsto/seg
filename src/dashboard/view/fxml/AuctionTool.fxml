@@ -27,10 +27,8 @@
 				<MenuItem fx:id="printCampaign" onAction="#printGraph" text="Print Graph" />
 				<MenuItem fx:id="close" onAction="#closeAction" text="Close" />
 			</Menu>
-			<Menu text="Preferences">
-				<MenuItem fx:id="mnuColour" disable="true" text="Colour Scheme" />
-				<MenuItem fx:id="mnuFont" disable="true" text="Font Size" />
-				<MenuItem fx:id="mnuUnits" disable="true" text="Units" />
+			<Menu text="Edit">
+				<MenuItem fx:id="prefDialog" onAction="#showPrefDialog" text="Preferences" />
 			</Menu>
 			<Menu text="Help">
 				<MenuItem fx:id="mnuDefinitions" onAction="#showDefintions" text="Definitions" />
