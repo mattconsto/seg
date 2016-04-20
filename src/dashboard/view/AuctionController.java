@@ -467,6 +467,7 @@ public class AuctionController extends AnchorPane {
 		
 		Stage stage = new Stage();
 		stage.setTitle(series.getName() + " Histogram");
+		stage.setMinHeight(115);
 		stage.setScene(new Scene(histogram));
 		stage.show();
 	}
