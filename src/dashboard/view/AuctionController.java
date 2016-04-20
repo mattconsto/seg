@@ -668,16 +668,18 @@ public class AuctionController extends AnchorPane {
 						Series<Date, Number> data = constructor.fetchGraph();
 						data.setName(key);
 
-						int last = 0;
-						for(Data<Date, Number> d : data.getData()) {
-							d.setNode(new HoveredThresholdNode(last, d.getYValue().intValue(), lineChart.getData().size()));
-							d.getNode().setOnMouseClicked(new EventHandler<Event>() {
-								@Override
-								public void handle(Event event) {
-									showHistogram(data);
-								}
-							});
-							last = d.getYValue().intValue();
+						if(preferences.getBoolean("Graph_Icons", true)) {
+							int last = 0;
+							for(Data<Date, Number> d : data.getData()) {
+								d.setNode(new HoveredThresholdNode(last, d.getYValue().intValue(), lineChart.getData().size()));
+								d.getNode().setOnMouseClicked(new EventHandler<Event>() {
+									@Override
+									public void handle(Event event) {
+										showHistogram(data);
+									}
+								});
+								last = d.getYValue().intValue();
+							}
 						}
 						
 						lineChart.getData().add(data);
