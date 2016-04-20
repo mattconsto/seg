@@ -11,7 +11,6 @@ import java.util.Date;
 
 import org.controlsfx.control.CheckComboBox;
 
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -39,6 +38,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import dashboard.controller.*;
 import dashboard.model.*;
+import extfx.scene.control.RestrictiveTextField;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -89,9 +89,9 @@ public class AuctionController extends AnchorPane {
 	@FXML private TableColumn<ObservableMetrics, String> metricCol;
 	private ObservableList<ObservableMetrics> tableMetrics = FXCollections.observableArrayList();
 	 
-	private HashMap<String, Filter> filters;
+	private HashMap<String, Filter> filters = new HashMap<>();
 	private Filter filter;
-	private BounceFilter bounceFilter;
+	private BounceFilter bounceFilter  = new BounceFilter();
 	
 	@FXML private MenuItem deleteCampaign;
 	@FXML private MenuItem exportCampaign;
@@ -104,8 +104,8 @@ public class AuctionController extends AnchorPane {
 	@FXML private MenuItem mnuSearch;
 	@FXML private MenuItem mnuList;
 	@FXML private MenuItem mnuAbout;
-	@FXML private FeedbackRestrictiveTextField txtBounceTime;
-	@FXML private FeedbackRestrictiveTextField txtBouncePages;
+	@FXML private RestrictiveTextField txtBounceTime;
+	@FXML private RestrictiveTextField txtBouncePages;
 	@FXML private RadioButton rbByBounceTime;
 	@FXML private ToggleGroup grBounce;
 	@FXML private RadioButton rbByBouncePages;
@@ -118,7 +118,7 @@ public class AuctionController extends AnchorPane {
 	 
         private MetricsUpdater updaterRunnable = null;
 	
-	private FileChooser fileChooser;
+	private FileChooser fileChooser = new FileChooser();
 
 	private HashMap<String, Series<Date, Number>> graphData = new HashMap<String, Series<Date, Number>>();
 	public void setApp(Main application){
@@ -126,38 +126,21 @@ public class AuctionController extends AnchorPane {
 	}
 
 	public void init() {
-		filters = new HashMap<>();
-		bounceFilter = new BounceFilter();
-		
 		filterDateFrom.setValue((LocalDate.of(2015,01,01)));
 		filterDateTo.setValue((LocalDate.of(2015,01,14)));
-		filterGender.getItems().addAll("Any","Female","Male");
-		filterAge.getItems().addAll("Any","Less than 25","25 to 34","35 to 44","45 to 54","Greater than 55");
-		filterIncome.getItems().addAll("Any","Low","Medium","High");
-		filterContext.getItems().addAll("Any","News","Shopping","Social Media","Blog","Hobbies","Travel");
 		filterGender.getCheckModel().check(0);
 		filterAge.getCheckModel().check(0);
 		filterContext.getCheckModel().check(0);
 		filterIncome.getCheckModel().check(0);
-		
-		fileChooser = new FileChooser();
 			 
 		configureTable();  
 		configureFilters();
 
 		application.getStage().setTitle(preferences.get("ProductName", "Ad Auction Dashboard") + " - " + DatabaseConnection.getDbfile().replace(".db", ""));
-		generateGraph.setDisable(false);
 		
 		rbByBounceTime.setUserData("timeBounce");
 		rbByBouncePages.setUserData("pageBounce");
-		grBounce.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
-			@Override
-			public void changed(ObservableValue<? extends Toggle> observableValue, Toggle t, Toggle arg2) {
-				System.out.println(grBounce.getSelectedToggle().getUserData().toString());
-			}
-		});
-		txtBounceTime.addListener(e -> System.err.println("Numbers Only!"));
-		txtBouncePages.addListener(e -> System.err.println("Numbers Only!"));
+		grBounce.selectedToggleProperty().addListener(((ObservableValue<? extends Toggle> v, Toggle t, Toggle q) -> System.out.println(grBounce.getSelectedToggle().getUserData().toString())));
 		fillCampaignList();
 		Platform.runLater(() -> splitPane.setDividerPosition(0, 0.175));
 		

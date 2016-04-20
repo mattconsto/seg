@@ -15,7 +15,6 @@ import org.controlsfx.control.CheckComboBox;
 import org.controlsfx.control.IndexedCheckModel;
 
 public class Filter {
-
 	private boolean genderEnabled = true;
 	private boolean ageEnabled = true;
 	private boolean incomeEnabled = true;
