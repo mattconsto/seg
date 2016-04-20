@@ -159,6 +159,8 @@ public class AuctionController extends AnchorPane {
 		Platform.runLater(() -> splitPane.setDividerPosition(0, 0.175));
 		
 		txtFilterName.setText(GenerateName.generate());
+		
+		application.getStage().getScene().getStylesheets().add("/src/dashboard/view/fxml/GraphDefault.css");
 	}
 	
 	private void configureFilters() {
@@ -358,6 +360,41 @@ public class AuctionController extends AnchorPane {
 		//if(updaterRunnable != null) updaterRunnable.stop();
 		DatabaseConnection.closeConnection();
 		application.getStage().close();
+	}
+	
+	@FXML
+	private void showPrefDialog() {
+		PreferencesDialog pf = new PreferencesDialog(this, application.getStage());
+	}
+	
+	protected void updatePreferences(String graphColour, boolean graphIcons, boolean graphDash, String fontSize) {
+		Scene mainScene = application.getStage().getScene();
+		mainScene.getStylesheets().clear();
+		
+		switch(graphColour)
+		{
+		default:
+		case "Default":
+			mainScene.getStylesheets().add("/src/dashboard/view/fxml/GraphDefault.css");
+			break;
+		case "HighContrast":
+			mainScene.getStylesheets().add("/src/dashboard/view/fxml/GraphHighContrast.css");
+			break;
+		}
+		
+		switch(fontSize)
+		{
+		case "Small":
+			mainScene.getStylesheets().add("/src/dashboard/view/fxml/SmallFont.css");
+			break;
+		default:
+		case "Med":
+			mainScene.getStylesheets().add("/src/dashboard/view/fxml/MedFont.css");
+			break;
+		case "Large":
+			mainScene.getStylesheets().add("/src/dashboard/view/fxml/LargeFont.css");
+			break;
+		}
 	}
 	
 	@FXML
