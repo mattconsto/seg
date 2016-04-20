@@ -36,7 +36,8 @@ public class BounceGraphConstructor extends GraphConstructor{
 				+ "INNER JOIN "
 				+ "(SELECT * FROM IMPRESSIONS GROUP BY ID) AS IMPRESSIONS "
 				+ "ON SERVER.ID=IMPRESSIONS.ID "
-				+ "WHERE " + bounceFilter.getSQL() + " AND " + filter.getSql().replace("DATE", "SERVER.ENTRYDATE")+ " GROUP BY strftime('" + filter.getTimeFormatSQL() +"', SERVER.ENTRYDATE);");
+				+ "WHERE " + bounceFilter.getSQL() + " AND " + filter.getSql().replace("DATE", "SERVER.ENTRYDATE")+ " "
+				+ "GROUP BY strftime('" + filter.getTimeFormatSQL() +"', SERVER.ENTRYDATE);");
 		
 		
 		XYChart.Series<Date, Number> series = new XYChart.Series<Date, Number>();

@@ -27,7 +27,7 @@ public class BounceRateGraphConstructor extends GraphConstructor{
 	@Override
 	protected Series<Date, Number> generateGraph(Connection conn)
 			throws SQLException, ParseException {
-		ResultSet results = conn.createStatement().executeQuery("SELECT DATE, NUMCLICKS, NUMBOUNCES FROM "
+/*		ResultSet results = conn.createStatement().executeQuery("SELECT DATE, NUMCLICKS, NUMBOUNCES FROM "
 				+ "(SELECT strftime('" + filter.getTimeFormatSQL() +"', CLICKDATE) as CLICKDATE, COUNT(ID) AS NUMCLICKS FROM "
 				+ "(SELECT CLICKS.DATE AS CLICKDATE, IMPRESSIONS.* FROM CLICKS INNER JOIN IMPRESSIONS ON CLICKS.ID=IMPRESSIONS.ID GROUP BY CLICKS.ID, CLICKDATE) "
 				+ "WHERE " + filter.getSql().replace("DATE", "CLICKDATE")+ " GROUP BY strftime('" + filter.getTimeFormatSQL() +"', CLICKDATE)) "
@@ -39,24 +39,25 @@ public class BounceRateGraphConstructor extends GraphConstructor{
 				+ "WHERE " + bounceFilter.getSQL() + " AND "+ filter.getSql().replace("DATE", "ENTRYDATE")
 				+ " GROUP BY strftime('" + filter.getTimeFormatSQL() +"', ENTRYDATE)) "
 				+ "ON DATE=CLICKDATE GROUP BY DATE");
-
-/*		ResultSet results = conn.createStatement().executeQuery("SELECT ENTRYDATE, NUMCLICKS, NUMBOUNCES FROM "
+*/
+		ResultSet results = conn.createStatement().executeQuery("SELECT ENTRYDATE, NUMCLICKS, NUMBOUNCES FROM "
+				+ "(SELECT strftime('" + filter.getTimeFormatSQL() +"', ENTRYDATE) AS ENTRYDATE,COUNT(*) AS NUMBOUNCES FROM "
+				+ "SERVER "
+				+ "INNER JOIN "
+				+ "(SELECT * FROM IMPRESSIONS GROUP BY ID) AS IMPRESSIONS "
+				+ "ON SERVER.ID=IMPRESSIONS.ID "
+				+ "WHERE " + bounceFilter.getSQL() + " AND " + filter.getSql().replace("DATE", "SERVER.ENTRYDATE")+ " "
+				+ "GROUP BY strftime('" + filter.getTimeFormatSQL() +"', SERVER.ENTRYDATE))"
+				+ "INNER JOIN"
 				+ "(SELECT strftime('" + filter.getTimeFormatSQL() +"', CLICKS.DATE) AS CLICKDATE,COUNT(*) AS NUMCLICKS FROM "
 				+ "CLICKS "
 				+ "INNER JOIN "
 				+ "(SELECT * FROM IMPRESSIONS GROUP BY ID) AS IMPRESSIONS "
 				+ "ON CLICKS.ID=IMPRESSIONS.ID "
-				+ "WHERE " + filter.getSql().replace("DATE", "CLICKDATE")
-				+ " GROUP BY strftime('" + filter.getTimeFormatSQL() +"', CLICKDATE)) "
-				+ "INNER JOIN "
-				+ "(SELECT strftime('" + filter.getTimeFormatSQL() +"', SERVER.ENTRYDATE) AS ENTRYDATE,COUNT(*) AS NUMBOUNCES FROM "
-				+ "SERVER "
-				+ "INNER JOIN "
-				+ "(SELECT * FROM IMPRESSIONS GROUP BY ID) AS IMPRESSIONS "
-				+ "ON SERVER.ID=IMPRESSIONS.ID "
-				+ "WHERE " + bounceFilter.getSQL() + " AND " + filter.getSql().replace("DATE", "ENTRYDATE") + " GROUP BY strftime('" + filter.getTimeFormatSQL() +"', ENTRYDATE)) "
-				+ "ON ENTRYDATE=CLICKDATE GROUP BY ENTRYDATE");*/
-		
+				+ "WHERE " + filter.getSql().replace("DATE", "CLICKS.DATE")
+				+ " GROUP BY strftime('" + filter.getTimeFormatSQL() +"', CLICKS.DATE))"
+				+ "ON ENTRYDATE=CLICKDATE");
+	
 		XYChart.Series<Date, Number> series = new XYChart.Series<Date, Number>();
 		series.setName(" by date");
 
