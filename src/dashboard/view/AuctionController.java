@@ -11,7 +11,6 @@ import java.util.Date;
 
 import org.controlsfx.control.CheckComboBox;
 
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -39,6 +38,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import dashboard.controller.*;
 import dashboard.model.*;
+import extfx.scene.control.RestrictiveTextField;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -58,6 +58,7 @@ import javafx.print.PrinterJob;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView.TableViewSelectionModel;
 import javafx.scene.control.cell.CheckBoxTableCell;
+import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
 /**
  * Auction Controller.
@@ -89,9 +90,9 @@ public class AuctionController extends AnchorPane {
 	@FXML private TableColumn<ObservableMetrics, String> metricCol;
 	private ObservableList<ObservableMetrics> tableMetrics = FXCollections.observableArrayList();
 	 
-	private HashMap<String, Filter> filters;
+	private HashMap<String, Filter> filters = new HashMap<>();
 	private Filter filter;
-	private BounceFilter bounceFilter;
+	private BounceFilter bounceFilter  = new BounceFilter();
 	
 	@FXML private MenuItem deleteCampaign;
 	@FXML private MenuItem exportCampaign;
@@ -104,8 +105,8 @@ public class AuctionController extends AnchorPane {
 	@FXML private MenuItem mnuSearch;
 	@FXML private MenuItem mnuList;
 	@FXML private MenuItem mnuAbout;
-	@FXML private FeedbackRestrictiveTextField txtBounceTime;
-	@FXML private FeedbackRestrictiveTextField txtBouncePages;
+	@FXML private RestrictiveTextField txtBounceTime;
+	@FXML private RestrictiveTextField txtBouncePages;
 	@FXML private RadioButton rbByBounceTime;
 	@FXML private ToggleGroup grBounce;
 	@FXML private RadioButton rbByBouncePages;
@@ -118,7 +119,7 @@ public class AuctionController extends AnchorPane {
 	 
         private MetricsUpdater updaterRunnable = null;
 	
-	private FileChooser fileChooser;
+	private FileChooser fileChooser = new FileChooser();
 
 	private HashMap<String, Series<Date, Number>> graphData = new HashMap<String, Series<Date, Number>>();
 	public void setApp(Main application){
@@ -126,38 +127,21 @@ public class AuctionController extends AnchorPane {
 	}
 
 	public void init() {
-		filters = new HashMap<>();
-		bounceFilter = new BounceFilter();
-		
 		filterDateFrom.setValue((LocalDate.of(2015,01,01)));
 		filterDateTo.setValue((LocalDate.of(2015,01,14)));
-		filterGender.getItems().addAll("Any","Female","Male");
-		filterAge.getItems().addAll("Any","Less than 25","25 to 34","35 to 44","45 to 54","Greater than 55");
-		filterIncome.getItems().addAll("Any","Low","Medium","High");
-		filterContext.getItems().addAll("Any","News","Shopping","Social Media","Blog","Hobbies","Travel");
 		filterGender.getCheckModel().check(0);
 		filterAge.getCheckModel().check(0);
 		filterContext.getCheckModel().check(0);
 		filterIncome.getCheckModel().check(0);
-		
-		fileChooser = new FileChooser();
 			 
 		configureTable();  
 		configureFilters();
 
 		application.getStage().setTitle(preferences.get("ProductName", "Ad Auction Dashboard") + " - " + DatabaseConnection.getDbfile().replace(".db", ""));
-		generateGraph.setDisable(false);
 		
 		rbByBounceTime.setUserData("timeBounce");
 		rbByBouncePages.setUserData("pageBounce");
-		grBounce.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
-			@Override
-			public void changed(ObservableValue<? extends Toggle> observableValue, Toggle t, Toggle arg2) {
-				System.out.println(grBounce.getSelectedToggle().getUserData().toString());
-			}
-		});
-		txtBounceTime.addListener(e -> System.err.println("Numbers Only!"));
-		txtBouncePages.addListener(e -> System.err.println("Numbers Only!"));
+		grBounce.selectedToggleProperty().addListener(((ObservableValue<? extends Toggle> v, Toggle t, Toggle q) -> System.out.println(grBounce.getSelectedToggle().getUserData().toString())));
 		fillCampaignList();
 		Platform.runLater(() -> splitPane.setDividerPosition(0, 0.175));
 		
@@ -219,7 +203,46 @@ public class AuctionController extends AnchorPane {
 				return new SimpleStringProperty(p.getValue().getResults(colNo));
 			}
 		});
-		tableResults.getColumns().add(tc);
+		
+                tc.setSortable(false);
+              
+                Callback<TableColumn<ObservableMetrics, String>, TableCell<ObservableMetrics, String> > cellFactory =
+                    new Callback<TableColumn<ObservableMetrics, String>, TableCell<ObservableMetrics, String>>() {
+                        @Override
+                        public TableCell call(TableColumn p) {
+                            TableCell cell = new TableCell<ObservableMetrics, String>() {
+                          @Override
+                          public void updateItem(String item, boolean empty) {
+                              super.updateItem(item, empty);
+                              setText(empty ? null : getString());
+                              setGraphic(null);
+                          }
+
+                          private String getString() {
+                              return getItem() == null ? "" : getItem().toString();
+                          } 
+                      };
+
+                    cell.addEventFilter(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+                        @Override
+                        public void handle(MouseEvent event) {
+                            if (event.getClickCount() > 1) {
+                                System.out.println("double clicked!");
+                                TableCell c = (TableCell) event.getSource();
+                                int i = c.getIndex();
+                                if (i > 1)
+                                {
+                                     Filter f = filters.get( c.getTableColumn().getText());
+                                     System.out.println(c.getTableColumn().getText() + ": " + f.toString());
+                                }
+                            }
+                        }
+                    });
+                return cell;
+                    }
+                };
+                tc.setCellFactory(cellFactory);
+                tableResults.getColumns().add(tc);
 	}
 	
 	// Configure the table widget: set up its column, and register the
@@ -256,13 +279,16 @@ public class AuctionController extends AnchorPane {
 				};
 			}
 		} );		 
+                checkCol.setSortable(false);
 		tableResults.getColumns().add(checkCol);
 		metricCol = new TableColumn<>("Metric");
 		metricCol.setMinWidth(120);
 		//metricCol.setMaxWidth(150);
 		metricCol.setCellValueFactory(new PropertyValueFactory<>("description")); 
+                metricCol.setSortable(false);
 		tableResults.getColumns().add(metricCol);
 		tableResults.setItems(tableMetrics);
+                
 	}
 
 	
@@ -367,7 +393,7 @@ public class AuctionController extends AnchorPane {
 	
 	@FXML
 	private void showPrefDialog() {
-		PreferencesDialog pf = new PreferencesDialog(this, application.getStage());
+		new PreferencesDialog(this, application.getStage());
 	}
 	
 	protected void updatePreferences(String graphColour, boolean graphIcons, boolean graphDash, String fontSize) {
@@ -379,7 +405,6 @@ public class AuctionController extends AnchorPane {
 		default:
 		case "Default":
 			mainScene.getStylesheets().add("/dashboard/view/fxml/GraphDefault.css");
-			mainScene.getStylesheets().add("/dashboard/view/fxml/GraphDashed.css");
 			break;
 		case "HighContrast":
 			mainScene.getStylesheets().add("/dashboard/view/fxml/GraphHighContrast.css");
@@ -633,7 +658,7 @@ public class AuctionController extends AnchorPane {
 
 						int last = 0;
 						for(Data<Date, Number> d : data.getData()) {
-							d.setNode(new HoveredThresholdNode(last, d.getYValue().intValue(), lineChart));
+							d.setNode(new HoveredThresholdNode(last, d.getYValue().intValue(), lineChart.getData().size()));
 							d.getNode().setOnMouseClicked(new EventHandler<Event>() {
 								@Override
 								public void handle(Event event) {
@@ -645,9 +670,6 @@ public class AuctionController extends AnchorPane {
 						
 						lineChart.getData().add(data);
 						graphData.put(key, data);
-						
-						final Series<Date, Number> final_data = data;
-						final_data.getNode().setOnMouseClicked(e -> showHistogram(final_data));
 
 					} catch (SQLException e) {
 						System.err.println("Unable to fetch data from database: " + e.getMessage());

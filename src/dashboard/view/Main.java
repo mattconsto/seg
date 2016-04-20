@@ -23,7 +23,6 @@ public class Main extends Application {
 
 	@Override
 	public void start(Stage primaryStage) {
-		// Setup our stage
 		stage = primaryStage;
 		
 		stage.setTitle(preferences.get("ProductName", "Ad Auction Dashboard"));

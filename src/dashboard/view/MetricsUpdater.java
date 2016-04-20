@@ -8,7 +8,6 @@ import java.text.DecimalFormatSymbols;
 
 import javafx.collections.ObservableList;
 import dashboard.model.BounceFilter;
-import dashboard.model.DatabaseConnection;
 import dashboard.model.Filter;
 import dashboard.model.ObservableMetrics;
 import java.sql.DriverManager;
@@ -20,8 +19,6 @@ public class MetricsUpdater  {
 	private ObservableList<ObservableMetrics> table;
 	private TableView<ObservableMetrics> tableView;
 	private Filter                            filter;
-	private BounceFilter bounceFilter;
-	private boolean                           running = false;
 	private int iFilter;
         private ExecutorService executor;
 	public MetricsUpdater() {
@@ -42,7 +39,6 @@ public class MetricsUpdater  {
                 this.tableView = t;
 		this.table  = table;
 		this.filter = filter;
-		this.bounceFilter = bounceFilter;
 		this.iFilter = index;
                 WorkerThread s =   new WorkerThread("SELECT COUNT(*) AS Frequency, * FROM "
 				+ "(SELECT IMPRESSIONS.*, SERVER.* FROM IMPRESSIONS "
@@ -59,13 +55,7 @@ public class MetricsUpdater  {
 				+ " WHERE " + filter.getSql() + ";", 1); 
                 
                 executor.execute(s);
-                 s =   new WorkerThread("SELECT COUNT(*) AS Frequency, * FROM "
-				+ "(SELECT IMPRESSIONS.*, CLICKS.* FROM IMPRESSIONS"
-				+ " INNER JOIN CLICKS ON IMPRESSIONS.ID=CLICKS.ID"
-				+ " GROUP BY CLICKS.DATE, CLICKS.ID) AS SUBQUERY"
-				+ " WHERE " + filter.getSql() + ";", 1); 
-              
-                executor.execute(s);
+               
                 s = new WorkerThread( "SELECT COUNT(*) AS Frequency, * "
 				+ "FROM (SELECT IMPRESSIONS.*, SERVER.* FROM "
 				+ "IMPRESSIONS INNER JOIN SERVER ON IMPRESSIONS.ID=SERVER.ID "

@@ -22,8 +22,7 @@ public final class ObservableMetrics implements Iterable<SimpleStringProperty> {
 			this.results.add(new SimpleStringProperty("0"));
 		this.description = new SimpleStringProperty(desc);
 	}
-	public void setResults(int iCol, String res) {	
-	   //this.results.add(iCol, new SimpleStringProperty(res));
+	public void setResults(int iCol, String res) {
 		this.results.set(iCol, new SimpleStringProperty(res));
 	}
 	public String getResults(int i) {
