@@ -209,8 +209,8 @@ public class AuctionController extends AnchorPane {
                 Callback<TableColumn<ObservableMetrics, String>, TableCell<ObservableMetrics, String> > cellFactory =
                     new Callback<TableColumn<ObservableMetrics, String>, TableCell<ObservableMetrics, String>>() {
                         @Override
-                        public TableCell call(TableColumn p) {
-                            TableCell cell = new TableCell<ObservableMetrics, String>() {
+                        public TableCell<ObservableMetrics, String> call(TableColumn<ObservableMetrics, String> p) {
+                            TableCell<ObservableMetrics, String> cell = new TableCell<ObservableMetrics, String>() {
                           @Override
                           public void updateItem(String item, boolean empty) {
                               super.updateItem(item, empty);
@@ -228,7 +228,8 @@ public class AuctionController extends AnchorPane {
                         public void handle(MouseEvent event) {
                             if (event.getClickCount() > 1) {
                                 System.out.println("double clicked!");
-                                TableCell c = (TableCell) event.getSource();
+                                @SuppressWarnings("unchecked")
+								TableCell<ObservableMetrics, String> c = (TableCell<ObservableMetrics, String>) event.getSource();
                                 int i = c.getIndex();
                                 if (i > 1)
                                 {
