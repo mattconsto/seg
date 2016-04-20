@@ -18,6 +18,8 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.SnapshotParameters;
@@ -543,7 +545,6 @@ public class AuctionController extends AnchorPane {
 		GraphConstructor constructor;
 			lineChart.setCreateSymbols(false);  
 			lineChart.setLegendVisible(true);
-			Series<Date, Number> data = null;
 			String key;
 			int i = 2;
 			 for(Map.Entry<String, Filter> f : filters.entrySet()){  
@@ -551,7 +552,7 @@ public class AuctionController extends AnchorPane {
 				if (tableResults.getColumns().get(i).isVisible()) {
 				key = f.getKey() + " : " + metric;
 				if (graphData.containsKey(key)) {
-					data = graphData.get(key);
+					Series<Date, Number> data = graphData.get(key);
 					if (!lineChart.getData().contains(data))
 						lineChart.getData().add(data);
 				}
@@ -577,8 +578,21 @@ public class AuctionController extends AnchorPane {
 					}
 
 					try {
-						data = constructor.fetchGraph();
+						Series<Date, Number> data = constructor.fetchGraph();
 						data.setName(key);
+
+						int last = 0;
+						for(Data<Date, Number> d : data.getData()) {
+							d.setNode(new HoveredThresholdNode(last, d.getYValue().intValue()));
+							d.getNode().setOnMouseClicked(new EventHandler<Event>() {
+								@Override
+								public void handle(Event event) {
+									showHistogram(data);
+								}
+							});
+							last = d.getYValue().intValue();
+						}
+						
 						lineChart.getData().add(data);
 						graphData.put(key, data);
 						
