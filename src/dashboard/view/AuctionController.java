@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.Date;
 
@@ -111,12 +112,11 @@ public class AuctionController extends AnchorPane {
 	@FXML private ToggleGroup grBounce;
 	@FXML private RadioButton rbByBouncePages;
 	@FXML private TextField txtFilterName;
-        @FXML private Label txtFilterDesc;
+	@FXML private Label txtFilterDesc;
 	@FXML private ComboBox<String> cbCampaign;
 	@FXML private TableColumn<ObservableMetrics, Boolean> selectCol;
 	
 	@FXML private SplitPane splitPane;
-	
 	 
         private MetricsUpdater updaterRunnable = null;
 	
@@ -148,12 +148,11 @@ public class AuctionController extends AnchorPane {
 		
 		txtFilterName.setText(GenerateName.generate());
 		
-		updatePreferences(preferences.get("Graph_Colour", "na"), preferences.getBoolean("Graph_Icons", false), preferences.getBoolean("Graph_Dash", false), preferences.get("Font_Size", "na"));
+		updatePreferences(preferences.get("Graph_Colour", "Default"), preferences.getBoolean("Graph_Icons", true), preferences.getBoolean("Graph_Dash", false), preferences.get("Font_Size", "Medium"), preferences.get("Currency_Symbol", new DecimalFormat().getDecimalFormatSymbols().getCurrencySymbol()));
 	}
 	
 	private void configureFilters() {
-		 
-                filter = new Filter();
+		filter = new Filter();
 		filterGender.getCheckModel().getCheckedItems().addListener(
 			(ListChangeListener.Change<? extends String> c) -> filter.setGender(filterGender));
 		filterAge.getCheckModel().getCheckedItems().addListener(
@@ -308,11 +307,11 @@ public class AuctionController extends AnchorPane {
 		about.setContentText(
 			"Created by SEG Team 3 2016:\n" + 
 			"\n" + 
-			"• Samuel Beresford\n" + 
-			"• Matthew Consterdine\n" +
-			"• Emma Gadsby\n" +
-			"• Matthew Langford\n" +
-			"• Iovana Pavlovici\n"
+			"ï¿½ Samuel Beresford\n" + 
+			"ï¿½ Matthew Consterdine\n" +
+			"ï¿½ Emma Gadsby\n" +
+			"ï¿½ Matthew Langford\n" +
+			"ï¿½ Iovana Pavlovici\n"
 		);
 		about.show();
 	}
@@ -405,7 +404,7 @@ public class AuctionController extends AnchorPane {
 		new PreferencesDialog(this, application.getStage());
 	}
 	
-	protected void updatePreferences(String graphColour, boolean graphIcons, boolean graphDash, String fontSize) {
+	protected void updatePreferences(String graphColour, boolean graphIcons, boolean graphDash, String fontSize, String currency) {
 		Scene mainScene = application.getStage().getScene();
 		mainScene.getStylesheets().clear();
 		
@@ -441,8 +440,9 @@ public class AuctionController extends AnchorPane {
 		 
 		preferences.put("Graph_Colour", graphColour);
 		preferences.putBoolean("Graph_Icons", graphIcons);
-		preferences.putBoolean("Graph_Dash", graphIcons);
+		preferences.putBoolean("Graph_Dash", graphDash);
 		preferences.put("Font_Size", fontSize);
+		preferences.put("Currency_Symbol", currency);
 	}
 	
 	@FXML

@@ -13,6 +13,8 @@ import dashboard.model.ObservableMetrics;
 import java.sql.DriverManager;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.prefs.Preferences;
+
 import javafx.scene.control.TableView;
 
 public class MetricsUpdater  {
@@ -21,6 +23,8 @@ public class MetricsUpdater  {
 	private Filter                            filter;
 	private int iFilter;
         private ExecutorService executor;
+
+    	private Preferences preferences = Preferences.userRoot();
 	public MetricsUpdater() {
                 try {  
                     executor = Executors.newCachedThreadPool(); //.newFixedThreadPool(15);   
@@ -202,7 +206,7 @@ public class MetricsUpdater  {
               DecimalFormatSymbols symbols = new DecimalFormat().getDecimalFormatSymbols();
 		DecimalFormat intFormatter = new DecimalFormat("#" + symbols.getGroupingSeparator() + "###");
 		DecimalFormat decFormatter = new DecimalFormat("#" + symbols.getGroupingSeparator() + "###" + symbols.getDecimalSeparator() + "00");
-		String currency = "£";
+		String currency = preferences.get("Currency_Symbol", new DecimalFormat().getDecimalFormatSymbols().getCurrencySymbol());
                 Connection connection = null;
              
              

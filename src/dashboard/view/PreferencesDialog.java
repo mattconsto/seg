@@ -1,5 +1,6 @@
 package dashboard.view;
 
+import java.text.DecimalFormat;
 import java.util.Optional;
 import java.util.prefs.Preferences;
 
@@ -9,6 +10,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.GridPane;
 import javafx.stage.StageStyle;
@@ -45,49 +47,58 @@ public class PreferencesDialog extends Dialog<Boolean>{
 		
 		RadioButton defaultColour = new RadioButton("Default");
 		defaultColour.setToggleGroup(colourGroup);
-		defaultColour.setSelected(true);
+		defaultColour.setSelected(preferences.get("Graph_Colour", "Default").equals("Default"));
 		defaultColour.setUserData("Default");
 		
 		RadioButton highContrast = new RadioButton("High Contrast");
 		highContrast.setToggleGroup(colourGroup);
+		highContrast.setSelected(preferences.get("Graph_Colour", "Default").equals("HighContrast"));
 		highContrast.setUserData("HighContrast");
 		
 		//Graph Icons
 		CheckBox graphIcons = new CheckBox("Show graph icons");
-		graphIcons.setSelected(false);
+		graphIcons.setSelected(preferences.getBoolean("Graph_Icons", true));
 		
 		//Dashed lines
 		CheckBox graphDash = new CheckBox("Show dashed series");
-		graphDash.setSelected(false);
+		graphDash.setSelected(preferences.getBoolean("Graph_Dash", false));
 		
 		//Font sizes
 		final ToggleGroup fontGroup = new ToggleGroup();
 		
 		RadioButton smallFont = new RadioButton("Small");
 		smallFont.setToggleGroup(fontGroup);
+		smallFont.setSelected(preferences.get("Font_Size", "Med").equals("Small"));
 		smallFont.setUserData("Small");
 		
 		RadioButton medFont = new RadioButton("Medium");
 		medFont.setToggleGroup(fontGroup);	
-		medFont.setSelected(true);
+		medFont.setSelected(preferences.get("Font_Size", "Med").equals("Med"));
 		medFont.setUserData("Med");
 		
 		RadioButton largeFont = new RadioButton("Large");
 		largeFont.setToggleGroup(fontGroup);
+		largeFont.setSelected(preferences.get("Font_Size", "Med").equals("Large"));
 		largeFont.setUserData("Large");
+
+		TextField currency = new TextField(preferences.get("Currency_Symbol", new DecimalFormat().getDecimalFormatSymbols().getCurrencySymbol()));
 		
 		mainGrid.add(new Label("Graph colour scheme"), 0, 0);
 		mainGrid.add(defaultColour, 0, 1);
 		mainGrid.add(highContrast, 1, 1);
 		
-		mainGrid.add(new Label("Graph options"), 0, 2);
+		mainGrid.add(new Label("Graph Options"), 0, 2);
 		mainGrid.add(graphIcons, 0, 3);
 		mainGrid.add(graphDash, 0, 4);
 		
-		mainGrid.add(new Label("Font size"), 0, 5);
+		mainGrid.add(new Label("Font Size"), 0, 5);
 		mainGrid.add(smallFont, 0, 6);
 		mainGrid.add(medFont, 1, 6);
 		mainGrid.add(largeFont, 2, 6);
+		
+		mainGrid.add(new Label("General Options"), 0, 7);
+		mainGrid.add(new Label("Currency"), 0, 8);
+		mainGrid.add(currency, 1, 8);
 		
 		getDialogPane().setContent(mainGrid);
 		
@@ -103,7 +114,7 @@ public class PreferencesDialog extends Dialog<Boolean>{
 		Optional<Boolean> response = showAndWait();
 		if(response.isPresent() && response.get())
 		{
-			controller.updatePreferences(colourGroup.getSelectedToggle().getUserData().toString(), graphIcons.isSelected(), false, fontGroup.getSelectedToggle().getUserData().toString());
+			controller.updatePreferences(colourGroup.getSelectedToggle().getUserData().toString(), graphIcons.isSelected(), graphDash.isSelected(), fontGroup.getSelectedToggle().getUserData().toString(), currency.getText());
 		}
 	}
 }
