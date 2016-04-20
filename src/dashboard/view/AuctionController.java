@@ -115,7 +115,8 @@ public class AuctionController extends AnchorPane {
 	
 	@FXML private SplitPane splitPane;
 	
-	private MetricsUpdater updaterRunnable;
+	 
+        private MetricsUpdater updaterRunnable = null;
 	
 	private FileChooser fileChooser;
 
@@ -161,12 +162,13 @@ public class AuctionController extends AnchorPane {
 		Platform.runLater(() -> splitPane.setDividerPosition(0, 0.175));
 		
 		txtFilterName.setText(GenerateName.generate());
+		
+		updatePreferences(preferences.get("Graph_Colour", "na"), preferences.getBoolean("Graph_Icons", false), preferences.getBoolean("Graph_Dash", false), preferences.get("Font_Size", "na"));
 	}
 	
 	private void configureFilters() {
-		// if (filters.size() <= iFilter)
-		//	 filters.add(new Filter());
-			filter = new Filter();
+		 
+                filter = new Filter();
 		filterGender.getCheckModel().getCheckedItems().addListener(
 			(ListChangeListener.Change<? extends String> c) -> filter.setGender(filterGender));
 		filterAge.getCheckModel().getCheckedItems().addListener(
@@ -208,8 +210,8 @@ public class AuctionController extends AnchorPane {
 	
 	private void addColumn(String colName) {
 		TableColumn<ObservableMetrics, String> tc = new TableColumn<ObservableMetrics, String>(colName);
-		tc.setMaxWidth(100);
-		tc.setMinWidth(100);
+		//tc.setMaxWidth(100);
+		//tc.setMinWidth(100);
 		final int colNo = filters.size();
 		tc.setCellValueFactory(new Callback<CellDataFeatures<ObservableMetrics, String>, ObservableValue<String>>() {
 			@Override
@@ -256,8 +258,8 @@ public class AuctionController extends AnchorPane {
 		} );		 
 		tableResults.getColumns().add(checkCol);
 		metricCol = new TableColumn<>("Metric");
-		metricCol.setMinWidth(150);
-		metricCol.setMaxWidth(150);
+		metricCol.setMinWidth(120);
+		//metricCol.setMaxWidth(150);
 		metricCol.setCellValueFactory(new PropertyValueFactory<>("description")); 
 		tableResults.getColumns().add(metricCol);
 		tableResults.setItems(tableMetrics);
@@ -308,7 +310,7 @@ public class AuctionController extends AnchorPane {
 	}
 	
 	@FXML private void importCampaignAction(ActionEvent event) {
-		if(updaterRunnable != null) updaterRunnable.stop();
+		//if(updaterRunnable != null) updaterRunnable.stop();
 		application.getStage().setMaximized(false);
 		application.start(application.getStage());
 	}
@@ -364,8 +366,48 @@ public class AuctionController extends AnchorPane {
 	}
 	
 	@FXML
+	private void showPrefDialog() {
+		PreferencesDialog pf = new PreferencesDialog(this, application.getStage());
+	}
+	
+	protected void updatePreferences(String graphColour, boolean graphIcons, boolean graphDash, String fontSize) {
+		Scene mainScene = application.getStage().getScene();
+		mainScene.getStylesheets().clear();
+		
+		switch(graphColour)
+		{
+		default:
+		case "Default":
+			mainScene.getStylesheets().add("/src/dashboard/view/fxml/GraphDefault.css");
+			break;
+		case "HighContrast":
+			mainScene.getStylesheets().add("/src/dashboard/view/fxml/GraphHighContrast.css");
+			break;
+		}
+		
+		switch(fontSize)
+		{
+		case "Small":
+			mainScene.getStylesheets().add("/src/dashboard/view/fxml/SmallFont.css");
+			break;
+		default:
+		case "Med":
+			mainScene.getStylesheets().add("/src/dashboard/view/fxml/MedFont.css");
+			break;
+		case "Large":
+			mainScene.getStylesheets().add("/src/dashboard/view/fxml/LargeFont.css");
+			break;
+		}
+		
+		preferences.put("Graph_Colour", graphColour);
+		preferences.putBoolean("Graph_Icons", graphIcons);
+		preferences.putBoolean("Graph_Dash", graphIcons);
+		preferences.put("Font_Size", fontSize);
+	}
+	
+	@FXML
 	private void generateData(ActionEvent event) {
-		if(updaterRunnable != null) updaterRunnable.stop();
+		//if(updaterRunnable != null) updaterRunnable.stop(); 
 			// todo - check valid entry for name and campaign
 		 if (filters.size() == 10 ) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -424,10 +466,13 @@ public class AuctionController extends AnchorPane {
 				tableResults.getColumns().get(filters.size()).setVisible(true);
 
 				// Cheap and nasty threading
-				updaterRunnable = new MetricsUpdater(tableMetrics, filter, bounceFilter, filters.size(),  tableResults);
-				 filters.put(txtFilterName.getText(), filter);
-				 new Thread(updaterRunnable).start();
-
+				//updaterRunnable = new MetricsUpdater(tableMetrics, filter, bounceFilter, filters.size(),  tableResults);
+				// filters.put(txtFilterName.getText(), filter);
+				 //new Thread(updaterRunnable).start();
+                                 if (updaterRunnable == null)
+                                    updaterRunnable = new MetricsUpdater();
+                                 updaterRunnable.runUpdater(tableMetrics, filter, bounceFilter, filters.size(),  tableResults);
+                                 filters.put(txtFilterName.getText(), filter);
 				configureFilters();
 				txtFilterName.setText(GenerateName.generate());
 			}
@@ -520,8 +565,10 @@ public class AuctionController extends AnchorPane {
 	}
 	
 	@FXML private void clearData(ActionEvent event) {
-		if(updaterRunnable != null)
+		if(updaterRunnable != null) {
 			updaterRunnable.stop();
+                        updaterRunnable = null;   // This may need a dispose method?
+                }
 		lineChart.getData().clear();
 		filters.clear();
 		graphData.clear();
