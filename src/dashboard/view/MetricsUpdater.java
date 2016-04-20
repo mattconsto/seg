@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 
 import javafx.collections.ObservableList;
 import dashboard.model.BounceFilter;
@@ -44,8 +45,9 @@ public class MetricsUpdater implements Runnable {
 	}
 	
 	private void updateMetricsTable() throws SQLException {
-		DecimalFormat intFormatter = new DecimalFormat("#,###");
-		DecimalFormat decFormatter = new DecimalFormat("#,###.00");
+        DecimalFormatSymbols symbols = new DecimalFormat().getDecimalFormatSymbols();
+		DecimalFormat intFormatter = new DecimalFormat("#" + symbols.getGroupingSeparator() + "###");
+		DecimalFormat decFormatter = new DecimalFormat("#" + symbols.getGroupingSeparator() + "###" + symbols.getDecimalSeparator() + "00");
 		String currency = "£";
 		
 		DatabaseConnection.setDbfile(filter.getCampaign() + ".db");
