@@ -145,7 +145,7 @@
 					</TitledPane>
 					
 					<TitledPane expanded="true" prefWidth="100.0" text="Metrics Display">
-						<TableView fx:id="tableResults">
+						<TableView fx:id="tableResults" editable="true">
 							<columns />
 						</TableView>               
 					</TitledPane>

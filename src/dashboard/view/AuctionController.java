@@ -203,46 +203,47 @@ public class AuctionController extends AnchorPane {
 				return new SimpleStringProperty(p.getValue().getResults(colNo));
 			}
 		});
-		
-                tc.setSortable(false);
-              
-                Callback<TableColumn<ObservableMetrics, String>, TableCell<ObservableMetrics, String> > cellFactory =
-                    new Callback<TableColumn<ObservableMetrics, String>, TableCell<ObservableMetrics, String>>() {
-                        @Override
-                        public TableCell<ObservableMetrics, String> call(TableColumn<ObservableMetrics, String> p) {
-                            TableCell<ObservableMetrics, String> cell = new TableCell<ObservableMetrics, String>() {
-                          @Override
-                          public void updateItem(String item, boolean empty) {
-                              super.updateItem(item, empty);
-                              setText(empty ? null : getString());
-                              setGraphic(null);
-                          }
 
-                          private String getString() {
-                              return getItem() == null ? "" : getItem().toString();
-                          } 
-                      };
+		tc.setSortable(false);
 
-                    cell.addEventFilter(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-                        @Override
-                        public void handle(MouseEvent event) {
-                            //if (event.getClickCount() > 1) {
-                                System.out.println("double clicked!");
-                                @SuppressWarnings("unchecked")
-								TableCell<ObservableMetrics, String> c = (TableCell<ObservableMetrics, String>) event.getSource();
-                                int i = c.getIndex();
-                                if (i > 1) {
-                                     Filter f = filters.get( c.getTableColumn().getText());
-                                     txtFilterDesc.setText(  c.getTableColumn().getText() +" - Campaign : " + f.getCampaign() + "\nFilter: " + f.toString());
-                                }
-                           // }
-                        }
-                    });
-                return cell;
-                    }
-                };
-                tc.setCellFactory(cellFactory);
-                tableResults.getColumns().add(tc);
+		Callback<TableColumn<ObservableMetrics, String>, TableCell<ObservableMetrics, String>> cellFactory = new Callback<TableColumn<ObservableMetrics, String>, TableCell<ObservableMetrics, String>>() {
+			@Override
+			public TableCell<ObservableMetrics, String> call(TableColumn<ObservableMetrics, String> p) {
+				TableCell<ObservableMetrics, String> cell = new TableCell<ObservableMetrics, String>() {
+					@Override
+					public void updateItem(String item, boolean empty) {
+						super.updateItem(item, empty);
+						setText(empty ? null : getString());
+						setGraphic(null);
+					}
+
+					private String getString() {
+						return getItem() == null ? "" : getItem().toString();
+					}
+				};
+
+				cell.addEventFilter(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+					@Override
+					public void handle(MouseEvent event) {
+						// if (event.getClickCount() > 1) {
+						System.out.println("double clicked!");
+						@SuppressWarnings("unchecked")
+						TableCell<ObservableMetrics, String> c = (TableCell<ObservableMetrics, String>) event
+								.getSource();
+						int i = c.getIndex();
+						if (i > 1) {
+							Filter f = filters.get(c.getTableColumn().getText());
+							txtFilterDesc.setText(c.getTableColumn().getText() + " - Campaign : " + f.getCampaign()
+									+ "\nFilter: " + f.toString());
+						}
+						// }
+					}
+				});
+				return cell;
+			}
+		};
+		tc.setCellFactory(cellFactory);
+		tableResults.getColumns().add(tc);
 	}
 	
 	// Configure the table widget: set up its column, and register the
@@ -278,27 +279,26 @@ public class AuctionController extends AnchorPane {
 				}
 				};
 			}
-		} );		 
-                checkCol.setSortable(false);
+				});
+		checkCol.setSortable(false);
 		tableResults.getColumns().add(checkCol);
 		metricCol = new TableColumn<>("Metric");
 		metricCol.setMinWidth(120);
-		//metricCol.setMaxWidth(150);
-		metricCol.setCellValueFactory(new PropertyValueFactory<>("description")); 
-                metricCol.setSortable(false);
+		// metricCol.setMaxWidth(150);
+		metricCol.setCellValueFactory(new PropertyValueFactory<>("description"));
+		metricCol.setSortable(false);
 		tableResults.getColumns().add(metricCol);
 		tableResults.setItems(tableMetrics);
-                
-               
+
 	}
-        private void setMetricsTableSize(int rowHeight) {
-            tableResults.setFixedCellSize(rowHeight);
-             
-            tableResults.prefHeightProperty().bind(tableResults.fixedCellSizeProperty().multiply(13.10));
-            tableResults.minHeightProperty().bind(tableResults.prefHeightProperty());
-            tableResults.maxHeightProperty().bind(tableResults.prefHeightProperty());
-        }
-                
+
+	private void setMetricsTableSize(int rowHeight) {
+		tableResults.setFixedCellSize(rowHeight);
+
+		tableResults.prefHeightProperty().bind(tableResults.fixedCellSizeProperty().multiply(13.10));
+		tableResults.minHeightProperty().bind(tableResults.prefHeightProperty());
+		tableResults.maxHeightProperty().bind(tableResults.prefHeightProperty());
+	}
 	
 	@FXML private void openAbout(ActionEvent event) {
 		Alert about = new Alert(AlertType.INFORMATION);
@@ -419,7 +419,7 @@ public class AuctionController extends AnchorPane {
 			break;
 		}
 		
-		lineChart.setCreateSymbols(graphIcons);
+//		lineChart.setCreateSymbols(graphIcons);
 		
 		switch(fontSize)
 		{
@@ -447,75 +447,71 @@ public class AuctionController extends AnchorPane {
 	
 	@FXML
 	private void generateData(ActionEvent event) {
-		//if(updaterRunnable != null) updaterRunnable.stop(); 
-			// todo - check valid entry for name and campaign
-		 if (filters.size() == 10 ) {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Too many filters");
-                    alert.setHeaderText(null);
-                    alert.setContentText("You are only allowed upto 10 filters at a time.");
-                    alert.showAndWait();
-                }
-                else if ( txtFilterName.getText().isEmpty()) { 
-                       
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Please enter a campaign name");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Please enter a campaign name");
-                    alert.showAndWait();
-                }
-                else if  (filters.containsKey(txtFilterName.getText())) {
-                     Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Campaign name in use");
-                    alert.setHeaderText(null);
-                    alert.setContentText("This campaign name has already been used. Please enter a unique campaign name");
-                    alert.showAndWait();
-                }
-                else {
-				filter.setDescription(txtFilterName.getText());
-				filter.setCampaign(cbCampaign.getValue());
-				filter.setDateFrom(filterDateFrom.getValue());
-				filter.setDateTo(filterDateTo.getValue());
-				bounceFilter.setTimeLimit(0);
-				bounceFilter.setPageLimit(0);
-				if(grBounce.getSelectedToggle().getUserData().toString().equalsIgnoreCase("timeBounce")){
-					try{
-						System.out.println("Time: "+txtBounceTime.getText());
-						if(!txtBounceTime.getText().isEmpty())
-							bounceFilter.setTimeLimit(Integer.parseInt(txtBounceTime.getText()));
-						else
-							bounceFilter.setTimeLimit(10);
-					}catch(NumberFormatException nfe){
+		// if(updaterRunnable != null) updaterRunnable.stop();
+		// todo - check valid entry for name and campaign
+		if (filters.size() == 10) {
+			Alert alert = new Alert(Alert.AlertType.ERROR);
+			alert.setTitle("Too many filters");
+			alert.setHeaderText(null);
+			alert.setContentText("You are only allowed upto 10 filters at a time.");
+			alert.showAndWait();
+		} else if (txtFilterName.getText().isEmpty()) {
+			Alert alert = new Alert(Alert.AlertType.ERROR);
+			alert.setTitle("Please enter a campaign name");
+			alert.setHeaderText(null);
+			alert.setContentText("Please enter a campaign name");
+			alert.showAndWait();
+		} else if (filters.containsKey(txtFilterName.getText())) {
+			Alert alert = new Alert(Alert.AlertType.ERROR);
+			alert.setTitle("Campaign name in use");
+			alert.setHeaderText(null);
+			alert.setContentText("This campaign name has already been used. Please enter a unique campaign name");
+			alert.showAndWait();
+		} else {
+			filter.setDescription(txtFilterName.getText());
+			filter.setCampaign(cbCampaign.getValue());
+			filter.setDateFrom(filterDateFrom.getValue());
+			filter.setDateTo(filterDateTo.getValue());
+			bounceFilter.setTimeLimit(0);
+			bounceFilter.setPageLimit(0);
+			if (grBounce.getSelectedToggle().getUserData().toString().equalsIgnoreCase("timeBounce")) {
+				try {
+					System.out.println("Time: " + txtBounceTime.getText());
+					if (!txtBounceTime.getText().isEmpty())
+						bounceFilter.setTimeLimit(Integer.parseInt(txtBounceTime.getText()));
+					else
 						bounceFilter.setTimeLimit(10);
-					}
+				} catch (NumberFormatException nfe) {
+					bounceFilter.setTimeLimit(10);
 				}
-				else{
-					try{
-						System.out.println("Pages: "+txtBouncePages.getText());
-						if(!txtBouncePages.getText().isEmpty())
-							bounceFilter.setPageLimit(Integer.parseInt(txtBouncePages.getText()));
-						else
-							bounceFilter.setPageLimit(1);
-					}catch(NumberFormatException nfe){
+			} else {
+				try {
+					System.out.println("Pages: " + txtBouncePages.getText());
+					if (!txtBouncePages.getText().isEmpty())
+						bounceFilter.setPageLimit(Integer.parseInt(txtBouncePages.getText()));
+					else
 						bounceFilter.setPageLimit(1);
-					}
+				} catch (NumberFormatException nfe) {
+					bounceFilter.setPageLimit(1);
 				}
-				//updateGraph(filterMetrics.getValue());
-				addColumn(txtFilterName.getText());
-				TableMenu.addCustomTableMenu(tableResults);
-				tableResults.getColumns().get(filters.size()).setVisible(true);
-
-				// Cheap and nasty threading
-				//updaterRunnable = new MetricsUpdater(tableMetrics, filter, bounceFilter, filters.size(),  tableResults);
-				// filters.put(txtFilterName.getText(), filter);
-				 //new Thread(updaterRunnable).start();
-                                 if (updaterRunnable == null)
-                                    updaterRunnable = new MetricsUpdater();
-                                 updaterRunnable.runUpdater(tableMetrics, filter, bounceFilter, filters.size(),  tableResults);
-                                 filters.put(txtFilterName.getText(), filter);
-				configureFilters();
-				txtFilterName.setText(GenerateName.generate());
 			}
+			// updateGraph(filterMetrics.getValue());
+			addColumn(txtFilterName.getText());
+			TableMenu.addCustomTableMenu(tableResults);
+			tableResults.getColumns().get(filters.size()).setVisible(true);
+
+			// Cheap and nasty threading
+			// updaterRunnable = new MetricsUpdater(tableMetrics, filter,
+			// bounceFilter, filters.size(), tableResults);
+			// filters.put(txtFilterName.getText(), filter);
+			// new Thread(updaterRunnable).start();
+			if (updaterRunnable == null)
+				updaterRunnable = new MetricsUpdater();
+			updaterRunnable.runUpdater(tableMetrics, filter, bounceFilter, filters.size(), tableResults);
+			filters.put(txtFilterName.getText(), filter);
+			configureFilters();
+			txtFilterName.setText(GenerateName.generate());
+		}
 	}
 	
 	@FXML private void exportData() {
@@ -681,7 +677,6 @@ public class AuctionController extends AnchorPane {
 								last = d.getYValue().intValue();
 							}
 						}
-						
 						lineChart.getData().add(data);
 						graphData.put(key, data);
 

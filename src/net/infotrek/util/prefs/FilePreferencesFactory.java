@@ -42,7 +42,7 @@ public class FilePreferencesFactory implements PreferencesFactory {
 		if (preferencesFile == null) {
 			String prefsFile = System.getProperty(SYSTEM_PROPERTY_FILE);
 			if (prefsFile == null || prefsFile.length() == 0) {
-				prefsFile = System.getProperty("user.home") + File.separator + ".fileprefs";
+				prefsFile = System.getProperty("user.home") + File.separator + ".preferences";
 			}
 			preferencesFile = new File(prefsFile).getAbsoluteFile();
 			log.finer("Preferences file is " + preferencesFile);

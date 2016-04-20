@@ -133,7 +133,6 @@ public class FilePreferences extends AbstractPreferences {
 		synchronized (file) {
 			Properties p = new Properties();
 			try {
-
 				StringBuilder sb = new StringBuilder();
 				getPath(sb);
 				String path = sb.toString();
@@ -170,7 +169,7 @@ public class FilePreferences extends AbstractPreferences {
 					}
 				}
 
-				p.store(new FileOutputStream(file), "FilePreferences");
+				p.store(new FileOutputStream(file), "Preferences");
 			} catch (IOException e) {
 				throw new BackingStoreException(e);
 			}
