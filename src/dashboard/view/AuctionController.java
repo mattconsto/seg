@@ -161,7 +161,7 @@ public class AuctionController extends AnchorPane {
 		
 		txtFilterName.setText(GenerateName.generate());
 		
-		application.getStage().getScene().getStylesheets().add("/src/dashboard/view/fxml/GraphDefault.css");
+		updatePreferences(preferences.get("Graph_Colour", "na"), preferences.getBoolean("Graph_Icons", false), preferences.getBoolean("Graph_Dash", false), preferences.get("Font_Size", "na"));
 	}
 	
 	private void configureFilters() {
@@ -396,6 +396,11 @@ public class AuctionController extends AnchorPane {
 			mainScene.getStylesheets().add("/src/dashboard/view/fxml/LargeFont.css");
 			break;
 		}
+		
+		preferences.put("Graph_Colour", graphColour);
+		preferences.putBoolean("Graph_Icons", graphIcons);
+		preferences.putBoolean("Graph_Dash", graphIcons);
+		preferences.put("Font_Size", fontSize);
 	}
 	
 	@FXML
