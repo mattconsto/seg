@@ -16,7 +16,6 @@ import javafx.scene.control.Alert.AlertType;
  * Read a CSV file and load it into the database
  */
 public class CSVReader {
-	
 	 long currentBytes = 0;
 	 long totBytes = 0;
 	/**
@@ -47,7 +46,6 @@ public class CSVReader {
 		&& verifyFile(new File(folder + "/click_log.csv"))
 		&& verifyFile(new File(folder + "/server_log.csv"));
 	}
-
 			
 	public Task<?> readImpressions(File fname) {
 		return new Task<Object>() {
