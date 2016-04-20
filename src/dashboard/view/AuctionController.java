@@ -1,6 +1,8 @@
 package dashboard.view;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -327,7 +329,13 @@ public class AuctionController extends AnchorPane {
 	}
 	
 	@FXML private void saveGraphAs(ActionEvent event) {
-		configureFileChooser(fileChooser);
+		fileChooser.setTitle("Save graph as...");
+		fileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
+		fileChooser.getExtensionFilters().clear();
+		fileChooser.getExtensionFilters().addAll(
+				new FileChooser.ExtensionFilter("PNG", "*.png")
+		);
+		
 		WritableImage snapshot = lineChart.snapshot(new SnapshotParameters(), null);
 		File newFile = fileChooser.showSaveDialog(application.getStage());
 		if(newFile != null) {
@@ -342,14 +350,6 @@ public class AuctionController extends AnchorPane {
 				System.err.println("Could not save image.");
 			}
 		}
-	}
-	
-	private static void configureFileChooser(final FileChooser fc){
-		fc.setTitle("Save graph as...");
-		fc.setInitialDirectory(new File(System.getProperty("user.dir")));
-		fc.getExtensionFilters().addAll(
-				new FileChooser.ExtensionFilter("PNG", "*.png*")
-		);
 	}
 
 	@FXML
@@ -427,6 +427,48 @@ public class AuctionController extends AnchorPane {
 				configureFilters();
 				txtFilterName.setText(GenerateName.generate());
 			}
+	}
+	
+	@FXML private void exportData() {
+		System.out.println("Export");
+		
+		StringBuilder output = new StringBuilder();
+		
+		int i = 0;
+		for(TableColumn<ObservableMetrics, ?> column : tableResults.getColumns()) {
+			if(i > 1) output.append(",");
+			if(i > 0) output.append(column.getText());
+			i++;
+		}
+		
+		output.append("\n");
+		
+		for(ObservableMetrics metrics : tableResults.getItems()) {
+			output.append(metrics.getDescription());
+			for(int j = 0; j < tableResults.getColumns().size() - 2; j++) {
+				output.append(",\"" + metrics.getResults(j) + "\"");
+			}
+			output.append("\n");
+		}
+		
+		fileChooser.setTitle("Save data as...");
+		fileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
+		fileChooser.getExtensionFilters().clear();
+		fileChooser.getExtensionFilters().addAll(
+				new FileChooser.ExtensionFilter("CSV", "*.csv")
+		);
+		
+		File newFile = fileChooser.showSaveDialog(application.getStage());
+		if(newFile != null) {
+			try {
+				if(!newFile.getName().endsWith(".csv")) newFile = new File(newFile.getPath() + ".csv");
+				BufferedWriter out = new BufferedWriter(new FileWriter(newFile));
+				out.write(output.toString());
+				out.close();
+			} catch(IOException e) {
+				System.err.println("Could not save csv.");
+			}
+		}
 	}
 	
 	private void showHistogram(Series<Date, Number> series) {

@@ -22,6 +22,7 @@
 		<MenuBar fx:id="menu">
 			<Menu text="File">
 				<MenuItem fx:id="importCampaign" onAction="#importCampaignAction" text="Manage Campaign(s)" />
+				<MenuItem fx:id="exportData" onAction="#exportData" text="Export Data" />
 				<MenuItem fx:id="exportCampaign" onAction="#saveGraphAs" text="Export Graph" />
 				<MenuItem fx:id="printCampaign" onAction="#printGraph" text="Print Graph" />
 				<MenuItem fx:id="close" onAction="#closeAction" text="Close" />
