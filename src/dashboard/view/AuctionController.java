@@ -382,6 +382,8 @@ public class AuctionController extends AnchorPane {
 			break;
 		}
 		
+		lineChart.setCreateSymbols(graphIcons);
+		
 		switch(fontSize)
 		{
 		case "Small":

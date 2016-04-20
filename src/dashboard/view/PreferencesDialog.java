@@ -105,7 +105,7 @@ public class PreferencesDialog extends Dialog<Boolean>{
 		Optional<Boolean> response = showAndWait();
 		if(response.isPresent() && response.get())
 		{
-			controller.updatePreferences(colourGroup.getSelectedToggle().getUserData().toString(), false, false, fontGroup.getSelectedToggle().getUserData().toString());
+			controller.updatePreferences(colourGroup.getSelectedToggle().getUserData().toString(), graphIcons.isSelected(), false, fontGroup.getSelectedToggle().getUserData().toString());
 		}
 	}
 }
