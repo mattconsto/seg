@@ -113,7 +113,8 @@ public class AuctionController extends AnchorPane {
 	
 	@FXML private SplitPane splitPane;
 	
-	private MetricsUpdater updaterRunnable;
+	 
+        private MetricsUpdater updaterRunnable = null;
 	
 	private FileChooser fileChooser;
 
@@ -357,7 +358,7 @@ public class AuctionController extends AnchorPane {
 
 	@FXML
 	private void closeAction(ActionEvent event) {
-		//if(updaterRunnable != null) updaterRunnable.stop();
+		if(updaterRunnable != null) updaterRunnable.stop();
 		DatabaseConnection.closeConnection();
 		application.getStage().close();
 	}
@@ -399,7 +400,7 @@ public class AuctionController extends AnchorPane {
 	
 	@FXML
 	private void generateData(ActionEvent event) {
-		//if(updaterRunnable != null) updaterRunnable.stop();
+		//if(updaterRunnable != null) updaterRunnable.stop(); 
 			// todo - check valid entry for name and campaign
 		 if (filters.size() == 10 ) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -461,8 +462,9 @@ public class AuctionController extends AnchorPane {
 				//updaterRunnable = new MetricsUpdater(tableMetrics, filter, bounceFilter, filters.size(),  tableResults);
 				// filters.put(txtFilterName.getText(), filter);
 				 //new Thread(updaterRunnable).start();
-                                 MetricsUpdater m = new MetricsUpdater(tableMetrics, filter, bounceFilter, filters.size(),  tableResults);
-                                 m.runUpdater();
+                                 if (updaterRunnable == null)
+                                    updaterRunnable = new MetricsUpdater();
+                                 updaterRunnable.runUpdater(tableMetrics, filter, bounceFilter, filters.size(),  tableResults);
                                  filters.put(txtFilterName.getText(), filter);
 				configureFilters();
 				txtFilterName.setText(GenerateName.generate());
@@ -556,8 +558,10 @@ public class AuctionController extends AnchorPane {
 	}
 	
 	@FXML private void clearData(ActionEvent event) {
-		//if(updaterRunnable != null)
-			//updaterRunnable.stop();
+		if(updaterRunnable != null) {
+			updaterRunnable.stop();
+                        updaterRunnable = null;   // This may need a dispose method?
+                }
 		lineChart.getData().clear();
 		filters.clear();
 		graphData.clear();
