@@ -1,0 +1,13 @@
+.chart-series-line {    
+    -fx-stroke-width: 2px;
+    -fx-effect: null;
+}
+
+.chart-series-line.series0 {
+    -fx-stroke-dash-array: 2px 2px; 
+}
+
+.chart-series-line.series1 {
+    -fx-stroke-dash-array: 4px 2px; 
+}
+

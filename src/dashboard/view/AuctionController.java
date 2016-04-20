@@ -111,6 +111,7 @@ public class AuctionController extends AnchorPane {
 	@FXML private ToggleGroup grBounce;
 	@FXML private RadioButton rbByBouncePages;
 	@FXML private TextField txtFilterName;
+        @FXML private Label txtFilterDesc;
 	@FXML private ComboBox<String> cbCampaign;
 	@FXML private TableColumn<ObservableMetrics, Boolean> selectCol;
 	
@@ -226,17 +227,16 @@ public class AuctionController extends AnchorPane {
                     cell.addEventFilter(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
                         @Override
                         public void handle(MouseEvent event) {
-                            if (event.getClickCount() > 1) {
+                            //if (event.getClickCount() > 1) {
                                 System.out.println("double clicked!");
                                 @SuppressWarnings("unchecked")
 								TableCell<ObservableMetrics, String> c = (TableCell<ObservableMetrics, String>) event.getSource();
                                 int i = c.getIndex();
-                                if (i > 1)
-                                {
+                                if (i > 1) {
                                      Filter f = filters.get( c.getTableColumn().getText());
-                                     System.out.println(c.getTableColumn().getText() + ": " + f.toString());
+                                     txtFilterDesc.setText(  c.getTableColumn().getText() +" - Campaign : " + f.getCampaign() + "\nFilter: " + f.toString());
                                 }
-                            }
+                           // }
                         }
                     });
                 return cell;
@@ -290,8 +290,16 @@ public class AuctionController extends AnchorPane {
 		tableResults.getColumns().add(metricCol);
 		tableResults.setItems(tableMetrics);
                 
+               
 	}
-
+        private void setMetricsTableSize(int rowHeight) {
+            tableResults.setFixedCellSize(rowHeight);
+             
+            tableResults.prefHeightProperty().bind(tableResults.fixedCellSizeProperty().multiply(13.10));
+            tableResults.minHeightProperty().bind(tableResults.prefHeightProperty());
+            tableResults.maxHeightProperty().bind(tableResults.prefHeightProperty());
+        }
+                
 	
 	@FXML private void openAbout(ActionEvent event) {
 		Alert about = new Alert(AlertType.INFORMATION);
@@ -300,11 +308,11 @@ public class AuctionController extends AnchorPane {
 		about.setContentText(
 			"Created by SEG Team 3 2016:\n" + 
 			"\n" + 
-			"â€¢ Samuel Beresford\n" + 
-			"â€¢ Matthew Consterdine\n" +
-			"â€¢ Emma Gadsby\n" +
-			"â€¢ Matthew Langford\n" +
-			"â€¢ Iovana Pavlovici\n"
+			"• Samuel Beresford\n" + 
+			"• Matthew Consterdine\n" +
+			"• Emma Gadsby\n" +
+			"• Matthew Langford\n" +
+			"• Iovana Pavlovici\n"
 		);
 		about.show();
 	}
@@ -418,16 +426,19 @@ public class AuctionController extends AnchorPane {
 		{
 		case "Small":
 			mainScene.getStylesheets().add("/dashboard/view/fxml/SmallFont.css");
+                        setMetricsTableSize(20); 
 			break;
 		default:
 		case "Med":
 			mainScene.getStylesheets().add("/dashboard/view/fxml/MedFont.css");
+                        setMetricsTableSize(25); 
 			break;
 		case "Large":
 			mainScene.getStylesheets().add("/dashboard/view/fxml/LargeFont.css");
+                        setMetricsTableSize(35); 
 			break;
 		}
-		
+		 
 		preferences.put("Graph_Colour", graphColour);
 		preferences.putBoolean("Graph_Icons", graphIcons);
 		preferences.putBoolean("Graph_Dash", graphIcons);
@@ -619,7 +630,7 @@ public class AuctionController extends AnchorPane {
 
 	private void updateGraph(String metric) {
 		GraphConstructor constructor;
-			lineChart.setCreateSymbols(false);  
+			lineChart.setCreateSymbols(false);
 			lineChart.setLegendVisible(true);
 			String key;
 			int i = 2;

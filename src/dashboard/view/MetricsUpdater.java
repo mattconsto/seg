@@ -40,131 +40,148 @@ public class MetricsUpdater  {
 		this.table  = table;
 		this.filter = filter;
 		this.iFilter = index;
-                WorkerThread s =   new WorkerThread("SELECT COUNT(*) AS Frequency, * FROM "
-				+ "(SELECT IMPRESSIONS.*, SERVER.* FROM IMPRESSIONS "
-				+ "INNER JOIN SERVER ON IMPRESSIONS.ID=SERVER.ID "
-				+ "GROUP BY SERVER.ENTRYDATE, SERVER.ID) AS SUBQUERY "
-				+ "WHERE "+ bounceFilter.getSQL() +" AND " + filter.getSql() + ";", 0); 
+                WorkerThread s =   new WorkerThread("SELECT COUNT(*) AS Frequency FROM "
+				+ "SERVER "
+				+ "INNER JOIN "
+				+ "(SELECT * FROM IMPRESSIONS GROUP BY ID) AS IMPRESSIONS "
+				+ "ON SERVER.ID=IMPRESSIONS.ID "
+				+ "WHERE " + bounceFilter.getSQL() + " AND " + filter.getSql().replace("DATE", "SERVER.ENTRYDATE")+ ";", 0); 
               
                 executor.execute(s);
                 
-                s =   new WorkerThread("SELECT COUNT(*) AS Frequency, * FROM "
-				+ "(SELECT IMPRESSIONS.*, CLICKS.* FROM IMPRESSIONS"
-				+ " INNER JOIN CLICKS ON IMPRESSIONS.ID=CLICKS.ID"
-				+ " GROUP BY CLICKS.DATE, CLICKS.ID) AS SUBQUERY"
-				+ " WHERE " + filter.getSql() + ";", 1); 
+                s =   new WorkerThread("SELECT COUNT(*) AS Frequency FROM "
+				+ "CLICKS "
+				+ "INNER JOIN "
+				+ "(SELECT * FROM IMPRESSIONS GROUP BY ID) AS IMPRESSIONS "
+				+ "ON CLICKS.ID=IMPRESSIONS.ID "
+				+ "WHERE " + filter.getSql().replace("DATE", "CLICKS.DATE") + ";", 1); 
                 
                 executor.execute(s);
                
-                s = new WorkerThread( "SELECT COUNT(*) AS Frequency, * "
-				+ "FROM (SELECT IMPRESSIONS.*, SERVER.* FROM "
-				+ "IMPRESSIONS INNER JOIN SERVER ON IMPRESSIONS.ID=SERVER.ID "
-				+ "GROUP BY SERVER.ENTRYDATE, SERVER.ID) AS SUBQUERY "
-				+ "WHERE CONVERSION = 1 AND " + filter.getSql() + ";", 2);
+                s = new WorkerThread( "SELECT COUNT(*) AS Frequency FROM "
+				+ "SERVER "
+				+ "INNER JOIN "
+				+ "(SELECT * FROM IMPRESSIONS GROUP BY ID) AS IMPRESSIONS "
+				+ "ON SERVER.ID=IMPRESSIONS.ID "
+				+ "WHERE CONVERSION = 1 AND " + filter.getSql().replace("DATE", "ENTRYDATE") + ";", 2);
            
                 executor.execute(s);
                 
-                s = new WorkerThread("SELECT COUNT(*) AS Frequency, * FROM IMPRESSIONS WHERE " +  filter.getSql() +";"  , 3);
+                s = new WorkerThread("SELECT COUNT(*) AS Frequency FROM "
+                		+ "IMPRESSIONS WHERE " +  filter.getSql() +";"  , 3);
           
                 executor.execute(s);
-                  s = new WorkerThread("SELECT COUNT(DISTINCT ID) AS Frequency, * FROM"
-				+ "(SELECT IMPRESSIONS.*, CLICKS.* FROM IMPRESSIONS"
-				+ " INNER JOIN CLICKS ON IMPRESSIONS.ID=CLICKS.ID"
-				+ " GROUP BY CLICKS.DATE, CLICKS.ID) AS SUBQUERY"
-				+ " WHERE " +  filter.getSql() + ";"  , 4);
+                  s = new WorkerThread("SELECT COUNT(DISTINCT CLICKS.ID) AS Frequency FROM "
+				+ "CLICKS "
+				+ "INNER JOIN "
+				+ "(SELECT * FROM IMPRESSIONS GROUP BY ID) AS IMPRESSIONS "
+				+ "ON CLICKS.ID=IMPRESSIONS.ID "
+				+ "WHERE " + filter.getSql().replace("DATE", "CLICKS.DATE") + ";"  , 4);
               
                 executor.execute(s);
-                  s = new WorkerThread(  "SELECT COUNT(DISTINCT ID) AS Frequency, * FROM IMPRESSIONS WHERE " +  filter.getSql() +";", 5);
+                  s = new WorkerThread(  "SELECT COUNT(DISTINCT ID) AS Frequency FROM "
+                  		+ "IMPRESSIONS WHERE " +  filter.getSql() +";", 5);
                
                 executor.execute(s);
                   s = new WorkerThread( "SELECT CLICKCOST, IMPCOST FROM "
-				+ "(SELECT CLICKDATE, SUM(CLICKCOST) AS CLICKCOST FROM "
-				+ "(SELECT IMPRESSIONS.*, CLICKS.DATE AS CLICKDATE, CLICKS.ID, CLICKS.COST AS CLICKCOST "
-				+ "FROM IMPRESSIONS "
-				+ "INNER JOIN CLICKS "
-				+ "ON IMPRESSIONS.ID=CLICKS.ID "
-				+ "GROUP BY CLICKS.DATE, CLICKS.ID)"
-				+ "WHERE " +  filter.getSql().replace("DATE","CLICKDATE") + ") "
+				+ "(SELECT SUM(CLICKS.COST) AS CLICKCOST FROM "
+				+ "CLICKS "
 				+ "INNER JOIN "
-				+ "(SELECT  SUM(COST) AS IMPCOST FROM IMPRESSIONS "
-				+ "WHERE " +  filter.getSql() + ")" , 6);
+				+ "(SELECT * FROM IMPRESSIONS GROUP BY ID) AS IMPRESSIONS "
+				+ "ON CLICKS.ID=IMPRESSIONS.ID "
+				+ "WHERE " + filter.getSql().replace("DATE", "CLICKS.DATE") + ") "
+				+ "JOIN "
+				+ "(SELECT SUM(COST) AS IMPCOST FROM "
+				+ "IMPRESSIONS "
+				+ "WHERE " + filter.getSql() + ");" , 6);
                
                 executor.execute(s);
-                  s = new WorkerThread( "SELECT SUM(NUMCLICKS), SUM(NUMIMP) FROM "
-				+ "(SELECT CLICKDATE, NUMCLICKS, NUMIMP FROM "
-				+ "(SELECT strftime('" + filter.getTimeFormatSQL() +"', CLICKDATE) as CLICKDATE, COUNT(*) AS NUMCLICKS FROM "
-				+ "(SELECT CLICKS.DATE AS CLICKDATE, IMPRESSIONS.* FROM CLICKS INNER JOIN IMPRESSIONS ON CLICKS.ID=IMPRESSIONS.ID GROUP BY CLICKS.ID, CLICKDATE) "
-				+ "WHERE " +  filter.getSql().replace("DATE", "CLICKDATE") + " GROUP BY strftime('" + filter.getTimeFormatSQL() +"', CLICKDATE)) "
+                  s = new WorkerThread( "SELECT NUMCLICKS, NUMIMPS FROM "
+				+ "(SELECT COUNT(*) AS NUMCLICKS FROM "
+				+ "CLICKS "
 				+ "INNER JOIN "
-				+ "(SELECT strftime('" + filter.getTimeFormatSQL() +"', DATE) AS DATE, COUNT(*) AS NUMIMP FROM IMPRESSIONS "
-				+ "WHERE " +  filter.getSql() + "GROUP BY strftime('" + filter.getTimeFormatSQL() +"', DATE)) "
-				+ "ON DATE=CLICKDATE)" , 7);
+				+ "(SELECT * FROM IMPRESSIONS GROUP BY ID) AS IMPRESSIONS "
+				+ "ON CLICKS.ID=IMPRESSIONS.ID "
+				+ "WHERE " + filter.getSql().replace("DATE", "CLICKS.DATE") +") "
+				+ "JOIN"
+				+ "(SELECT COUNT(*) AS NUMIMPS FROM "
+				+ "IMPRESSIONS "
+				+ "WHERE " + filter.getSql() +");" , 7);
              
                 executor.execute(s);
-                  s = new WorkerThread( "SELECT SUM(CLICKCOST), SUM(IMPCOST), SUM(Frequency) FROM "
-				+ "(SELECT strftime('" + filter.getTimeFormatSQL() +"', ENTRYDATE) AS ENTRYDATE,COUNT(*) AS Frequency "
-				+ "FROM (SELECT IMPRESSIONS.*, SERVER.* FROM "
-				+ "IMPRESSIONS INNER JOIN SERVER ON IMPRESSIONS.ID=SERVER.ID "
-				+ "GROUP BY SERVER.ENTRYDATE, SERVER.ID) AS SUBQUERY "
-				+ "WHERE CONVERSION = 1 AND " +  filter.getSql() + " "
-				+ "GROUP BY strftime('" + filter.getTimeFormatSQL() +"', ENTRYDATE))"
+                  s = new WorkerThread( "SELECT CLICKCOST, IMPCOST, Frequency FROM "
+				+ "(SELECT CLICKCOST, IMPCOST FROM "
+				+ "(SELECT SUM(CLICKS.COST) AS CLICKCOST FROM "
+				+ "CLICKS "
 				+ "INNER JOIN "
-				+ "(SELECT CLICKDATE, CLICKCOST, IMPCOST FROM "
-				+ "(SELECT strftime('" + filter.getTimeFormatSQL() +"', CLICKDATE) AS CLICKDATE, SUM(CLICKCOST) AS CLICKCOST FROM "
-				+ "(SELECT IMPRESSIONS.*, CLICKS.ID, CLICKS.DATE AS CLICKDATE, CLICKS.COST AS CLICKCOST "
-				+ "FROM IMPRESSIONS "
-				+ "INNER JOIN CLICKS "
-				+ "ON IMPRESSIONS.ID=CLICKS.ID "
-				+ "GROUP BY CLICKS.DATE, CLICKS.ID) "
-				+ "WHERE " +  filter.getSql().replace("DATE", "CLICKDATE") + " GROUP BY strftime('" + filter.getTimeFormatSQL() +"', CLICKDATE)) "
+				+ "(SELECT * FROM IMPRESSIONS GROUP BY ID) AS IMPRESSIONS "
+				+ "ON CLICKS.ID=IMPRESSIONS.ID "
+				+ "WHERE " + filter.getSql().replace("DATE", "CLICKS.DATE") + ") "
+				+ "JOIN "
+				+ "(SELECT SUM(COST) AS IMPCOST FROM "
+				+ "IMPRESSIONS "
+				+ "WHERE " + filter.getSql() +")) "
+				+ "JOIN "
+				+ "(SELECT COUNT(*) AS Frequency FROM "
+				+ "SERVER "
 				+ "INNER JOIN "
-				+ "(SELECT strftime('" + filter.getTimeFormatSQL() +"', DATE) AS IMPDATE, SUM(COST) AS IMPCOST FROM IMPRESSIONS "
-				+ "WHERE " +  filter.getSql() + " GROUP BY strftime('" + filter.getTimeFormatSQL() +"', DATE)) "
-				+ "ON IMPDATE=CLICKDATE) "
-				+ "ON CLICKDATE=ENTRYDATE;" , 8);
+				+ "(SELECT * FROM IMPRESSIONS GROUP BY ID) AS IMPRESSIONS "
+				+ "ON IMPRESSIONS.ID=SERVER.ID "
+				+ "WHERE CONVERSION = 1 AND " + filter.getSql().replace("DATE", "ENTRYDATE") + ");" , 8);
            
                 executor.execute(s);
-                  s = new WorkerThread( "SELECT SUM(CLICKCOST), SUM(IMPCOST), SUM(NUMCLICKS) FROM "
-				+ "(SELECT strftime('" + filter.getTimeFormatSQL() +"', CLICKDATE) AS CLICKDATE, SUM(CLICKCOST) AS CLICKCOST, COUNT(ID) AS NUMCLICKS FROM "
-				+ "(SELECT IMPRESSIONS.*, CLICKS.ID, CLICKS.DATE AS CLICKDATE, CLICKS.COST AS CLICKCOST "
-				+ "FROM IMPRESSIONS "
-				+ "INNER JOIN CLICKS "
-				+ "ON IMPRESSIONS.ID=CLICKS.ID "
-				+ "GROUP BY CLICKS.DATE, CLICKS.ID) "
-				+ "WHERE " + filter.getSql().replace("DATE", "CLICKDATE")+ " GROUP BY strftime('" + filter.getTimeFormatSQL() +"', CLICKDATE)) "
+                  s = new WorkerThread( "SELECT CLICKCOST, IMPCOST, NUMCLICKS FROM "
+				+ "(SELECT CLICKCOST, IMPCOST FROM "
+				+ "(SELECT SUM(CLICKS.COST) AS CLICKCOST FROM "
+				+ "CLICKS "
 				+ "INNER JOIN "
-				+ "(SELECT strftime('" + filter.getTimeFormatSQL() +"', DATE) AS IMPDATE, SUM(COST) AS IMPCOST FROM IMPRESSIONS "
-				+ "WHERE " + filter.getSql()+ " GROUP BY strftime('" + filter.getTimeFormatSQL() +"', DATE)) "
-				+ "ON IMPDATE=CLICKDATE", 9);
+				+ "(SELECT * FROM IMPRESSIONS GROUP BY ID) AS IMPRESSIONS "
+				+ "ON CLICKS.ID=IMPRESSIONS.ID "
+				+ "WHERE " + filter.getSql().replace("DATE", "CLICKS.DATE") + ") "
+				+ "JOIN "
+				+ "(SELECT SUM(COST) AS IMPCOST FROM "
+				+ "IMPRESSIONS "
+				+ "WHERE " + filter.getSql() +")) "
+				+ "JOIN"
+				+ "(SELECT COUNT(*) AS NUMCLICKS FROM "
+				+ "CLICKS "
+				+ "INNER JOIN "
+				+ "(SELECT * FROM IMPRESSIONS GROUP BY ID) AS IMPRESSIONS "
+				+ "ON CLICKS.ID=IMPRESSIONS.ID "
+				+ "WHERE " + filter.getSql().replace("DATE", "CLICKS.DATE") +");", 9);
              
                 executor.execute(s);
-                 s = new WorkerThread( "SELECT SUM(CLICKCOST), SUM(IMPCOST), SUM(NUMIMPS) FROM"
-				+ "(SELECT IMPDATE, CLICKCOST, IMPCOST, NUMIMPS FROM "
-				+ "(SELECT strftime('" + filter.getTimeFormatSQL() +"', CLICKDATE) AS CLICKDATE, SUM(CLICKCOST) AS CLICKCOST FROM "
-				+ "(SELECT IMPRESSIONS.*, CLICKS.ID, CLICKS.DATE AS CLICKDATE, CLICKS.COST AS CLICKCOST "
-				+ "FROM IMPRESSIONS "
-				+ "INNER JOIN CLICKS "
-				+ "ON IMPRESSIONS.ID=CLICKS.ID "
-				+ "GROUP BY CLICKS.DATE, CLICKS.ID) "
-				+ "WHERE " + filter.getSql().replace("DATE", "CLICKDATE")+ " GROUP BY strftime('" + filter.getTimeFormatSQL() +"', CLICKDATE)) "
+                 s = new WorkerThread( "SELECT CLICKCOST, IMPCOST, NUMIMPS FROM"
+				+ "(SELECT SUM(CLICKS.COST) AS CLICKCOST FROM "
+				+ "CLICKS "
 				+ "INNER JOIN "
-				+ "(SELECT strftime('" + filter.getTimeFormatSQL() +"', DATE) AS IMPDATE, SUM(COST) AS IMPCOST, COUNT(ID) AS NUMIMPS FROM IMPRESSIONS "
-				+ "WHERE " + filter.getSql()+ " GROUP BY strftime('" + filter.getTimeFormatSQL() +"', DATE)) "
-				+ "ON IMPDATE=CLICKDATE)" , 10);
+				+ "(SELECT * FROM IMPRESSIONS GROUP BY ID) AS IMPRESSIONS "
+				+ "ON CLICKS.ID=IMPRESSIONS.ID "
+				+ "WHERE " + filter.getSql().replace("DATE", "CLICKS.DATE") +") "
+				+ "JOIN "
+				+ "(SELECT SUM(COST) AS IMPCOST FROM "
+				+ "IMPRESSIONS "
+				+ "WHERE " + filter.getSql() +") "
+				+ "JOIN"
+				+ "(SELECT COUNT(*) AS NUMIMPS FROM "
+				+ "IMPRESSIONS "
+				+ "WHERE " + filter.getSql() +");" , 10);
             
                 executor.execute(s);
                  s = new WorkerThread( "SELECT SUM(NUMCLICKS), SUM(NUMBOUNCES) FROM "
-				+ "(SELECT strftime('" + filter.getTimeFormatSQL() +"', CLICKDATE) as CLICKDATE, COUNT(ID) AS NUMCLICKS FROM "
-				+ "(SELECT CLICKS.DATE AS CLICKDATE, IMPRESSIONS.* FROM CLICKS INNER JOIN IMPRESSIONS ON CLICKS.ID=IMPRESSIONS.ID GROUP BY CLICKS.ID, CLICKDATE) "
-				+ "WHERE " + filter.getSql().replace("DATE", "CLICKDATE")+ " GROUP BY strftime('" + filter.getTimeFormatSQL() +"', CLICKDATE)) "
+				+ "(SELECT COUNT(*) AS NUMBOUNCES FROM "
+				+ "SERVER "
 				+ "INNER JOIN "
-				+ "(SELECT strftime('" + filter.getTimeFormatSQL() +"', ENTRYDATE) AS DATE, COUNT(*) AS NUMBOUNCES FROM "
-				+ "(SELECT IMPRESSIONS.*, SERVER.* FROM IMPRESSIONS "
-				+ "INNER JOIN SERVER ON IMPRESSIONS.ID=SERVER.ID "
-				+ "GROUP BY SERVER.ENTRYDATE, SERVER.ID) AS SUBQUERY "
-				+ "WHERE "+bounceFilter.getSQL()+" AND "+ filter.getSql().replace("DATE", "ENTRYDATE")
-				+ " GROUP BY strftime('" + filter.getTimeFormatSQL() +"', ENTRYDATE)) "
-				+ "ON DATE=CLICKDATE GROUP BY DATE" , 11);
+				+ "(SELECT * FROM IMPRESSIONS GROUP BY ID) AS IMPRESSIONS "
+				+ "ON SERVER.ID=IMPRESSIONS.ID "
+				+ "WHERE " + bounceFilter.getSQL() + " AND " + filter.getSql().replace("DATE", "SERVER.ENTRYDATE")+ ") "
+				+ "JOIN"
+				+ "(SELECT COUNT(*) AS NUMCLICKS FROM "
+				+ "CLICKS "
+				+ "INNER JOIN "
+				+ "(SELECT * FROM IMPRESSIONS GROUP BY ID) AS IMPRESSIONS "
+				+ "ON CLICKS.ID=IMPRESSIONS.ID "
+				+ "WHERE " + filter.getSql().replace("DATE", "CLICKS.DATE") +");" , 11);
                
                 executor.execute(s);
                 
@@ -185,7 +202,7 @@ public class MetricsUpdater  {
               DecimalFormatSymbols symbols = new DecimalFormat().getDecimalFormatSymbols();
 		DecimalFormat intFormatter = new DecimalFormat("#" + symbols.getGroupingSeparator() + "###");
 		DecimalFormat decFormatter = new DecimalFormat("#" + symbols.getGroupingSeparator() + "###" + symbols.getDecimalSeparator() + "00");
-		String currency = "Â£";
+		String currency = "£";
                 Connection connection = null;
              
              
@@ -237,6 +254,7 @@ public class MetricsUpdater  {
                     }
                      catch (SQLException exception) {
 				System.err.println("SQLite Open error");
+				System.err.println(exception.getMessage());
 				System.exit(1);
                      }
 		

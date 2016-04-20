@@ -145,10 +145,13 @@
 					</TitledPane>
 					
 					<TitledPane expanded="true" prefWidth="100.0" text="Metrics Display">
-						<TableView fx:id="tableResults" tableMenuButtonVisible="true" editable="true">
+						<TableView fx:id="tableResults" tableMenuButtonVisible="true" editable="true" layoutX="8.6" layoutY="8.6" maxWidth="400.0" prefHeight="592.0" prefWidth="226.0" AnchorPane.bottomAnchor="121.0" AnchorPane.leftAnchor="-11.0" AnchorPane.rightAnchor="-11.0" AnchorPane.topAnchor="-11.0">
 							<columns />
 						</TableView>
+                                               
 					</TitledPane>
+                                         <Label fx:id="txtFilterDesc" layoutX="8.6" layoutY="582.0" prefHeight="132.0" prefWidth="226.0" AnchorPane.bottomAnchor="-11.0" AnchorPane.leftAnchor="-11.0" AnchorPane.rightAnchor="-11.0" />
+                                 
 				</VBox>
 				
 				<FocusedButton fx:id="generateGraph" onAction="#generateData" prefHeight="50.0" prefWidth="75.0" text="Add" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" />
