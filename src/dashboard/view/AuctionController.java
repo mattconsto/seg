@@ -632,7 +632,7 @@ public class AuctionController extends AnchorPane {
 
 						int last = 0;
 						for(Data<Date, Number> d : data.getData()) {
-							d.setNode(new HoveredThresholdNode(last, d.getYValue().intValue()));
+							d.setNode(new HoveredThresholdNode(last, d.getYValue().intValue(), lineChart.getData().size()));
 							d.getNode().setOnMouseClicked(new EventHandler<Event>() {
 								@Override
 								public void handle(Event event) {
@@ -644,9 +644,6 @@ public class AuctionController extends AnchorPane {
 						
 						lineChart.getData().add(data);
 						graphData.put(key, data);
-						
-						final Series<Date, Number> final_data = data;
-						final_data.getNode().setOnMouseClicked(e -> showHistogram(final_data));
 
 					} catch (SQLException e) {
 						System.err.println("Unable to fetch data from database: " + e.getMessage());
