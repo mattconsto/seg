@@ -24,22 +24,26 @@ public class MetricsUpdater  {
 	private boolean                           running = false;
 	private int iFilter;
         private ExecutorService executor;
-	public MetricsUpdater(ObservableList<ObservableMetrics> table, Filter filter, BounceFilter bounceFilter, int index,
-			TableView<ObservableMetrics> t) {
-		this.tableView = t;
-		this.table  = table;
-		this.filter = filter;
-		this.bounceFilter = bounceFilter;
-		this.iFilter = index;
-	}
- public void runUpdater() {
-               
+	public MetricsUpdater() {
                 try {  
                     executor = Executors.newCachedThreadPool(); //.newFixedThreadPool(15);   
                 }
                 catch ( Exception eofException ) { // EOFException |InterruptedException
                     System.err.println("Failed to start threading " + eofException.getMessage());
                 } // 
+	}
+        public void stop() {
+             executor.shutdownNow();
+        }
+        public void runUpdater(ObservableList<ObservableMetrics> table, Filter filter, BounceFilter bounceFilter, int index,
+			TableView<ObservableMetrics> t) {
+               
+                
+                this.tableView = t;
+		this.table  = table;
+		this.filter = filter;
+		this.bounceFilter = bounceFilter;
+		this.iFilter = index;
                 WorkerThread s =   new WorkerThread("SELECT COUNT(*) AS Frequency, * FROM "
 				+ "(SELECT IMPRESSIONS.*, SERVER.* FROM IMPRESSIONS "
 				+ "INNER JOIN SERVER ON IMPRESSIONS.ID=SERVER.ID "
