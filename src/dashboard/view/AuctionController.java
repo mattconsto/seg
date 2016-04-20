@@ -16,8 +16,14 @@ import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.SnapshotParameters;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.Chart;
 import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart.Data;
 import javafx.scene.chart.XYChart.Series;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
@@ -26,6 +32,7 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.transform.Scale;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import dashboard.controller.*;
 import dashboard.model.*;
 
@@ -224,19 +231,18 @@ public class AuctionController extends AnchorPane {
 				{ setAlignment( Pos.CENTER );}
 				@Override
 				public void updateItem( Boolean item, boolean empty ){
-					if ( ! empty ) {
-						TableRow<?>  row = getTableRow();
+					if ( !empty ) {
+						TableRow<?> row = getTableRow();
 						if ( row != null ) {
-						int rowNo = row.getIndex();
-						TableViewSelectionModel<?>  s = getTableView().getSelectionModel();
-						if ( item ) {
-							updateGraph(  getTableView().getItems().get(rowNo).getDescription());
-							s.select( rowNo );
-						}
-						else  {
-							removeGraph(  getTableView().getItems().get(rowNo).getDescription());
-							s.clearSelection( rowNo );
-						}
+							int rowNo = row.getIndex();
+							TableViewSelectionModel<?> s = getTableView().getSelectionModel();
+							if ( item ) {
+								updateGraph( getTableView().getItems().get(rowNo).getDescription());
+								s.select( rowNo );
+							} else {
+								removeGraph( getTableView().getItems().get(rowNo).getDescription());
+								s.clearSelection( rowNo );
+							}
 						}
 					}
 					super.updateItem( item, empty );
@@ -424,6 +430,41 @@ public class AuctionController extends AnchorPane {
 			}
 	}
 	
+	private void showHistogram(Series<Date, Number> series) {
+		BarChart<String, Number> histogram = new BarChart<>(new CategoryAxis(), new NumberAxis());
+		histogram.setTitle(series.getName() + " Histogram");
+		histogram.setStyle("-fx-background-color: #ffffff;");
+
+		int   buckets = 10;
+		int[] data    = new int[buckets];
+		int   minimum = Integer.MAX_VALUE;
+		int   maximum = Integer.MIN_VALUE;
+		
+		for(Data<Date, Number> entry : series.getData()) {
+			int value = entry.getYValue().intValue();
+			if(value < minimum) minimum = value;
+			if(value > maximum) maximum = value;
+		}
+		
+		for(Data<Date, Number> entry : series.getData()) {
+			int value = entry.getYValue().intValue();
+			data[(value - minimum)/((maximum - minimum) / (buckets - 1))]++;
+		}
+		
+		Series<String, Number> histogram_series = new Series<>();
+		
+		for(int i = 0; i < buckets; i++) {
+			histogram_series.getData().add(new Data<String, Number>(Integer.toString(i), data[i]));
+		}
+		
+		histogram.getData().add(histogram_series);
+		
+		Stage stage = new Stage();
+		stage.setTitle(series.getName() + " Histogram");
+		stage.setScene(new Scene(histogram));
+		stage.show();
+	}
+	
 	@FXML private void clearData(ActionEvent event) {
 		if(updaterRunnable != null)
 			updaterRunnable.stop();
@@ -488,7 +529,9 @@ public class AuctionController extends AnchorPane {
 						data.setName(key);
 						lineChart.getData().add(data);
 						graphData.put(key, data);
-
+						
+						final Series<Date, Number> final_data = data;
+						final_data.getNode().setOnMouseClicked(e -> showHistogram(final_data));
 
 					} catch (SQLException e) {
 						System.err.println("Unable to fetch data from database: " + e.getMessage());
