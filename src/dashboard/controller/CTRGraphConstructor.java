@@ -15,7 +15,6 @@ import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 public class CTRGraphConstructor extends GraphConstructor {
-
 	public CTRGraphConstructor(Filter filter) {
 		super(filter);
 	}
@@ -43,5 +42,4 @@ public class CTRGraphConstructor extends GraphConstructor {
 		results.close();
 		return series;
 	}
-
 }

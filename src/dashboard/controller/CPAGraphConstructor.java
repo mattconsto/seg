@@ -14,7 +14,6 @@ import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 public class CPAGraphConstructor extends GraphConstructor{
-
 	public CPAGraphConstructor(Filter filter) {
 		super(filter);
 	}
@@ -57,5 +56,4 @@ public class CPAGraphConstructor extends GraphConstructor{
 		results.close();
 		return series;
 	}
-
 }

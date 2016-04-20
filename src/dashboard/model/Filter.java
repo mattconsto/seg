@@ -274,9 +274,6 @@ public class Filter {
 
 	
 	private void setGenderSQL() {
-		/*if (gender.isEmpty() || gender.contains("Any") || (gender.contains("Female") && gender.contains("Male"))){
-			
-		}*/
 		if (gender.contains("Male") && !gender.contains("Female"))
 			genderSQL = "gender = 0";
 		else if(gender.contains("Female") && !gender.contains("Male"))

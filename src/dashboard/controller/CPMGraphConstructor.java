@@ -14,7 +14,6 @@ import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 public class CPMGraphConstructor extends GraphConstructor{
-
 	public CPMGraphConstructor(Filter filter) {
 		super(filter);
 	}
@@ -46,5 +45,4 @@ public class CPMGraphConstructor extends GraphConstructor{
 		results.close();
 		return series;
 	}
-
 }

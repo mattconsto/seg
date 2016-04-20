@@ -14,7 +14,6 @@ import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 public class TotalCostGraphConstructor extends GraphConstructor{
-
 	public TotalCostGraphConstructor(Filter filter){
 		super(filter);
 	}

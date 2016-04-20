@@ -25,12 +25,6 @@ public class BounceGraphConstructor extends GraphConstructor{
 	
 	@Override
 	protected Series<Date, Number> generateGraph(Connection conn) throws SQLException, ParseException {
-/*		ResultSet results = conn.createStatement().executeQuery("SELECT strftime('" + filter.getTimeFormatSQL() +"', ENTRYDATE) AS ENTRYDATE,COUNT(*) AS Frequency FROM "
-				+ "(SELECT IMPRESSIONS.*, SERVER.* FROM IMPRESSIONS "
-				+ "INNER JOIN SERVER ON IMPRESSIONS.ID=SERVER.ID "
-				+ "GROUP BY SERVER.ENTRYDATE, SERVER.ID) AS SUBQUERY "
-				+ "WHERE " + bounceFilter.getSQL() + " AND " + filter.getSql().replace("DATE", "ENTRYDATE")+ " GROUP BY strftime('" + filter.getTimeFormatSQL() +"', ENTRYDATE);");
-*/
 		ResultSet results = conn.createStatement().executeQuery("SELECT strftime('" + filter.getTimeFormatSQL() +"', ENTRYDATE) AS ENTRYDATE,COUNT(*) AS Frequency FROM "
 				+ "SERVER "
 				+ "INNER JOIN "
@@ -38,15 +32,13 @@ public class BounceGraphConstructor extends GraphConstructor{
 				+ "ON SERVER.ID=IMPRESSIONS.ID "
 				+ "WHERE " + bounceFilter.getSQL() + " AND " + filter.getSql().replace("DATE", "SERVER.ENTRYDATE")+ " GROUP BY strftime('" + filter.getTimeFormatSQL() +"', SERVER.ENTRYDATE);");
 		
-		
 		XYChart.Series<Date, Number> series = new XYChart.Series<Date, Number>();
 		series.setName("Bounces (Pages visited = 1) by date");
 
 		DateFormat format = new SimpleDateFormat(filter.getTimeFormatJava(), Locale.ENGLISH);
 		
-		while (results.next()) {
+		while (results.next())
 			series.getData().add(new XYChart.Data<Date, Number>(format.parse(results.getString(1)), results.getInt(2)));
-		}
 		
 		results.close();
 		return series;

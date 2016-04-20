@@ -14,7 +14,6 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.chart.XYChart.Series;
 
 public class UniqueImpressionsGraphConstructor extends GraphConstructor {
-
 	public UniqueImpressionsGraphConstructor(Filter filter) {
 		super(filter);
 	}
