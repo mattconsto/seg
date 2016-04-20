@@ -2,12 +2,14 @@ package dashboard.view;
 
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
+import javafx.scene.chart.LineChart;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 
 public class HoveredThresholdNode extends StackPane {
+
 	public HoveredThresholdNode(int priorValue, int value, int series) {
 		setPrefSize(15, 15);
 

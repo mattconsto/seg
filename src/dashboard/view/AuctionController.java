@@ -629,7 +629,7 @@ public class AuctionController extends AnchorPane {
 
 	private void updateGraph(String metric) {
 		GraphConstructor constructor;
-			lineChart.setCreateSymbols(false);  
+			lineChart.setCreateSymbols(false);
 			lineChart.setLegendVisible(true);
 			String key;
 			int i = 2;
