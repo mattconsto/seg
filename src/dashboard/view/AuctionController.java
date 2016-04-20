@@ -58,6 +58,7 @@ import javafx.print.PrinterJob;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView.TableViewSelectionModel;
 import javafx.scene.control.cell.CheckBoxTableCell;
+import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
 /**
  * Auction Controller.
@@ -219,7 +220,46 @@ public class AuctionController extends AnchorPane {
 				return new SimpleStringProperty(p.getValue().getResults(colNo));
 			}
 		});
-		tableResults.getColumns().add(tc);
+		
+                tc.setSortable(false);
+              
+                Callback<TableColumn<ObservableMetrics, String>, TableCell<ObservableMetrics, String> > cellFactory =
+                    new Callback<TableColumn<ObservableMetrics, String>, TableCell<ObservableMetrics, String>>() {
+                        @Override
+                        public TableCell call(TableColumn p) {
+                            TableCell cell = new TableCell<ObservableMetrics, String>() {
+                          @Override
+                          public void updateItem(String item, boolean empty) {
+                              super.updateItem(item, empty);
+                              setText(empty ? null : getString());
+                              setGraphic(null);
+                          }
+
+                          private String getString() {
+                              return getItem() == null ? "" : getItem().toString();
+                          } 
+                      };
+
+                    cell.addEventFilter(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+                        @Override
+                        public void handle(MouseEvent event) {
+                            if (event.getClickCount() > 1) {
+                                System.out.println("double clicked!");
+                                TableCell c = (TableCell) event.getSource();
+                                int i = c.getIndex();
+                                if (i > 1)
+                                {
+                                     Filter f = filters.get( c.getTableColumn().getText());
+                                     System.out.println(c.getTableColumn().getText() + ": " + f.toString());
+                                }
+                            }
+                        }
+                    });
+                return cell;
+                    }
+                };
+                tc.setCellFactory(cellFactory);
+                tableResults.getColumns().add(tc);
 	}
 	
 	// Configure the table widget: set up its column, and register the
@@ -256,13 +296,16 @@ public class AuctionController extends AnchorPane {
 				};
 			}
 		} );		 
+                checkCol.setSortable(false);
 		tableResults.getColumns().add(checkCol);
 		metricCol = new TableColumn<>("Metric");
 		metricCol.setMinWidth(120);
 		//metricCol.setMaxWidth(150);
 		metricCol.setCellValueFactory(new PropertyValueFactory<>("description")); 
+                metricCol.setSortable(false);
 		tableResults.getColumns().add(metricCol);
 		tableResults.setItems(tableMetrics);
+                
 	}
 
 	

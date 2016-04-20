@@ -59,13 +59,7 @@ public class MetricsUpdater  {
 				+ " WHERE " + filter.getSql() + ";", 1); 
                 
                 executor.execute(s);
-                 s =   new WorkerThread("SELECT COUNT(*) AS Frequency, * FROM "
-				+ "(SELECT IMPRESSIONS.*, CLICKS.* FROM IMPRESSIONS"
-				+ " INNER JOIN CLICKS ON IMPRESSIONS.ID=CLICKS.ID"
-				+ " GROUP BY CLICKS.DATE, CLICKS.ID) AS SUBQUERY"
-				+ " WHERE " + filter.getSql() + ";", 1); 
-              
-                executor.execute(s);
+               
                 s = new WorkerThread( "SELECT COUNT(*) AS Frequency, * "
 				+ "FROM (SELECT IMPRESSIONS.*, SERVER.* FROM "
 				+ "IMPRESSIONS INNER JOIN SERVER ON IMPRESSIONS.ID=SERVER.ID "
