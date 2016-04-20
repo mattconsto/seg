@@ -164,9 +164,8 @@ public class AuctionController extends AnchorPane {
 	}
 	
 	private void configureFilters() {
-		// if (filters.size() <= iFilter)
-		//	 filters.add(new Filter());
-			filter = new Filter();
+		 
+                filter = new Filter();
 		filterGender.getCheckModel().getCheckedItems().addListener(
 			(ListChangeListener.Change<? extends String> c) -> filter.setGender(filterGender));
 		filterAge.getCheckModel().getCheckedItems().addListener(
@@ -208,8 +207,8 @@ public class AuctionController extends AnchorPane {
 	
 	private void addColumn(String colName) {
 		TableColumn<ObservableMetrics, String> tc = new TableColumn<ObservableMetrics, String>(colName);
-		tc.setMaxWidth(100);
-		tc.setMinWidth(100);
+		//tc.setMaxWidth(100);
+		//tc.setMinWidth(100);
 		final int colNo = filters.size();
 		tc.setCellValueFactory(new Callback<CellDataFeatures<ObservableMetrics, String>, ObservableValue<String>>() {
 			@Override
@@ -256,8 +255,8 @@ public class AuctionController extends AnchorPane {
 		} );		 
 		tableResults.getColumns().add(checkCol);
 		metricCol = new TableColumn<>("Metric");
-		metricCol.setMinWidth(150);
-		metricCol.setMaxWidth(150);
+		metricCol.setMinWidth(120);
+		//metricCol.setMaxWidth(150);
 		metricCol.setCellValueFactory(new PropertyValueFactory<>("description")); 
 		tableResults.getColumns().add(metricCol);
 		tableResults.setItems(tableMetrics);
@@ -308,7 +307,7 @@ public class AuctionController extends AnchorPane {
 	}
 	
 	@FXML private void importCampaignAction(ActionEvent event) {
-		if(updaterRunnable != null) updaterRunnable.stop();
+		//if(updaterRunnable != null) updaterRunnable.stop();
 		application.getStage().setMaximized(false);
 		application.start(application.getStage());
 	}
@@ -358,7 +357,7 @@ public class AuctionController extends AnchorPane {
 
 	@FXML
 	private void closeAction(ActionEvent event) {
-		if(updaterRunnable != null) updaterRunnable.stop();
+		//if(updaterRunnable != null) updaterRunnable.stop();
 		DatabaseConnection.closeConnection();
 		application.getStage().close();
 	}
@@ -405,7 +404,7 @@ public class AuctionController extends AnchorPane {
 	
 	@FXML
 	private void generateData(ActionEvent event) {
-		if(updaterRunnable != null) updaterRunnable.stop();
+		//if(updaterRunnable != null) updaterRunnable.stop();
 			// todo - check valid entry for name and campaign
 		 if (filters.size() == 10 ) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -464,10 +463,12 @@ public class AuctionController extends AnchorPane {
 				tableResults.getColumns().get(filters.size()).setVisible(true);
 
 				// Cheap and nasty threading
-				updaterRunnable = new MetricsUpdater(tableMetrics, filter, bounceFilter, filters.size(),  tableResults);
-				 filters.put(txtFilterName.getText(), filter);
-				 new Thread(updaterRunnable).start();
-
+				//updaterRunnable = new MetricsUpdater(tableMetrics, filter, bounceFilter, filters.size(),  tableResults);
+				// filters.put(txtFilterName.getText(), filter);
+				 //new Thread(updaterRunnable).start();
+                                 MetricsUpdater m = new MetricsUpdater(tableMetrics, filter, bounceFilter, filters.size(),  tableResults);
+                                 m.runUpdater();
+                                 filters.put(txtFilterName.getText(), filter);
 				configureFilters();
 				txtFilterName.setText(GenerateName.generate());
 			}
@@ -560,8 +561,8 @@ public class AuctionController extends AnchorPane {
 	}
 	
 	@FXML private void clearData(ActionEvent event) {
-		if(updaterRunnable != null)
-			updaterRunnable.stop();
+		//if(updaterRunnable != null)
+			//updaterRunnable.stop();
 		lineChart.getData().clear();
 		filters.clear();
 		graphData.clear();
