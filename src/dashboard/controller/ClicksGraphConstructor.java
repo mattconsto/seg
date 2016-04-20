@@ -28,7 +28,6 @@ public class ClicksGraphConstructor extends GraphConstructor {
 				+ "WHERE " + filter.getSql().replace("DATE", "CLICKS.DATE")
 				+ " GROUP BY strftime('" + filter.getTimeFormatSQL() +"', CLICKS.DATE);");
 		
-		
 		XYChart.Series<Date, Number> series = new XYChart.Series<Date, Number>();
 		series.setName("Clicks by date");
 

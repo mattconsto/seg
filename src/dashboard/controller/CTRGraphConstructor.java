@@ -22,15 +22,21 @@ public class CTRGraphConstructor extends GraphConstructor {
 	@Override
 	protected Series<Date, Number> generateGraph(Connection conn)
 			throws SQLException, ParseException {
-		ResultSet results = conn.createStatement().executeQuery("SELECT CLICKDATE, NUMCLICKS, NUMIMP FROM "
-				+ "(SELECT strftime('" + filter.getTimeFormatSQL() +"', CLICKDATE) as CLICKDATE, COUNT(*) AS NUMCLICKS FROM"
-				+ "(SELECT CLICKS.DATE AS CLICKDATE, IMPRESSIONS.* FROM CLICKS INNER JOIN IMPRESSIONS ON CLICKS.ID=IMPRESSIONS.ID GROUP BY CLICKS.ID, CLICKDATE) "
-				+ "WHERE " + filter.getSql().replace("DATE", "CLICKDATE")+ " GROUP BY strftime('" + filter.getTimeFormatSQL() +"', CLICKDATE)) "
+		ResultSet results = conn.createStatement().executeQuery("SELECT CLICKDATE, NUMCLICKS, NUMIMPS FROM "
+				+ "(SELECT strftime('" + filter.getTimeFormatSQL() +"', CLICKS.DATE) AS CLICKDATE,COUNT(*) AS NUMCLICKS FROM "
+				+ "CLICKS "
 				+ "INNER JOIN "
-				+ "(SELECT strftime('" + filter.getTimeFormatSQL() +"', DATE) AS DATE, COUNT(*) AS NUMIMP FROM IMPRESSIONS "
-				+ "WHERE " + filter.getSql()+ " GROUP BY strftime('" + filter.getTimeFormatSQL() +"', DATE)) "
-				+ "ON DATE=CLICKDATE ");
-
+				+ "(SELECT * FROM IMPRESSIONS GROUP BY ID) AS IMPRESSIONS "
+				+ "ON CLICKS.ID=IMPRESSIONS.ID "
+				+ "WHERE " + filter.getSql().replace("DATE", "CLICKS.DATE")
+				+ " GROUP BY strftime('" + filter.getTimeFormatSQL() +"', CLICKS.DATE))"
+				+ "INNER JOIN"
+				+ "(SELECT strftime('" + filter.getTimeFormatSQL() +"', DATE) AS IMPDATE,COUNT(*) AS NUMIMPS FROM "
+				+ "IMPRESSIONS "
+				+ "WHERE " + filter.getSql() +" "
+				+ "GROUP BY strftime('" + filter.getTimeFormatSQL() +"', DATE))"
+				+ "ON IMPDATE=CLICKDATE");
+		
 		XYChart.Series<Date, Number> series = new XYChart.Series<Date, Number>();
 		series.setName("Click Through Rate by date");
 
