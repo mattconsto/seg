@@ -119,7 +119,7 @@ public class AuctionController extends AnchorPane {
 	@FXML private SplitPane splitPane;
 	 
         private MetricsUpdater updaterRunnable = null;
-	
+	private GraphUpdater updateGraphRunnable = null;
 	private FileChooser fileChooser = new FileChooser();
 
 	private HashMap<String, Series<Date, Number>> graphData = new HashMap<String, Series<Date, Number>>();
@@ -557,7 +557,7 @@ public class AuctionController extends AnchorPane {
 		}
 	}
 	
-	private void showHistogram(Series<Date, Number> series) {
+	/*private void showHistogram(Series<Date, Number> series) {
 		BarChart<String, Number> histogram = new BarChart<>(new CategoryAxis(), new NumberAxis());
 		histogram.setTitle(series.getName() + " Histogram");
 		histogram.setStyle("-fx-background-color: #ffffff;");
@@ -598,12 +598,16 @@ public class AuctionController extends AnchorPane {
 		stage.setMinHeight(115);
 		stage.setScene(new Scene(histogram));
 		stage.show();
-	}
+	}*/
 	
 	@FXML private void clearData(ActionEvent event) {
 		if(updaterRunnable != null) {
 			updaterRunnable.stop();
                         updaterRunnable = null;   // This may need a dispose method?
+                }
+                if (updateGraphRunnable != null) {
+                     updateGraphRunnable.stop();
+                     updateGraphRunnable = null;
                 }
 		lineChart.getData().clear();
 		filters.clear();
@@ -624,7 +628,7 @@ public class AuctionController extends AnchorPane {
 		}
 	}
 
-	private void updateGraph(String metric) {
+	  private void updateGraph(String metric) {
 		GraphConstructor constructor;
 			lineChart.setCreateSymbols(false);
 			lineChart.setLegendVisible(true);
@@ -633,61 +637,21 @@ public class AuctionController extends AnchorPane {
 			 for(Map.Entry<String, Filter> f : filters.entrySet()){  
 
 				if (tableResults.getColumns().get(i).isVisible()) {
-				key = f.getKey() + " : " + metric;
-				if (graphData.containsKey(key)) {
-					Series<Date, Number> data = graphData.get(key);
-					if (!lineChart.getData().contains(data))
-						lineChart.getData().add(data);
-				}
-				else {
-					switch(metric) {
-						default:
-						case "Bounces":		constructor = new BounceGraphConstructor(f.getValue(), bounceFilter);	 break;
-						case "Impressions":		constructor = new ImpressionsGraphConstructor(f.getValue());		  break;
-						case "Clicks":		 constructor = new ClicksGraphConstructor(f.getValue());			   break;
-						case "Unique Impressions": constructor = new UniqueImpressionsGraphConstructor(f.getValue());		break;
-						case "Unique Clicks":	  constructor = new UniqueClicksGraphConstructor(f.getValue());		 break;
-						case "Conversions":		constructor = new ConversionGraphConstructor(f.getValue());		   break;
-						case "Cost Per Click":
-						case "CPC":			constructor = new CPCGraphConstructor(f.getValue());				  break;
-						case "Cost Per Aquisition":
-						case "CPA":			constructor = new CPAGraphConstructor(f.getValue());				  break;
-						case "Cost Per Mille":
-						case "CPM":			constructor = new CPMGraphConstructor(f.getValue());				  break;
-						case "Click Through Rate":
-						case "CTR":			constructor = new CTRGraphConstructor(f.getValue());				  break;
-						case "Total Cost":		 constructor = new TotalCostGraphConstructor(f.getValue());			break;
-						case "Bounce Rate":		constructor = new BounceRateGraphConstructor(f.getValue(), bounceFilter); break;
-					}
-
-					try {
-						Series<Date, Number> data = constructor.fetchGraph();
-						data.setName(key);
-
-						if(preferences.getBoolean("Graph_Icons", true)) {
-							int last = 0;
-							for(Data<Date, Number> d : data.getData()) {
-								d.setNode(new HoveredThresholdNode(last, d.getYValue().intValue(), lineChart.getData().size()));
-								d.getNode().setOnMouseClicked(new EventHandler<Event>() {
-									@Override
-									public void handle(Event event) {
-										showHistogram(data);
-									}
-								});
-								last = d.getYValue().intValue();
-							}
-						}
-						lineChart.getData().add(data);
-						graphData.put(key, data);
-
-					} catch (SQLException e) {
-						System.err.println("Unable to fetch data from database: " + e.getMessage());
-					}
-				}
+                                    key = f.getKey() + " : " + metric;
+                                    if (graphData.containsKey(key)) {
+                                            Series<Date, Number> data = graphData.get(key);
+                                            if (!lineChart.getData().contains(data))
+                                                    lineChart.getData().add(data);
+                                    }
+                                    else {
+                                        if (updateGraphRunnable == null)
+                                            updateGraphRunnable = new GraphUpdater();
+                                        updateGraphRunnable.runUpdater(f.getValue(), metric, bounceFilter, lineChart, graphData); 
+                                    }
 				} else {
-				key = f.getKey() + " : " + metric;
-				if (graphData.containsKey(key))
-					lineChart.getData().remove(graphData.get(key));
+                                    key = f.getKey() + " : " + metric;
+                                    if (graphData.containsKey(key))
+                                            lineChart.getData().remove(graphData.get(key));
 				}
 				i++;
 			}
