@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.Date;
-
+import java.sql.DriverManager;
 import javafx.scene.chart.XYChart;
 import dashboard.model.DatabaseConnection;
 import dashboard.model.Filter;
@@ -27,15 +27,23 @@ public abstract class GraphConstructor {
 	public XYChart.Series<Date, Number> fetchGraph() throws SQLException {
 		try {
 			System.out.println("Constructing Graph");
-			DatabaseConnection.setDbfile(filter.getCampaign() + ".db");
-			XYChart.Series<Date, Number> result = generateGraph(DatabaseConnection.getConnection());
+                       
+                        Class.forName("org.sqlite.JDBC");
+			Connection connection = DriverManager.getConnection("jdbc:sqlite:" + filter.getCampaign() + ".db");
+                        //DatabaseConnection.setDbfile(filter.getCampaign() + ".db");
+			XYChart.Series<Date, Number> result = generateGraph(connection);
 			System.out.println("Finished Executing Query");
-			return result; 
+                        connection.close();
+                        return result; 
+			
 		} catch (ParseException e) {
 			e.printStackTrace();
-			return null;
-		}
-	}
+                } catch (ClassNotFoundException exception) {
+        		System.err.println("SQLite JDBC Library no found!");
+                	System.exit(1);
+                }
+                return null; 
+        }
 
 	/**
 	 * Run an SQL query and return the data
