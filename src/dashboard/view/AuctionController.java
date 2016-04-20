@@ -367,7 +367,7 @@ public class AuctionController extends AnchorPane {
 	
 	@FXML
 	private void showPrefDialog() {
-		PreferencesDialog pf = new PreferencesDialog(this, application.getStage());
+		new PreferencesDialog(this, application.getStage());
 	}
 	
 	protected void updatePreferences(String graphColour, boolean graphIcons, boolean graphDash, String fontSize) {
@@ -378,24 +378,24 @@ public class AuctionController extends AnchorPane {
 		{
 		default:
 		case "Default":
-			mainScene.getStylesheets().add("/src/dashboard/view/fxml/GraphDefault.css");
+			mainScene.getStylesheets().add("/dashboard/view/fxml/GraphDefault.css");
 			break;
 		case "HighContrast":
-			mainScene.getStylesheets().add("/src/dashboard/view/fxml/GraphHighContrast.css");
+			mainScene.getStylesheets().add("/dashboard/view/fxml/GraphHighContrast.css");
 			break;
 		}
 		
 		switch(fontSize)
 		{
 		case "Small":
-			mainScene.getStylesheets().add("/src/dashboard/view/fxml/SmallFont.css");
+			mainScene.getStylesheets().add("/dashboard/view/fxml/SmallFont.css");
 			break;
 		default:
 		case "Med":
-			mainScene.getStylesheets().add("/src/dashboard/view/fxml/MedFont.css");
+			mainScene.getStylesheets().add("/dashboard/view/fxml/MedFont.css");
 			break;
 		case "Large":
-			mainScene.getStylesheets().add("/src/dashboard/view/fxml/LargeFont.css");
+			mainScene.getStylesheets().add("/dashboard/view/fxml/LargeFont.css");
 			break;
 		}
 		
