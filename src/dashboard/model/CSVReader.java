@@ -10,13 +10,11 @@ import javafx.concurrent.Task;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
- 
 
 /**
  * Read a CSV file and load it into the database
  */
 public class CSVReader {
-	
 	 long currentBytes = 0;
 	 long totBytes = 0;
 	/**
@@ -47,7 +45,6 @@ public class CSVReader {
 		&& verifyFile(new File(folder + "/click_log.csv"))
 		&& verifyFile(new File(folder + "/server_log.csv"));
 	}
-
 			
 	public Task<?> readImpressions(File fname) {
 		return new Task<Object>() {
@@ -165,7 +162,7 @@ public class CSVReader {
 			protected Object call() throws Exception {
 				try {
 					Connection conn = DatabaseConnection.getConnection(); 
-								Statement stmt = conn.createStatement();
+					Statement stmt = conn.createStatement();
 					stmt.executeUpdate("drop table if exists CLICKS;");
 					String sql = "CREATE TABLE CLICKS " + "(DATE	  TEXT NOT NULL," + " ID 		INTEGER NOT NULL,"
 							+ " COST	  REAL NOT NULL)";
@@ -217,7 +214,7 @@ public class CSVReader {
 			protected Object call() throws Exception {
 				try {
 					Connection conn = DatabaseConnection.getConnection(); 
-								Statement stmt = conn.createStatement();
+					Statement stmt = conn.createStatement();
 					stmt.executeUpdate("drop table if exists SERVER;");
 					String sql = "CREATE TABLE SERVER " + "(ENTRYDATE TEXT  NOT NULL," + " ID 		INTEGER NOT NULL,"
 							+ " EXITDATE  TEXT NOT NULL," + " PAGES		INTEGER	NOT NULL," + " CONVERSION  INTEGER NOT NULL)";

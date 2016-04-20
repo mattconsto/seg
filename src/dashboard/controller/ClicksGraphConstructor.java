@@ -14,21 +14,12 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.chart.XYChart.Series;
 
 public class ClicksGraphConstructor extends GraphConstructor {
-
 	public ClicksGraphConstructor(Filter filter) {
 		super(filter);
 	}
 	
 	@Override
 	protected Series<Date, Number> generateGraph(Connection conn) throws SQLException, ParseException {
-		/*
-		ResultSet results = conn.createStatement().executeQuery("SELECT strftime('" + filter.getTimeFormatSQL() +"', DATE) AS DATE,COUNT(*) AS Frequency FROM"
-				+ "(SELECT IMPRESSIONS.*, CLICKS.* FROM IMPRESSIONS"
-				+ " INNER JOIN CLICKS ON IMPRESSIONS.ID=CLICKS.ID"
-				+ " GROUP BY CLICKS.DATE, CLICKS.ID) AS SUBQUERY"
-				+ " WHERE " + filter.getSql()
-				+ " GROUP BY strftime('" + filter.getTimeFormatSQL() +"', DATE);");
-		*/
 		ResultSet results = conn.createStatement().executeQuery("SELECT strftime('" + filter.getTimeFormatSQL() +"', CLICKS.DATE),COUNT(*) AS Frequency FROM "
 				+ "CLICKS "
 				+ "INNER JOIN "
@@ -36,7 +27,6 @@ public class ClicksGraphConstructor extends GraphConstructor {
 				+ "ON CLICKS.ID=IMPRESSIONS.ID "
 				+ "WHERE " + filter.getSql().replace("DATE", "CLICKS.DATE")
 				+ " GROUP BY strftime('" + filter.getTimeFormatSQL() +"', CLICKS.DATE);");
-		
 		
 		XYChart.Series<Date, Number> series = new XYChart.Series<Date, Number>();
 		series.setName("Clicks by date");

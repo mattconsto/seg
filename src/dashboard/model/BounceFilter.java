@@ -13,18 +13,11 @@ public class BounceFilter{
 	}
 	
 	public String getPageLimitSQL(){
-		if(pagesVisited > 0)
-			return "PAGES <= " + pagesVisited;
-		else
-			return "1";
+		return pagesVisited > 0 ? "PAGES <= " + pagesVisited : "1";
 	}
 	
 	public String getTimeLimitSQL(){
-		if(timeOnSite > 0){
-			return "STRFTIME('%s',EXITDATE) - STRFTIME('%s',ENTRYDATE) <= " + timeOnSite;
-		}
-		else
-			return "1";
+		return timeOnSite > 0 ? "STRFTIME('%s',EXITDATE) - STRFTIME('%s',ENTRYDATE) <= " + timeOnSite : "1";
 	}
 	
 	public String getSQL(){

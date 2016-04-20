@@ -14,7 +14,7 @@
 
 <?import org.controlsfx.control.CheckComboBox?>
 <?import extfx.scene.chart.DateAxis?>
-<?import dashboard.view.FeedbackRestrictiveTextField?>
+<?import extfx.scene.control.RestrictiveTextField?>
 <?import dashboard.view.FocusedButton?>
 
 <BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" id="AnchorPane" styleClass="background" stylesheets="@AuctionTool.css" fx:controller="dashboard.view.AuctionController">
@@ -53,16 +53,48 @@
 							<ComboBox fx:id="cbCampaign" GridPane.rowIndex="0" GridPane.columnIndex="1" prefWidth="50" maxWidth="Infinity" />
 							
 							<Label text="Gender:" GridPane.rowIndex="1" GridPane.columnIndex="0" />
-							<CheckComboBox fx:id="filterGender" GridPane.rowIndex="1" GridPane.columnIndex="1" prefWidth="50" maxWidth="Infinity" />
+							<CheckComboBox fx:id="filterGender" GridPane.rowIndex="1" GridPane.columnIndex="1" prefWidth="50" maxWidth="Infinity">
+								<items>
+									<String fx:value="Any" />
+									<String fx:value="Female" />
+									<String fx:value="Male" />
+								</items>
+							</CheckComboBox>
 							
 							<Label text="Age:" GridPane.rowIndex="2" GridPane.columnIndex="0" />
-							<CheckComboBox fx:id="filterAge" GridPane.rowIndex="2" GridPane.columnIndex="1" prefWidth="50" maxWidth="Infinity" />
+							<CheckComboBox fx:id="filterAge" GridPane.rowIndex="2" GridPane.columnIndex="1" prefWidth="50" maxWidth="Infinity">
+								<items>
+									<String fx:value="Any" />
+									<String fx:value="Less than 25" />
+									<String fx:value="25 to 34" />
+									<String fx:value="35 to 44" />
+									<String fx:value="45 to 54" />
+									<String fx:value="Greater than 55" />
+								</items>
+							</CheckComboBox>
 							
 							<Label text="Income:" GridPane.rowIndex="3" GridPane.columnIndex="0" />
-							<CheckComboBox fx:id="filterIncome" GridPane.rowIndex="3" GridPane.columnIndex="1" prefWidth="50" maxWidth="Infinity" />
+							<CheckComboBox fx:id="filterIncome" GridPane.rowIndex="3" GridPane.columnIndex="1" prefWidth="50" maxWidth="Infinity">
+								<items>
+									<String fx:value="Any" />
+									<String fx:value="Low" />
+									<String fx:value="Medium" />
+									<String fx:value="High" />
+								</items>
+							</CheckComboBox>
 							
 							<Label text="Context:" GridPane.rowIndex="4" GridPane.columnIndex="0" />
-							<CheckComboBox fx:id="filterContext" GridPane.rowIndex="4" GridPane.columnIndex="1" prefWidth="50" maxWidth="Infinity" />
+							<CheckComboBox fx:id="filterContext" GridPane.rowIndex="4" GridPane.columnIndex="1" prefWidth="50" maxWidth="Infinity">
+								<items>
+									<String fx:value="Any" />
+									<String fx:value="News" />
+									<String fx:value="Shopping" />
+									<String fx:value="Social Media" />
+									<String fx:value="Blog" />
+									<String fx:value="Hobbies" />
+									<String fx:value="Travel" />
+								</items>
+							</CheckComboBox>
 							
 							<Label text="Time Unit:" GridPane.rowIndex="5" GridPane.columnIndex="0" />
 							<ComboBox fx:id="filterTime" GridPane.rowIndex="5" GridPane.columnIndex="1" prefWidth="50" maxWidth="Infinity">
@@ -105,10 +137,10 @@
 									<ToggleGroup fx:id="grBounce" />
 								</toggleGroup>
 							</RadioButton>
-							<FeedbackRestrictiveTextField fx:id="txtBounceTime" restrict="[0-9]" prefWidth="50" text="10" promptText="10" GridPane.rowIndex="0" GridPane.columnIndex="1" />
+							<RestrictiveTextField fx:id="txtBounceTime" restrict="[0-9]" prefWidth="50" text="10" promptText="10" GridPane.rowIndex="0" GridPane.columnIndex="1" />
 							
 							<RadioButton fx:id="rbByBouncePages" selected="true" text="№ Pages:" toggleGroup="$grBounce" GridPane.rowIndex="1" GridPane.columnIndex="0" />
-							<FeedbackRestrictiveTextField fx:id="txtBouncePages" restrict="[0-9]" prefWidth="50" text="1" promptText="1" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+							<RestrictiveTextField fx:id="txtBouncePages" restrict="[0-9]" prefWidth="50" text="1" promptText="1" GridPane.rowIndex="1" GridPane.columnIndex="1" />
 						</GridPane>
 					</TitledPane>
 					
@@ -119,7 +151,7 @@
 					</TitledPane>
 				</VBox>
 				
-				<FocusedButton fx:id="generateGraph" disable="true" onAction="#generateData" prefHeight="50.0" prefWidth="75.0" text="Add" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" />
+				<FocusedButton fx:id="generateGraph" onAction="#generateData" prefHeight="50.0" prefWidth="75.0" text="Add" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" />
 				<FocusedButton fx:id="clearGraph" onAction="#clearData" prefHeight="50.0" prefWidth="75.0" text="Clear" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" />
 			</AnchorPane>
 			

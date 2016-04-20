@@ -14,7 +14,6 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.chart.XYChart.Series;
 
 public class ConversionGraphConstructor extends GraphConstructor {
-
 	public ConversionGraphConstructor(Filter filter) {
 		super(filter);
 	}
