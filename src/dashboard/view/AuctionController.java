@@ -307,11 +307,11 @@ public class AuctionController extends AnchorPane {
 		about.setContentText(
 			"Created by SEG Team 3 2016:\n" + 
 			"\n" + 
-			"� Samuel Beresford\n" + 
-			"� Matthew Consterdine\n" +
-			"� Emma Gadsby\n" +
-			"� Matthew Langford\n" +
-			"� Iovana Pavlovici\n"
+			"> Samuel Beresford\n" + 
+			"> Matthew Consterdine\n" +
+			"> Emma Gadsby\n" +
+			"> Matthew Langford\n" +
+			"> Iovana Pavlovici\n"
 		);
 		about.show();
 	}
