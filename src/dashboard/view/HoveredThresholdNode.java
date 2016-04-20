@@ -2,6 +2,7 @@ package dashboard.view;
 
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
+import javafx.scene.chart.LineChart;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
@@ -10,21 +11,25 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 
 public class HoveredThresholdNode extends StackPane {
-	public HoveredThresholdNode(int priorValue, int value) {
-		setPrefSize(50, 50);
-
+	
+	final private LineChart chart;
+	
+	public HoveredThresholdNode(int priorValue, int value, LineChart myChart) {
+		setPrefSize(10, 10);
+		chart = myChart;
+		
 		final Label label = createDataThresholdLabel(priorValue, value);
 		final Border border = getBorder();
 		final Background background = getBackground();
-
-		setBackground(Background.EMPTY);
-		setBorder(Border.EMPTY);
-
+		
 		setOnMouseEntered(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent mouseEvent) {
-				setBackground(background);
-				setBorder(border);
+				if(!chart.getCreateSymbols())
+				{
+					setBackground(background);
+					setBorder(border);
+				}
 				getChildren().setAll(label);
 				setCursor(Cursor.HAND);
 				toFront();
@@ -33,8 +38,11 @@ public class HoveredThresholdNode extends StackPane {
 		setOnMouseExited(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent mouseEvent) {
-				setBackground(Background.EMPTY);
-				setBorder(Border.EMPTY);
+				if(!chart.getCreateSymbols())
+				{
+					setBackground(Background.EMPTY);
+					setBorder(Border.EMPTY);
+				}
 				getChildren().clear();
 				setCursor(Cursor.CROSSHAIR);
 			}

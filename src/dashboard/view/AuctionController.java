@@ -378,10 +378,11 @@ public class AuctionController extends AnchorPane {
 		{
 		default:
 		case "Default":
-			mainScene.getStylesheets().add("/src/dashboard/view/fxml/GraphDefault.css");
+			mainScene.getStylesheets().add("/dashboard/view/fxml/GraphDefault.css");
+			mainScene.getStylesheets().add("/dashboard/view/fxml/GraphDashed.css");
 			break;
 		case "HighContrast":
-			mainScene.getStylesheets().add("/src/dashboard/view/fxml/GraphHighContrast.css");
+			mainScene.getStylesheets().add("/dashboard/view/fxml/GraphHighContrast.css");
 			break;
 		}
 		
@@ -390,14 +391,14 @@ public class AuctionController extends AnchorPane {
 		switch(fontSize)
 		{
 		case "Small":
-			mainScene.getStylesheets().add("/src/dashboard/view/fxml/SmallFont.css");
+			mainScene.getStylesheets().add("/dashboard/view/fxml/SmallFont.css");
 			break;
 		default:
 		case "Med":
-			mainScene.getStylesheets().add("/src/dashboard/view/fxml/MedFont.css");
+			mainScene.getStylesheets().add("/dashboard/view/fxml/MedFont.css");
 			break;
 		case "Large":
-			mainScene.getStylesheets().add("/src/dashboard/view/fxml/LargeFont.css");
+			mainScene.getStylesheets().add("/dashboard/view/fxml/LargeFont.css");
 			break;
 		}
 		
@@ -592,7 +593,7 @@ public class AuctionController extends AnchorPane {
 
 	private void updateGraph(String metric) {
 		GraphConstructor constructor;
-			lineChart.setCreateSymbols(false);  
+			lineChart.setCreateSymbols(false);
 			lineChart.setLegendVisible(true);
 			String key;
 			int i = 2;
@@ -632,7 +633,7 @@ public class AuctionController extends AnchorPane {
 
 						int last = 0;
 						for(Data<Date, Number> d : data.getData()) {
-							d.setNode(new HoveredThresholdNode(last, d.getYValue().intValue()));
+							d.setNode(new HoveredThresholdNode(last, d.getYValue().intValue(), lineChart));
 							d.getNode().setOnMouseClicked(new EventHandler<Event>() {
 								@Override
 								public void handle(Event event) {
