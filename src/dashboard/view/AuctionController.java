@@ -305,7 +305,7 @@ public class AuctionController extends AnchorPane {
 	}
 	
 	@FXML private void importCampaignAction(ActionEvent event) {
-		if(updaterRunnable != null) updaterRunnable.stop();
+		//if(updaterRunnable != null) updaterRunnable.stop();
 		application.getStage().setMaximized(false);
 		application.start(application.getStage());
 	}
@@ -355,14 +355,14 @@ public class AuctionController extends AnchorPane {
 
 	@FXML
 	private void closeAction(ActionEvent event) {
-		if(updaterRunnable != null) updaterRunnable.stop();
+		//if(updaterRunnable != null) updaterRunnable.stop();
 		DatabaseConnection.closeConnection();
 		application.getStage().close();
 	}
 	
 	@FXML
 	private void generateData(ActionEvent event) {
-		if(updaterRunnable != null) updaterRunnable.stop();
+		//if(updaterRunnable != null) updaterRunnable.stop();
 			// todo - check valid entry for name and campaign
 		 if (filters.size() == 10 ) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -421,10 +421,12 @@ public class AuctionController extends AnchorPane {
 				tableResults.getColumns().get(filters.size()).setVisible(true);
 
 				// Cheap and nasty threading
-				updaterRunnable = new MetricsUpdater(tableMetrics, filter, bounceFilter, filters.size(),  tableResults);
-				 filters.put(txtFilterName.getText(), filter);
-				 new Thread(updaterRunnable).start();
-
+				//updaterRunnable = new MetricsUpdater(tableMetrics, filter, bounceFilter, filters.size(),  tableResults);
+				// filters.put(txtFilterName.getText(), filter);
+				 //new Thread(updaterRunnable).start();
+                                 MetricsUpdater m = new MetricsUpdater(tableMetrics, filter, bounceFilter, filters.size(),  tableResults);
+                                 m.runUpdater();
+                                 filters.put(txtFilterName.getText(), filter);
 				configureFilters();
 				txtFilterName.setText(GenerateName.generate());
 			}
@@ -517,8 +519,8 @@ public class AuctionController extends AnchorPane {
 	}
 	
 	@FXML private void clearData(ActionEvent event) {
-		if(updaterRunnable != null)
-			updaterRunnable.stop();
+		//if(updaterRunnable != null)
+			//updaterRunnable.stop();
 		lineChart.getData().clear();
 		filters.clear();
 		graphData.clear();
