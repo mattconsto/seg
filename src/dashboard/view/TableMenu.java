@@ -105,7 +105,7 @@ public class TableMenu {
 		for (Object obj : table.getColumns()) {
 
 			TableColumn<?, ?> tableColumn = (TableColumn<?, ?>) obj;
-			if (!tableColumn.getText().equals("Metric") && !tableColumn.getText().equals("Show")) {
+			if (!tableColumn.getText().equals("Metric") && !tableColumn.getText().equals("")) {
 				CheckBox cb = new CheckBox(tableColumn.getText());
 
 				cb.selectedProperty().bindBidirectional(tableColumn.visibleProperty());
