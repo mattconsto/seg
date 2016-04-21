@@ -589,13 +589,14 @@ public class AuctionController extends AnchorPane {
 			int i = 2;
 			 for(Map.Entry<String, Filter> f : filters.entrySet()){  
 				if (tableResults.getColumns().get(i).isVisible()) {
-				application.getStage().getScene().setCursor(Cursor.WAIT);
+				    application.getStage().getScene().setCursor(Cursor.WAIT);
                                     key = f.getKey() + " : " + metric;
                                     if (graphData.containsKey(key)) {
                                             Series<Date, Number> data = graphData.get(key);
                                             if (data != null && !lineChart.getData().contains(data))
                                                     lineChart.getData().add(data);
-				} else {
+                                            application.getStage().getScene().setCursor(Cursor.DEFAULT);
+                                    } else {
                                         if (updateGraphRunnable == null)
                                             updateGraphRunnable = new GraphUpdater();
 					updateGraphRunnable.runUpdater(f.getValue(), metric, bounceFilter, lineChart, graphData, () -> application.getStage().getScene().setCursor(Cursor.DEFAULT));
