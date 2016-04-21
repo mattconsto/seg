@@ -59,10 +59,6 @@ public class PreferencesDialog extends Dialog<Boolean>{
 		CheckBox graphIcons = new CheckBox("Show graph icons");
 		graphIcons.setSelected(preferences.getBoolean("Graph_Icons", true));
 		
-		//Dashed lines
-		CheckBox graphDash = new CheckBox("Show dashed series");
-		graphDash.setSelected(preferences.getBoolean("Graph_Dash", false));
-		
 		//Font sizes
 		final ToggleGroup fontGroup = new ToggleGroup();
 		
@@ -89,16 +85,15 @@ public class PreferencesDialog extends Dialog<Boolean>{
 		
 		mainGrid.add(new Label("Graph Options"), 0, 2);
 		mainGrid.add(graphIcons, 0, 3);
-		mainGrid.add(graphDash, 0, 4);
 		
-		mainGrid.add(new Label("Font Size"), 0, 5);
-		mainGrid.add(smallFont, 0, 6);
-		mainGrid.add(medFont, 1, 6);
-		mainGrid.add(largeFont, 2, 6);
+		mainGrid.add(new Label("Font Size"), 0, 4);
+		mainGrid.add(smallFont, 0, 5);
+		mainGrid.add(medFont, 1, 5);
+		mainGrid.add(largeFont, 2, 5);
 		
-		mainGrid.add(new Label("General Options"), 0, 7);
-		mainGrid.add(new Label("Currency"), 0, 8);
-		mainGrid.add(currency, 1, 8);
+		mainGrid.add(new Label("General Options"), 0, 6);
+		mainGrid.add(new Label("Currency"), 0, 7);
+		mainGrid.add(currency, 1, 7);
 		
 		getDialogPane().setContent(mainGrid);
 		
@@ -114,7 +109,7 @@ public class PreferencesDialog extends Dialog<Boolean>{
 		Optional<Boolean> response = showAndWait();
 		if(response.isPresent() && response.get())
 		{
-			controller.updatePreferences(colourGroup.getSelectedToggle().getUserData().toString(), graphIcons.isSelected(), graphDash.isSelected(), fontGroup.getSelectedToggle().getUserData().toString(), currency.getText());
+			controller.updatePreferences(colourGroup.getSelectedToggle().getUserData().toString(), graphIcons.isSelected(), fontGroup.getSelectedToggle().getUserData().toString(), currency.getText());
 		}
 	}
 }

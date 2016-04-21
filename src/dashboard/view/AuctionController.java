@@ -5,7 +5,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.Date;
@@ -18,16 +17,11 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.SnapshotParameters;
-import javafx.scene.chart.BarChart;
-import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.XYChart.Data;
 import javafx.scene.chart.XYChart.Series;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
@@ -36,8 +30,6 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.transform.Scale;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
-import dashboard.controller.*;
 import dashboard.model.*;
 import extfx.scene.control.RestrictiveTextField;
 
@@ -148,7 +140,7 @@ public class AuctionController extends AnchorPane {
 		
 		txtFilterName.setText(GenerateName.generate());
 		
-		updatePreferences(preferences.get("Graph_Colour", "Default"), preferences.getBoolean("Graph_Icons", true), preferences.getBoolean("Graph_Dash", false), preferences.get("Font_Size", "Medium"), preferences.get("Currency_Symbol", new DecimalFormat().getDecimalFormatSymbols().getCurrencySymbol()));
+		updatePreferences(preferences.get("Graph_Colour", "Default"), preferences.getBoolean("Graph_Icons", true), preferences.get("Font_Size", "Medium"), preferences.get("Currency_Symbol", new DecimalFormat().getDecimalFormatSymbols().getCurrencySymbol()));
 	}
 	
 	private void configureFilters() {
@@ -404,7 +396,7 @@ public class AuctionController extends AnchorPane {
 		new PreferencesDialog(this, application.getStage());
 	}
 	
-	protected void updatePreferences(String graphColour, boolean graphIcons, boolean graphDash, String fontSize, String currency) {
+	protected void updatePreferences(String graphColour, boolean graphIcons, String fontSize, String currency) {
 		Scene mainScene = application.getStage().getScene();
 		mainScene.getStylesheets().clear();
 		
@@ -440,7 +432,6 @@ public class AuctionController extends AnchorPane {
 		 
 		preferences.put("Graph_Colour", graphColour);
 		preferences.putBoolean("Graph_Icons", graphIcons);
-		preferences.putBoolean("Graph_Dash", graphDash);
 		preferences.put("Font_Size", fontSize);
 		preferences.put("Currency_Symbol", currency);
 	}
@@ -629,7 +620,6 @@ public class AuctionController extends AnchorPane {
 	}
 
 	  private void updateGraph(String metric) {
-		GraphConstructor constructor;
 			lineChart.setCreateSymbols(false);
 			lineChart.setLegendVisible(true);
 			String key;
