@@ -120,7 +120,7 @@
 							<DatePicker fx:id="filterDateTo" GridPane.rowIndex="7" GridPane.columnIndex="1" prefWidth="50"  maxWidth="Infinity" />
 							
 							<Label text="Name:" GridPane.rowIndex="8" GridPane.columnIndex="0" />
-							<TextField fx:id="txtFilterName" GridPane.rowIndex="8" GridPane.columnIndex="1" />
+							<TextField fx:id="txtFilterName" onAction="#generateData" GridPane.rowIndex="8" GridPane.columnIndex="1" />
 						</GridPane>
 					</TitledPane>
 					
