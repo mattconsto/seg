@@ -351,20 +351,32 @@ public class AuctionController extends AnchorPane {
 	
 	@FXML private void printGraph(ActionEvent event) {
         Printer printer = Printer.getDefaultPrinter();
-        PageLayout pageLayout = printer.createPageLayout(Paper.A4, PageOrientation.LANDSCAPE, Printer.MarginType.HARDWARE_MINIMUM);
-        double scaleX = pageLayout.getPrintableWidth() / lineChart.getBoundsInParent().getWidth();
-        double scaleY = pageLayout.getPrintableHeight() / lineChart.getBoundsInParent().getHeight();
-        lineChart.getTransforms().add(new Scale(scaleX, scaleY));
-
-		PrinterJob job = PrinterJob.createPrinterJob();
-		if (job != null && job.showPrintDialog(lineChart.getScene().getWindow())){
-		    boolean success = job.printPage(pageLayout, lineChart);
-		    if (success) {
-		        job.endJob();
-		    }
-		}
-		
-		lineChart.getTransforms().clear();
+        if(printer != null){
+	        PageLayout pageLayout = printer.createPageLayout(Paper.A4, PageOrientation.LANDSCAPE, Printer.MarginType.HARDWARE_MINIMUM);
+	        double scaleX = pageLayout.getPrintableWidth() / lineChart.getBoundsInParent().getWidth();
+	        double scaleY = pageLayout.getPrintableHeight() / lineChart.getBoundsInParent().getHeight();
+	        lineChart.getTransforms().add(new Scale(scaleX, scaleY));
+	
+			PrinterJob job = PrinterJob.createPrinterJob();
+			if (job != null && job.showPrintDialog(lineChart.getScene().getWindow())){
+			    boolean success = job.printPage(pageLayout, lineChart);
+			    if (success) {
+			        job.endJob();
+			    }
+			}
+			
+			lineChart.getTransforms().clear();
+        }
+        else
+        {
+        	Alert printerErrorAlert = new Alert(AlertType.ERROR);
+        	printerErrorAlert.setTitle("Printer error");
+        	printerErrorAlert.setHeaderText("Unable to find your default printer.");
+        	printerErrorAlert.setContentText("Please check that your printer is\nconnected and properly configured.");
+        	printerErrorAlert.initOwner(application.getStage());
+        	
+        	printerErrorAlert.showAndWait();
+        }
 	}
 	
 	@FXML private void saveGraphAs(ActionEvent event) {
