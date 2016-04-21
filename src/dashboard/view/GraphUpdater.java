@@ -34,6 +34,7 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
+import javafx.scene.chart.XYChart.Series;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
@@ -181,41 +182,43 @@ public class GraphUpdater {
 			}
 
 			try {
-                            String key = filter.getDescription() + " : " + metric;
-                            if (!graphData.containsKey(key)) {
-                                graphData.put(key, null);  // added this so the data is not retrieved more than once
-  
-				XYChart.Series<Date, Number> data = constructor.fetchGraph();
-				data.setName(key);
+				String key = filter.getDescription() + " : " + metric;
+				if (!graphData.containsKey(key)) {
+					graphData.put(key, null); // added this so the data is not retrieved more than once
 
-				if(preferences.getBoolean("Graph_Icons", true)) { 
-					int last = 0;
-					for (XYChart.Data<Date, Number> d : data.getData()) {
-						d.setNode(new HoveredThresholdNode(last, d.getYValue().intValue(), graphData.size())); // linechart.getData().size()));
-						d.getNode().setOnMouseClicked(new EventHandler<Event>() {
-							@Override
-							public void handle(Event event) {
-								showHistogram(data, null);
+					XYChart.Series<Date, Number> data = constructor.fetchGraph();
+					data.setName(key);
+
+					if (preferences.getBoolean("Graph_Icons", true)) {
+						int last = 0;
+						for (XYChart.Data<Date, Number> d : data.getData()) {
+							d.setNode(new HoveredThresholdNode(last, d.getYValue().intValue(), graphData.size())); // linechart.getData().size()));
+							d.getNode().setOnMouseClicked(new EventHandler<Event>() {
+								@Override
+								public void handle(Event event) {
+									showHistogram(data, null);
+								}
+							});
+							last = d.getYValue().intValue();
+						}
+					}
+
+					graphData.put(key, data); // update graph data with real data
+
+					lineChart.setAnimated(false);
+					Platform.runLater(new Runnable() {
+						@Override
+						public void run() {
+							if (!lineChart.getData().contains(data)) {
+								lineChart.getData().add(data);
+								data.getNode().setOnMouseClicked(e -> showHistogram(data, null));
 							}
-						});
-						last = d.getYValue().intValue();
-					}
+
+						}
+					});
+
+					lineChart.getXAxis().setTickLabelsVisible(true);
 				}
-
-                                graphData.put(key, data);   // update graph data with real data
-                  
-				lineChart.setAnimated(false);
-				Platform.runLater(new Runnable() {
-					@Override
-					public void run() {
-                                            if (!lineChart.getData().contains(data))
-                                                lineChart.getData().add(data);
-
-					}
-				});
-
-				lineChart.getXAxis().setTickLabelsVisible(true);
-                            }
 			} catch (SQLException e) {
 				System.err.println("Unable to fetch data from database: " + e.getMessage());
 			}
