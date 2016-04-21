@@ -23,6 +23,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.prefs.Preferences;
+
 import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -38,6 +40,8 @@ import javafx.stage.Stage;
 public class GraphUpdater {
 
 	private ExecutorService executor;
+
+	private Preferences preferences = Preferences.userRoot();
 
 	public GraphUpdater() {
 		try {
@@ -177,16 +181,18 @@ public class GraphUpdater {
 				XYChart.Series<Date, Number> data = constructor.fetchGraph();
 				data.setName(key);
 
-				int last = 0;
-				for (XYChart.Data<Date, Number> d : data.getData()) {
-					d.setNode(new HoveredThresholdNode(last, d.getYValue().intValue(), graphData.size())); // linechart.getData().size()));
-					d.getNode().setOnMouseClicked(new EventHandler<Event>() {
-						@Override
-						public void handle(Event event) {
-							showHistogram(data, null);
-						}
-					});
-					last = d.getYValue().intValue();
+				if(preferences.getBoolean("Graph_Icons", true)) { 
+					int last = 0;
+					for (XYChart.Data<Date, Number> d : data.getData()) {
+						d.setNode(new HoveredThresholdNode(last, d.getYValue().intValue(), graphData.size())); // linechart.getData().size()));
+						d.getNode().setOnMouseClicked(new EventHandler<Event>() {
+							@Override
+							public void handle(Event event) {
+								showHistogram(data, null);
+							}
+						});
+						last = d.getYValue().intValue();
+					}
 				}
 
 				graphData.put(key, data);
