@@ -72,7 +72,7 @@ public class AuctionController extends AnchorPane {
 	@FXML private CheckComboBox<String> filterAge;
 	@FXML private CheckComboBox<String> filterIncome;
 	@FXML private CheckComboBox<String> filterContext;
-	//@FXML private ComboBox<String> filterMetrics;
+	 
 	@FXML private DatePicker filterDateFrom;
 	@FXML private DatePicker filterDateTo;
 	@FXML private Button generateGraph;
@@ -486,7 +486,7 @@ public class AuctionController extends AnchorPane {
 					bounceFilter.setPageLimit(1);
 				}
 			}
-			// updateGraph(filterMetrics.getValue());
+			 
 			addColumn(txtFilterName.getText());
 			TableMenu.addCustomTableMenu(tableResults);
 			tableResults.getColumns().get(filters.size()).setVisible(true);
@@ -630,7 +630,7 @@ public class AuctionController extends AnchorPane {
                                     key = f.getKey() + " : " + metric;
                                     if (graphData.containsKey(key)) {
                                             Series<Date, Number> data = graphData.get(key);
-                                            if (!lineChart.getData().contains(data))
+                                            if (data != null && !lineChart.getData().contains(data))
                                                     lineChart.getData().add(data);
                                     }
                                     else {
