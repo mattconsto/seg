@@ -14,15 +14,15 @@ import javafx.collections.ObservableList;
 import org.controlsfx.control.CheckComboBox;
 import org.controlsfx.control.IndexedCheckModel;
 
-public class Filter {
+public class Filter implements Cloneable {
 	private boolean genderEnabled = true;
 	private boolean ageEnabled = true;
 	private boolean incomeEnabled = true;
 	private boolean contextEnabled = true;
-	private List <String> gender;
-	private List <String> age;
-	private List <String> income; 
-	private List <String> context;
+	private ArrayList <String> gender;
+	private ArrayList <String> age;
+	private ArrayList <String> income; 
+	private ArrayList <String> context;
 	private LocalDate dateTo;
 	private LocalDate dateFrom;
 	private String contextSQL = "1";
@@ -35,6 +35,22 @@ public class Filter {
 	private String campaign = "";
 	private String description= "";
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public Filter clone() {
+		try {
+			Filter clone  = (Filter) super.clone();
+			clone.gender  = (ArrayList<String>) this.gender.clone();
+			clone.age     = (ArrayList<String>) this.age.clone();
+			clone.income  = (ArrayList<String>) this.income.clone();
+			clone.context = (ArrayList<String>) this.context.clone();
+			return clone;
+		} catch (CloneNotSupportedException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
 	@Override
 	public String toString() {
 		return listToString(new String[] {

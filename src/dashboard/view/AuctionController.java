@@ -147,7 +147,7 @@ public class AuctionController extends AnchorPane {
 	}
 	
 	private void configureFilters() {
-		filter = new Filter();
+		filter = filter != null ? filter.clone() : new Filter();
 		filterGender.getCheckModel().getCheckedItems().addListener(
 			(ListChangeListener.Change<? extends String> c) -> filter.setGender(filterGender));
 		filterAge.getCheckModel().getCheckedItems().addListener(
@@ -188,6 +188,9 @@ public class AuctionController extends AnchorPane {
 	} 
 	
 	private void addColumn(String colName) {
+		txtFilterDesc.setText(txtFilterName.getText() + " - Campaign : " + filter.getCampaign()
+				+ "\nFilter: " + filter.toString());
+		
 		TableColumn<ObservableMetrics, String> tc = new TableColumn<ObservableMetrics, String>(colName);
 		//tc.setMaxWidth(100);
 		//tc.setMinWidth(100);
