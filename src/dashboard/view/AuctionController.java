@@ -460,6 +460,7 @@ public class AuctionController extends AnchorPane {
 			alert.setContentText("This campaign name has already been used. Please enter a unique campaign name");
 			alert.showAndWait();
 		} else {
+			application.getStage().getScene().setCursor(Cursor.WAIT);
 			filter.setDescription(txtFilterName.getText());
 			filter.setCampaign(cbCampaign.getValue());
 			filter.setDateFrom(filterDateFrom.getValue());
@@ -499,7 +500,7 @@ public class AuctionController extends AnchorPane {
 			// new Thread(updaterRunnable).start();
 			if (updaterRunnable == null)
 				updaterRunnable = new MetricsUpdater();
-			updaterRunnable.runUpdater(tableMetrics, filter, bounceFilter, filters.size(), tableResults);
+			updaterRunnable.runUpdater(tableMetrics, filter, bounceFilter, filters.size(), tableResults, () -> application.getStage().getScene().setCursor(Cursor.DEFAULT));
 			filters.put(txtFilterName.getText(), filter);
 			configureFilters();
 			txtFilterName.setText(GenerateName.generate());
