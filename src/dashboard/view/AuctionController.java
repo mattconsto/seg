@@ -19,6 +19,7 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.chart.LineChart;
@@ -242,9 +243,9 @@ public class AuctionController extends AnchorPane {
 	// selection changed listener.
 	private void configureTable() {
 		tableResults.getColumns().clear();
-		TableColumn<ObservableMetrics,Boolean>  checkCol = new TableColumn<>("Show");
-		checkCol.setMinWidth(50);
-		checkCol.setMaxWidth(50);
+		TableColumn<ObservableMetrics,Boolean>  checkCol = new TableColumn<>("");
+		checkCol.setMinWidth(40);
+		checkCol.setMaxWidth(40);
 		checkCol.setCellValueFactory( new PropertyValueFactory<ObservableMetrics,Boolean>( "select" ) );
 		checkCol.setCellFactory( new Callback<TableColumn<ObservableMetrics,Boolean>, TableCell<ObservableMetrics,Boolean>>() {
 			@Override
@@ -275,7 +276,7 @@ public class AuctionController extends AnchorPane {
 		checkCol.setSortable(false);
 		tableResults.getColumns().add(checkCol);
 		metricCol = new TableColumn<>("Metric");
-		metricCol.setMinWidth(120);
+		metricCol.setMinWidth(130);
 		// metricCol.setMaxWidth(150);
 		metricCol.setCellValueFactory(new PropertyValueFactory<>("description"));
 		metricCol.setSortable(false);
@@ -619,35 +620,34 @@ public class AuctionController extends AnchorPane {
 		}
 	}
 
-	  private void updateGraph(String metric) {
-			lineChart.setCreateSymbols(false);
-			lineChart.setLegendVisible(true);
-			String key;
-			int i = 2;
-			 for(Map.Entry<String, Filter> f : filters.entrySet()){  
-
-				if (tableResults.getColumns().get(i).isVisible()) {
-                                    key = f.getKey() + " : " + metric;
-                                    if (graphData.containsKey(key)) {
-                                            Series<Date, Number> data = graphData.get(key);
-                                            if (!lineChart.getData().contains(data))
-                                                    lineChart.getData().add(data);
-                                    }
-                                    else {
-                                        if (updateGraphRunnable == null)
-                                            updateGraphRunnable = new GraphUpdater();
-                                        updateGraphRunnable.runUpdater(f.getValue(), metric, bounceFilter, lineChart, graphData); 
-                                    }
+	private void updateGraph(String metric) {
+		lineChart.setCreateSymbols(false);
+		lineChart.setLegendVisible(true);
+		String key;
+		int i = 2;
+		for (Map.Entry<String, Filter> f : filters.entrySet()) {
+			if (tableResults.getColumns().get(i).isVisible()) {
+				application.getStage().getScene().setCursor(Cursor.WAIT);
+				key = f.getKey() + " : " + metric;
+				if (graphData.containsKey(key)) {
+					Series<Date, Number> data = graphData.get(key);
+					if (!lineChart.getData().contains(data))
+						lineChart.getData().add(data);
 				} else {
-                                    key = f.getKey() + " : " + metric;
-                                    if (graphData.containsKey(key))
-                                            lineChart.getData().remove(graphData.get(key));
+					if (updateGraphRunnable == null)
+						updateGraphRunnable = new GraphUpdater();
+					updateGraphRunnable.runUpdater(f.getValue(), metric, bounceFilter, lineChart, graphData, () -> application.getStage().getScene().setCursor(Cursor.DEFAULT));
 				}
-				i++;
+			} else {
+				key = f.getKey() + " : " + metric;
+				if (graphData.containsKey(key))
+					lineChart.getData().remove(graphData.get(key));
 			}
-		   lineChart.setCreateSymbols(false);
-		   lineChart.setLegendVisible(true);
-		   lineChart.getXAxis().setTickLabelsVisible(true);
+			i++;
+		}
+		lineChart.setCreateSymbols(false);
+		lineChart.setLegendVisible(true);
+		lineChart.getXAxis().setTickLabelsVisible(true);
 	}
 	
 	@FXML private void openCampaignAction(ActionEvent event) {
