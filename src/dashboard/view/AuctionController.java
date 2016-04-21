@@ -31,6 +31,7 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.transform.Scale;
 import javafx.stage.FileChooser;
+import javafx.stage.StageStyle;
 import dashboard.model.*;
 import extfx.scene.control.RestrictiveTextField;
 
@@ -295,6 +296,7 @@ public class AuctionController extends AnchorPane {
 	
 	@FXML private void openAbout(ActionEvent event) {
 		Alert about = new Alert(AlertType.INFORMATION);
+		about.initStyle(StageStyle.UTILITY);
 		about.setTitle(preferences.get("ProductName", "Ad Auction Dashboard") + " - About");
 		about.setHeaderText("About");
 		about.setContentText(
@@ -311,6 +313,7 @@ public class AuctionController extends AnchorPane {
 	
 	@FXML private void showDefintions(ActionEvent event) {
 		Alert about = new Alert(AlertType.INFORMATION);
+		about.initStyle(StageStyle.UTILITY);
 		about.setTitle(preferences.get("ProductName", "Ad Auction Dashboard") + " - Definitions");
 		about.setHeaderText("Definitions");
 		about.setContentText(
