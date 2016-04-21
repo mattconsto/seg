@@ -19,6 +19,7 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.chart.LineChart;
@@ -30,6 +31,7 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.transform.Scale;
 import javafx.stage.FileChooser;
+import javafx.stage.StageStyle;
 import dashboard.model.*;
 import extfx.scene.control.RestrictiveTextField;
 
@@ -242,9 +244,9 @@ public class AuctionController extends AnchorPane {
 	// selection changed listener.
 	private void configureTable() {
 		tableResults.getColumns().clear();
-		TableColumn<ObservableMetrics,Boolean>  checkCol = new TableColumn<>("Show");
-		checkCol.setMinWidth(50);
-		checkCol.setMaxWidth(50);
+		TableColumn<ObservableMetrics,Boolean>  checkCol = new TableColumn<>("");
+		checkCol.setMinWidth(40);
+		checkCol.setMaxWidth(40);
 		checkCol.setCellValueFactory( new PropertyValueFactory<ObservableMetrics,Boolean>( "select" ) );
 		checkCol.setCellFactory( new Callback<TableColumn<ObservableMetrics,Boolean>, TableCell<ObservableMetrics,Boolean>>() {
 			@Override
@@ -275,7 +277,7 @@ public class AuctionController extends AnchorPane {
 		checkCol.setSortable(false);
 		tableResults.getColumns().add(checkCol);
 		metricCol = new TableColumn<>("Metric");
-		metricCol.setMinWidth(120);
+		metricCol.setMinWidth(130);
 		// metricCol.setMaxWidth(150);
 		metricCol.setCellValueFactory(new PropertyValueFactory<>("description"));
 		metricCol.setSortable(false);
@@ -294,6 +296,7 @@ public class AuctionController extends AnchorPane {
 	
 	@FXML private void openAbout(ActionEvent event) {
 		Alert about = new Alert(AlertType.INFORMATION);
+		about.initStyle(StageStyle.UTILITY);
 		about.setTitle(preferences.get("ProductName", "Ad Auction Dashboard") + " - About");
 		about.setHeaderText("About");
 		about.setContentText(
@@ -310,6 +313,7 @@ public class AuctionController extends AnchorPane {
 	
 	@FXML private void showDefintions(ActionEvent event) {
 		Alert about = new Alert(AlertType.INFORMATION);
+		about.initStyle(StageStyle.UTILITY);
 		about.setTitle(preferences.get("ProductName", "Ad Auction Dashboard") + " - Definitions");
 		about.setHeaderText("Definitions");
 		about.setContentText(
@@ -459,6 +463,7 @@ public class AuctionController extends AnchorPane {
 			alert.setContentText("This campaign name has already been used. Please enter a unique campaign name");
 			alert.showAndWait();
 		} else {
+			application.getStage().getScene().setCursor(Cursor.WAIT);
 			filter.setDescription(txtFilterName.getText());
 			filter.setCampaign(cbCampaign.getValue());
 			filter.setDateFrom(filterDateFrom.getValue());
@@ -498,7 +503,7 @@ public class AuctionController extends AnchorPane {
 			// new Thread(updaterRunnable).start();
 			if (updaterRunnable == null)
 				updaterRunnable = new MetricsUpdater();
-			updaterRunnable.runUpdater(tableMetrics, filter, bounceFilter, filters.size(), tableResults);
+			updaterRunnable.runUpdater(tableMetrics, filter, bounceFilter, filters.size(), tableResults, () -> application.getStage().getScene().setCursor(Cursor.DEFAULT));
 			filters.put(txtFilterName.getText(), filter);
 			configureFilters();
 			txtFilterName.setText(GenerateName.generate());
@@ -625,18 +630,17 @@ public class AuctionController extends AnchorPane {
 			String key;
 			int i = 2;
 			 for(Map.Entry<String, Filter> f : filters.entrySet()){  
-
 				if (tableResults.getColumns().get(i).isVisible()) {
+				application.getStage().getScene().setCursor(Cursor.WAIT);
                                     key = f.getKey() + " : " + metric;
                                     if (graphData.containsKey(key)) {
                                             Series<Date, Number> data = graphData.get(key);
                                             if (data != null && !lineChart.getData().contains(data))
                                                     lineChart.getData().add(data);
-                                    }
-                                    else {
+				} else {
                                         if (updateGraphRunnable == null)
                                             updateGraphRunnable = new GraphUpdater();
-                                        updateGraphRunnable.runUpdater(f.getValue(), metric, bounceFilter, lineChart, graphData); 
+					updateGraphRunnable.runUpdater(f.getValue(), metric, bounceFilter, lineChart, graphData, () -> application.getStage().getScene().setCursor(Cursor.DEFAULT));
                                     }
 				} else {
                                     key = f.getKey() + " : " + metric;
