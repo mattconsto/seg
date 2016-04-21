@@ -139,6 +139,7 @@ public class AuctionController extends AnchorPane {
 		grBounce.selectedToggleProperty().addListener(((ObservableValue<? extends Toggle> v, Toggle t, Toggle q) -> System.out.println(grBounce.getSelectedToggle().getUserData().toString())));
 		fillCampaignList();
 		Platform.runLater(() -> splitPane.setDividerPosition(0, 0.175));
+		Platform.runLater(() -> generateGraph.requestFocus()); 
 		
 		txtFilterName.setText(GenerateName.generate());
 		

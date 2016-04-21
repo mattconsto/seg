@@ -34,7 +34,7 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
-
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 public class GraphUpdater {
@@ -121,6 +121,10 @@ public class GraphUpdater {
 			histogram.getData().add(histogram_series);
 
 			Stage stage = new Stage();
+			for (int size : new int[] {512, 256, 128, 64, 48, 32, 16})
+				stage.getIcons().add(
+					new Image(getClass().getResourceAsStream(
+							String.format("/icon%d.png", size))));
 			stage.setTitle(series.getName() + " Histogram");
 			stage.setMinHeight(115);
 			stage.setScene(new Scene(histogram));
