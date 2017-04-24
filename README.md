@@ -1,6 +1,8 @@
 Ad Auction Dashboard
 ====================
 
+![](screenshot.png)
+
 ## Starting the Dashboard
 
 Either double click the jar or use the command:
@@ -9,9 +11,9 @@ Either double click the jar or use the command:
 
 ## Loading a Campaign
 
-Once you have launched the Dashboard, you need to load an auction. If this is 
-your first time using it, go to `File > Import Campaign` and navigate to the 
-directory with your data. If you have already imported data, go to 
+Once you have launched the Dashboard, you need to load an auction. If this is
+your first time using it, go to `File > Import Campaign` and navigate to the
+directory with your data. If you have already imported data, go to
 `File > Load Campaign` and select the `*.db` file containing your campaign.
 
 ## Using the Dashboard
