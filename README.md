@@ -1,7 +1,7 @@
 Ad Auction Dashboard
 ====================
 
-![](screenshot.png)
+![](screenshots/25%20-%20No%20Icons%2C%20Many%20Series.png)
 
 ## Starting the Dashboard
 
